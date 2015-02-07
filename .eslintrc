@@ -1,0 +1,9 @@
+{
+    "settings": {
+        "ecmascript": 6,
+        "jsx": true
+    },
+    "env": {
+        "browser": true
+    }
+}
