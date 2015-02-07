@@ -14,3 +14,7 @@ export default class Gravatar extends React.Component {
         );
     }
 }
+
+Gravatar.propTypes = {
+    email: React.PropTypes.string.isRequired
+};

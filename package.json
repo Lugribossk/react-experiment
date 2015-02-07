@@ -7,19 +7,33 @@
     "unmockedModulePathPatterns": [
       "react"
     ],
-    "moduleFileExtensions": ["js", "json"],
-    "testFileExtensions": ["js"],
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "testFileExtensions": [
+      "js"
+    ],
     "testDirectoryName": "test"
   },
   "dependencies": {
     "6to5-core": "^3.4.0",
     "6to5-loader": "^3.0.0",
+    "bluebird": "^2.9.6",
+    "bootstrap": "^3.3.2",
+    "css-loader": "^0.9.1",
+    "file-loader": "^0.8.1",
     "grunt": "^0.4.5",
     "grunt-jest": "^0.1.2",
     "grunt-webpack": "^1.0.8",
+    "html-webpack-plugin": "^1.1.0",
     "jest-cli": "^0.2.2",
+    "lodash": "^3.1.0",
     "md5": "^1.0.0",
     "react": "0.13.0-beta.1",
+    "react-bootstrap": "^0.13.3",
+    "style-loader": "^0.8.3",
+    "url-loader": "^0.5.5",
     "webpack": "^1.5.3",
     "webpack-dev-server": "^1.7.0"
   }
