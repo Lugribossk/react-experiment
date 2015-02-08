@@ -1,6 +1,6 @@
 import React from "react";
 import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap"
-import Gravatar from "./Gravatar";
+import Gravatar from "../ui/Gravatar";
 
 export default class ExampleNavbar extends React.Component {
     isActive(link) {

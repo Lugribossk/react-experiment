@@ -1,7 +1,7 @@
 import {Grapnel} from "grapnel/src/grapnel";
 
 export default class AuthenticatingRouter extends Grapnel {
-    constructor(authController) {
+    constructor(currentUserStore) {
         super();
 
         var lastValue;
@@ -13,14 +13,14 @@ export default class AuthenticatingRouter extends Grapnel {
             }
             lastValue = event.value;
 
-            if (!authController.getCurrentUser()) {
+            if (!currentUserStore.getUser()) {
                 event.preventDefault();
 
-                authController.attemptLogin()
-                    .then(() => {
-                        lastValue = null;
-                        event.callback();
-                    })
+                //currentUserStore.updateFromLoginForm();
+                currentUserStore.onNextLogin(() => {
+                    lastValue = null;
+                    event.callback();
+                });
             }
         });
     }

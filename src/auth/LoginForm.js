@@ -1,6 +1,8 @@
 import React from "react/addons";
 import _ from "lodash";
 import {Input, Button, Alert, Glyphicon} from "react-bootstrap"
+import Mixins from "../util/Mixins";
+import SubscribeMixin from "../util/SubscribeMixin";
 
 export default class LoginForm extends React.Component {
     constructor(props) {
@@ -11,24 +13,24 @@ export default class LoginForm extends React.Component {
             invalidLogin: false
         };
 
-        // TODO This only allows a single mixin.
-        _.assign(this, React.addons.LinkedStateMixin);
+        this.subscribe(this.props.userStore.onInvalidLogin(this.onInvalidLogin.bind(this)));
     }
 
-    valid() {
+    isValidInput() {
         return this.state.username.length > 0 && this.state.password.length > 0;
+    }
+
+    onInvalidLogin() {
+        this.setState({invalidLogin: true});
     }
 
     onSubmit(e) {
         e.preventDefault();
-        if (!this.valid()) {
+        if (!this.isValidInput()) {
             return;
         }
         this.setState({invalidLogin: false});
-        this.props.tryCredentials(this.state.username, this.state.password)
-            .catch(() => {
-                this.setState({invalidLogin: true});
-            });
+        this.props.userStore.tryCredentials(this.state.username, this.state.password);
     }
 
     render() {
@@ -42,7 +44,7 @@ export default class LoginForm extends React.Component {
                     </Alert>
                 }
                 <span style={{float: "right"}}><a href="#resetpassword">Forgot your password?</a></span>
-                <Button bsStyle="primary" type="submit" disabled={!this.valid()}>
+                <Button bsStyle="primary" type="submit" disabled={!this.isValidInput()}>
                     Log in
                 </Button>
             </form>
@@ -50,6 +52,8 @@ export default class LoginForm extends React.Component {
     }
 }
 
-LoginForm.propTypes = {
-    tryCredentials: React.PropTypes.func.isRequired
-};
+Mixins.add(LoginForm.prototype, [React.addons.LinkedStateMixin, SubscribeMixin]);
+
+//LoginForm.propTypes = {
+//    tryCredentials: React.PropTypes.func.isRequired
+//};

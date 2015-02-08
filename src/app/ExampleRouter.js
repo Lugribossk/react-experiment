@@ -1,9 +1,9 @@
 import React from "react";
-import AuthenticatingRouter from "./AuthenticatingRouter";
+import AuthenticatingRouter from "../auth/AuthenticatingRouter";
 
 export default class ExampleRouter extends AuthenticatingRouter {
-    constructor(element, authController) {
-        super(authController);
+    constructor(element, userStore) {
+        super(userStore);
         this.element = element;
 
         this.get("test1", () => {
@@ -23,6 +23,7 @@ export default class ExampleRouter extends AuthenticatingRouter {
     }
 
     show(stuff) {
-        React.render(stuff, this.element);
+        this.element(stuff);
+        //React.render(stuff, this.element());
     }
 }
