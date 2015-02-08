@@ -33,7 +33,6 @@ export default class Application extends React.Component {
                 // TODO try saved credentials
                 return new Promise((resolve, reject) => {
                     var x = (username, password) => {
-                        console.log("trycredentials")
                         return authController.tryCredentials(username, password)
                             .then(resolve);
                     };
