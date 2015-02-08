@@ -11,6 +11,7 @@ export default class LoginForm extends React.Component {
             invalidLogin: false
         };
 
+        // TODO This only allows a single mixin.
         _.assign(this, React.addons.LinkedStateMixin);
     }
 
@@ -24,10 +25,10 @@ export default class LoginForm extends React.Component {
             return;
         }
         this.setState({invalidLogin: false});
-        ///*this.props.loginController.tryCredentials(this.state.username, this.state.password)
-        //    .catch(() => {
-        //        this.setState({invalidLogin: true});
-        //    });*/
+        this.props.tryCredentials(this.state.username, this.state.password)
+            .catch(() => {
+                this.setState({invalidLogin: true});
+            });
     }
 
     render() {
@@ -48,3 +49,7 @@ export default class LoginForm extends React.Component {
         );
     }
 }
+
+LoginForm.propTypes = {
+    tryCredentials: React.PropTypes.func.isRequired
+};
