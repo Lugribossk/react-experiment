@@ -34,8 +34,8 @@ export default class LoginForm extends React.Component {
     render() {
         return (
             <form role="form" onSubmit={this.onSubmit.bind(this)}>
-                <Input type="text" label="Username" valueLink={this.linkState("username")}/>
-                <Input type="password" label="Password" valueLink={this.linkState("password")}/>
+                <Input type="text" label="Username" valueLink={this.linkState("username")} placeholder="Username" autoComplete="username" autoFocus/>
+                <Input type="password" label="Password" valueLink={this.linkState("password")} placeholder="Password" autoComplete="current-password"/>
                 {this.state.invalidLogin &&
                     <Alert bsStyle="warning">
                         <Glyphicon glyph="warning-sign"/> Email or password incorrect.

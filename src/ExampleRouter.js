@@ -1,30 +1,10 @@
 import React from "react";
-import {Grapnel} from "grapnel/src/grapnel";
+import AuthenticatingRouter from "./AuthenticatingRouter";
 
-export default class ExampleRouter extends Grapnel {
+export default class ExampleRouter extends AuthenticatingRouter {
     constructor(element, authController) {
-        super();
+        super(authController);
         this.element = element;
-
-        var lastValue;
-        this.on("match", (event) => {
-            // Only do the auth check on the first route matched, as the * route will always be the second route matched.
-            if (lastValue === event.value) {
-                event.preventDefault();
-                return;
-            }
-            lastValue = event.value;
-
-            if (!authController.getCurrentUser()) {
-                event.preventDefault();
-
-                authController.attemptLogin()
-                    .then(() => {
-                        lastValue = null;
-                        event.callback();
-                    })
-            }
-        });
 
         this.get("test1", () => {
             this.show(<h1>Test 1</h1>);
@@ -39,7 +19,7 @@ export default class ExampleRouter extends Grapnel {
             if (!event.parent()) {
                 this.navigate("");
             }
-        })
+        });
     }
 
     show(stuff) {
