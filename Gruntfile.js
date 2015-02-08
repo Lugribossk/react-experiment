@@ -29,6 +29,9 @@ module.exports = function (grunt) {
                     template: "src/index.html"
                 })
             ],
+            node: {
+                __filename: true
+            },
             devtool: "eval-source-map",
             watch: true,
             keepalive: true
@@ -67,7 +70,10 @@ module.exports = function (grunt) {
                         NODE_ENV: JSON.stringify('production')
                     }
                 })
-            ]
+            ],
+            node: {
+                __filename: true
+            }
         }
     });
 

@@ -3,17 +3,9 @@ import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap"
 import Gravatar from "./Gravatar";
 
 export default class ExampleNavbar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentRoute: ""
-        };
-        // TODO update currentRoute
-    }
-
     isActive(link) {
-        var route = this.state.currentRoute;
-        var isDefault = (route === "" && link === "");
+        var route = this.props.route;
+        var isDefault = (route === "" && link === "#");
         var isSubpath = (route.indexOf(link) === 0);
 
         return isDefault || isSubpath
@@ -30,7 +22,7 @@ export default class ExampleNavbar extends React.Component {
         return (
             <Navbar brand="Example">
                 <Nav>
-                    <NavItem href="#" active={this.isActive("")}>Dashboard</NavItem>
+                    <NavItem href="#" active={this.isActive("#")}>Dashboard</NavItem>
                     <NavItem href="#test1" active={this.isActive("test1")}>Test 1</NavItem>
                     <NavItem href="#test2/12345" active={this.isActive("test2")}>Test 2</NavItem>
                 </Nav>
@@ -49,5 +41,6 @@ export default class ExampleNavbar extends React.Component {
 ExampleNavbar.propTypes = {
     email: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
+    route: React.PropTypes.string.isRequired,
     onLogout: React.PropTypes.func.isRequired
 };
