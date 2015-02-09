@@ -12,28 +12,26 @@ export default class Application extends React.Component {
     constructor(props) {
         super(props);
         this.currentUserStore = new CurrentUserStore();
+        var routeStore = new ExampleRouteStore(this.currentUserStore);
+
         this.state = {
             user: this.currentUserStore.getUser(),
-            route: "",
-            stuff: null
+            route: null,
+            routeContent: null
         };
 
         this.subscribe(this.currentUserStore.onUserChange(this.onUserChange.bind(this)));
+        this.subscribe(routeStore.onRoute(this.onRoute.bind(this)));
     }
 
     onUserChange(user) {
         this.setState({user: user});
     }
 
-    componentDidMount() {
-        var x = (stuff) => {
-            this.setState({stuff: stuff});
-        };
-        var router = new ExampleRouter(x, this.currentUserStore);
-
-        this.setState({route: router.fragment.get()});
-        router.on("match", (event) => {
-            this.setState({route: event.value});
+    onRoute(route, content) {
+        this.setState({
+            route: route,
+            routeContent: content
         });
     }
 
@@ -47,7 +45,7 @@ export default class Application extends React.Component {
                 <div>
                     <ExampleNavbar {...this.state.user} route={this.state.route} onLogout={this.logout} />
                     <div className="container" ref="content">
-                        {this.state.stuff}
+                        {this.state.routeContent}
                     </div>
                 </div>
             );

@@ -9,7 +9,7 @@ export default class Store {
         _.assign(this.state, newState);
         _.forEach(newState, (value, key) => {
             this._trigger(key, value);
-        })
+        });
     }
 
     _registerListener(name, listener) {
@@ -33,10 +33,10 @@ export default class Store {
         }
     }
 
-    _trigger(name, data) {
+    _trigger(name, ...data) {
         if (this.listeners[name]) {
             _.forEach(this.listeners[name], (listener) => {
-                listener(data);
+                listener.apply(null, data);
             });
         }
     }
