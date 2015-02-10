@@ -35,15 +35,11 @@ export default class Application extends React.Component {
         });
     }
 
-    logout() {
-        this.currentUserStore.logout();
-    }
-
     render () {
         if (this.state.user) {
             return (
                 <div>
-                    <ExampleNavbar {...this.state.user} route={this.state.route} onLogout={this.logout} />
+                    <ExampleNavbar {...this.state.user} route={this.state.route}/>
                     <div className="container" ref="content">
                         {this.state.routeContent}
                     </div>

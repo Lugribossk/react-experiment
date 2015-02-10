@@ -1,6 +1,7 @@
 import React from "react";
 import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap"
 import Gravatar from "../ui/Gravatar";
+import AuthActions from "../auth/AuthActions";
 
 export default class ExampleNavbar extends React.Component {
     isActive(link) {
@@ -30,7 +31,7 @@ export default class ExampleNavbar extends React.Component {
                     <DropdownButton title={currentUser}>
                         <MenuItem href="#profile">Profile</MenuItem>
                         <MenuItem divider />
-                        <MenuItem onSelect={this.props.onLogout}>Log out</MenuItem>
+                        <MenuItem onSelect={AuthActions.logout}>Log out</MenuItem>
                     </DropdownButton>
                 </Nav>
             </Navbar>
@@ -41,6 +42,5 @@ export default class ExampleNavbar extends React.Component {
 ExampleNavbar.propTypes = {
     email: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
-    route: React.PropTypes.string.isRequired,
-    onLogout: React.PropTypes.func.isRequired
+    route: React.PropTypes.string.isRequired
 };

@@ -1,4 +1,4 @@
-import Gravatar from "../src/uiGravatar";
+import Gravatar from "../src/ui/Gravatar";
 import React from "react/addons";
 var TestUtils = React.addons.TestUtils;
 

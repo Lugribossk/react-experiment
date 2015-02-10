@@ -1,4 +1,5 @@
-import Store from "../util/Store";
+import Store from "../flux/Store";
+import AuthActions from "./AuthActions";
 
 export default class CurrentUserStore extends Store {
     constructor() {
@@ -7,6 +8,9 @@ export default class CurrentUserStore extends Store {
         this.state = {
             user: null
         };
+
+        AuthActions.tryCredentials.onDispatch(this.tryCredentials.bind(this));
+        AuthActions.logout.onDispatch(this.logout.bind(this));
     }
 
     tryCredentials(username, password) {

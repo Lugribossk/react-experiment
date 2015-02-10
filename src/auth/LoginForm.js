@@ -3,6 +3,7 @@ import _ from "lodash";
 import {Input, Button, Alert, Glyphicon} from "react-bootstrap"
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../util/SubscribeMixin";
+import AuthActions from "../auth/AuthActions";
 
 export default class LoginForm extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ export default class LoginForm extends React.Component {
             return;
         }
         this.setState({invalidLogin: false});
-        this.props.userStore.tryCredentials(this.state.username, this.state.password);
+        AuthActions.tryCredentials(this.state.username, this.state.password);
     }
 
     render() {
@@ -54,6 +55,6 @@ export default class LoginForm extends React.Component {
 
 Mixins.add(LoginForm.prototype, [React.addons.LinkedStateMixin, SubscribeMixin]);
 
-//LoginForm.propTypes = {
-//    tryCredentials: React.PropTypes.func.isRequired
-//};
+LoginForm.propTypes = {
+    userStore: React.PropTypes.any.isRequired
+};

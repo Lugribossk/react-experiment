@@ -1,4 +1,4 @@
-import Store from "../util/Store";
+import Store from "../flux/Store";
 import {Grapnel} from "grapnel/src/grapnel";
 
 export default class AuthenticatingRouteStore extends Store {
