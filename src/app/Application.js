@@ -2,7 +2,7 @@ import React from "react";
 import Promise from "bluebird";
 import "bootstrap/dist/css/bootstrap.css";
 import ExampleNavbar from "./ExampleNavbar"
-import ExampleRouter from "./ExampleRouter";
+import ExampleRouteStore from "./ExampleRouteStore";
 import LoginForm from "../auth/LoginForm"
 import CurrentUserStore from "../auth/CurrentUserStore";
 import Mixins from "../util/Mixins";

@@ -109,4 +109,6 @@ module.exports = function (grunt) {
     //        src: ["src/**/*.js", "test/**/*.js"]
     //    }
     //});
+
+    grunt.registerTask("dev", ["webpack-dev-server:start"]);
 };

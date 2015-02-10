@@ -3,6 +3,7 @@ import React from "react";
 export default class Store {
     constructor() {
         this.listeners = {};
+        this.state = {};
     }
 
     setState(newState) {

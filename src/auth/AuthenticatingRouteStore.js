@@ -1,3 +1,5 @@
+import Store from "../util/Store";
+import {Grapnel} from "grapnel/src/grapnel";
 
 export default class AuthenticatingRouteStore extends Store {
     constructor(userStore) {
@@ -43,6 +45,6 @@ export default class AuthenticatingRouteStore extends Store {
         this.setState({
             content: content
         });
-        this._trigger("blah", this.state.route, this.state.content);
+        this._trigger("blah", this.grapnel.fragment.get(), this.state.content);
     }
 }
