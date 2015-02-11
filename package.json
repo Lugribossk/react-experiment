@@ -36,6 +36,7 @@
     "react-bootstrap": "^0.13.3",
     "react-hot-loader": "^1.1.4",
     "style-loader": "^0.8.3",
+    "superagent": "^0.21.0",
     "url-loader": "^0.5.5",
     "webpack": "^1.5.3",
     "webpack-dev-server": "^1.7.0"

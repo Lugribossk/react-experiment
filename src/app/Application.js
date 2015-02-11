@@ -7,11 +7,13 @@ import LoginForm from "../auth/LoginForm"
 import CurrentUserStore from "../auth/CurrentUserStore";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../util/SubscribeMixin";
+import ExampleApi from "./ExampleApi";
 
 export default class Application extends React.Component {
     constructor(props) {
         super(props);
-        this.currentUserStore = new CurrentUserStore();
+        var api = new ExampleApi();
+        this.currentUserStore = new CurrentUserStore(api);
         var routeStore = new ExampleRouteStore(this.currentUserStore);
 
         this.state = {

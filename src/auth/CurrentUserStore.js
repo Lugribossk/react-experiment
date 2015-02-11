@@ -2,8 +2,9 @@ import Store from "../flux/Store";
 import AuthActions from "./AuthActions";
 
 export default class CurrentUserStore extends Store {
-    constructor() {
+    constructor(api) {
         super();
+        this.api = api;
 
         this.state = {
             user: null
@@ -14,14 +15,18 @@ export default class CurrentUserStore extends Store {
     }
 
     tryCredentials(username, password) {
-        if (password === "t") {
-            this.setState({user: {
-                name: "Test Testsen",
-                email: "example@example.com"
-            }});
-        } else {
-            this._trigger("invalidLogin");
-        }
+
+        this.api.authenticate(username, password)
+            .catch((err) => {
+                this._trigger("invalidLogin");
+            }).then(() => {
+                return this.api.get("/users/current");
+            }).then((user) => {
+                console.info("Logged in as", user.username);
+                this.setState({user: user});
+            }).catch((err) => {
+                console.error("Unable to get current user:", err);
+            });
     }
 
     logout() {
