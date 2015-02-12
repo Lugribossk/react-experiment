@@ -2,6 +2,7 @@ module.exports = function (grunt) {
     "use strict";
     var webpack = require("webpack");
     var HtmlWebpackPlugin = require("html-webpack-plugin");
+    var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
     grunt.initConfig({});
 
@@ -9,15 +10,18 @@ module.exports = function (grunt) {
     grunt.config.set("webpack", {
         build: {
             context: "src",
-            entry: "./main.js",
+            entry: {
+                main: "./main.js",
+                vendor: ["bluebird", "lodash", "md5", "react", "react-bootstrap", "superagent"]
+            },
             output: {
                 path: "target/dist",
-                filename: "main-[hash].min.js"
+                filename: "main-[chunkhash].min.js"
             },
             module: {
                 loaders: [
                     { test: /\.js$/, exclude: /node_modules/, loader: "6to5"},
-                    { test: /\.css$/, loader: "style!css"},
+                    { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
                     { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                     { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
                     { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
@@ -25,14 +29,17 @@ module.exports = function (grunt) {
                 ]
             },
             plugins: [
+                new webpack.optimize.OccurenceOrderPlugin(),
+                new webpack.optimize.CommonsChunkPlugin("vendor", "vendor-[chunkhash].min.js"),
                 new HtmlWebpackPlugin({
-                    template: "src/index.html"
+                    template: "src/index-build.html"
                 }),
                 new webpack.DefinePlugin({
                     'process.env': {
                         NODE_ENV: JSON.stringify('production')
                     }
                 }),
+                new ExtractTextPlugin("main-[chunkhash].css"),
                 new webpack.optimize.UglifyJsPlugin({
                     minimize: true,
                     comments: /a^/g, // Remove all comments

@@ -42,7 +42,7 @@ export default class Application extends React.Component {
             return (
                 <div>
                     <ExampleNavbar {...this.state.user} route={this.state.route}/>
-                    <div className="container" ref="content">
+                    <div className="container">
                         {this.state.routeContent}
                     </div>
                 </div>

@@ -23,6 +23,7 @@
     "bluebird": "^2.9.6",
     "bootstrap": "^3.3.2",
     "css-loader": "^0.9.1",
+    "extract-text-webpack-plugin": "^0.3.8",
     "file-loader": "^0.8.1",
     "grapnel": "^0.5.2",
     "grunt": "^0.4.5",
