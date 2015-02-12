@@ -1,4 +1,4 @@
-import Action from "../src/experimental/Action";
+import Action from "../../src/flux/Action";
 
 describe("Action", () => {
     it("should call listeners when triggered.", () => {

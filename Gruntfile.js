@@ -16,7 +16,7 @@ module.exports = function (grunt) {
             },
             module: {
                 loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: "6to"},
+                    { test: /\.js$/, exclude: /node_modules/, loader: "6to5"},
                     { test: /\.css$/, loader: "style!css"},
                     { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                     { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
@@ -111,4 +111,6 @@ module.exports = function (grunt) {
     //});
 
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
+    grunt.registerTask("test", ["jest"]);
+    grunt.registerTask("build", ["webpack:build"]);
 };

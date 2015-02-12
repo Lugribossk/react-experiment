@@ -2,7 +2,7 @@ import React from "react/addons";
 import _ from "lodash";
 import {Input, Button, Alert, Glyphicon} from "react-bootstrap"
 import Mixins from "../util/Mixins";
-import SubscribeMixin from "../util/SubscribeMixin";
+import SubscribeMixin from "../flux/SubscribeMixin";
 import AuthActions from "../auth/AuthActions";
 
 export default class LoginForm extends React.Component {

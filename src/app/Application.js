@@ -6,7 +6,7 @@ import ExampleRouteStore from "./ExampleRouteStore";
 import LoginForm from "../auth/LoginForm"
 import CurrentUserStore from "../auth/CurrentUserStore";
 import Mixins from "../util/Mixins";
-import SubscribeMixin from "../util/SubscribeMixin";
+import SubscribeMixin from "../flux/SubscribeMixin";
 import ExampleApi from "./ExampleApi";
 
 export default class Application extends React.Component {

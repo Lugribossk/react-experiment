@@ -1,5 +1,8 @@
 import Store from "../flux/Store";
 import AuthActions from "./AuthActions";
+import Logger from "../util/Logger";
+
+var log = new Logger(__filename);
 
 export default class CurrentUserStore extends Store {
     constructor(api) {
@@ -15,17 +18,16 @@ export default class CurrentUserStore extends Store {
     }
 
     tryCredentials(username, password) {
-
         this.api.authenticate(username, password)
             .catch((err) => {
                 this._trigger("invalidLogin");
             }).then(() => {
                 return this.api.get("/users/current");
             }).then((user) => {
-                console.info("Logged in as", user.username);
+                log.info("Logged in as", user.username);
                 this.setState({user: user});
             }).catch((err) => {
-                console.error("Unable to get current user:", err);
+                log.error("Unable to get current user:", err);
             });
     }
 
