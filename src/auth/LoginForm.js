@@ -31,7 +31,7 @@ export default class LoginForm extends React.Component {
             return;
         }
         this.setState({invalidLogin: false});
-        AuthActions.tryCredentials(this.state.username, this.state.password);
+        AuthActions.login(this.state.username, this.state.password);
     }
 
     render() {

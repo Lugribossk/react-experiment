@@ -1,38 +1,52 @@
-import Store from "../flux/Store";
+import CachingStore from "../flux/CachingStore";
 import AuthActions from "./AuthActions";
 import Logger from "../util/Logger";
+import User from "./User";
+import OAuth2AccessToken from "./OAuth2AccessToken";
 
 var log = new Logger(__filename);
 
-export default class CurrentUserStore extends Store {
+export default class CurrentUserStore extends CachingStore {
     constructor(api) {
-        super();
+        super(__filename);
         this.api = api;
 
-        this.state = {
-            user: null
+        this.state = this.getCachedState() || {
+            user: null,
+            accessToken: null
         };
 
-        AuthActions.tryCredentials.onDispatch(this.tryCredentials.bind(this));
+        if (this.state.accessToken) {
+            this.api.authenticateWith(this.state.accessToken.accessToken);
+            // Reload current user in case the token has expired.
+            this._fetchCurrentUser();
+        }
+
+        AuthActions.login.onDispatch(this.login.bind(this));
         AuthActions.logout.onDispatch(this.logout.bind(this));
+
+        this._registerListener("accessToken", () => {
+            // TODO have api listen for token changes? But that results in a circular dependency
+            if (this.state.accessToken) {
+                this.api.authenticateWith(this.state.accessToken.accessToken);
+            } else {
+                this.api.authenticateWith(null);
+            }
+        })
     }
 
-    tryCredentials(username, password) {
-        this.api.authenticate(username, password)
-            .catch((err) => {
-                this._trigger("invalidLogin");
-            }).then(() => {
-                return this.api.get("/users/current");
-            }).then((user) => {
-                log.info("Logged in as", user.username);
-                this.setState({user: user});
-            }).catch((err) => {
-                log.error("Unable to get current user:", err);
+    login(username, password) {
+        this._fetchAccesstoken(username, password)
+            .then(() => {
+                this._fetchCurrentUser();
             });
     }
 
     logout() {
-        this.setState({user: null});
+        this.setState({
+            user: null,
+            accessToken: null
+        });
     }
 
     getUser() {
@@ -43,10 +57,10 @@ export default class CurrentUserStore extends Store {
         return this._registerListener("user", listener);
     }
 
-    onNextLogin(listener) {
-        var remove = this.onUserChange(user => {
+    onNextSuccessfulLogin(listener) {
+        var unsubscribe = this.onUserChange(user => {
             if (user) {
-                remove();
+                unsubscribe();
                 listener();
             }
         });
@@ -54,5 +68,43 @@ export default class CurrentUserStore extends Store {
 
     onInvalidLogin(listener) {
         return this._registerListener("invalidLogin", listener);
+    }
+
+    unmarshalState(data) {
+        return {
+            user: data.user ? new User(data.user) : null,
+            accessToken: data.accessToken ? new OAuth2AccessToken(data.accessToken) : null
+        };
+    }
+
+    _fetchAccesstoken(username, password) {
+        return this.api.post("/token", {
+            username: username,
+            password: password,
+            grant_type: "password"
+        })
+            .catch((err) => {
+                console.info("Login failed with username", username, err);
+                this._trigger("invalidLogin");
+            })
+            .then((data) => {
+                var accessToken = new OAuth2AccessToken(data);
+                this.setState({accessToken: accessToken});
+                return accessToken;
+            });
+    }
+
+    _fetchCurrentUser() {
+        return this.api.getAs("/users/current", User)
+            .then((user) => {
+                log.info("Logged in as", user.username);
+                this.setState({user: user});
+            }).catch((err) => {
+                log.error("Unable to get current user:", err);
+                this.setState({
+                    user: null,
+                    accessToken: null
+                });
+            });
     }
 }

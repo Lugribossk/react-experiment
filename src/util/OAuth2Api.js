@@ -8,7 +8,7 @@ export default class OAuth2Api {
     }
 
     get(url, data) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             var req = request.get(this.getBaseUrl() + url);
 
             if (this.token) {
@@ -19,8 +19,8 @@ export default class OAuth2Api {
             }
 
             req.end((err, result) => {
-                if (err) {
-                    reject(err);
+                if (err || result.error) {
+                    reject(err || result.error);
                 } else {
                     resolve(result.body);
                 }
@@ -28,15 +28,25 @@ export default class OAuth2Api {
         });
     }
 
+    getAs(url, data, Klass) {
+        if (data && !_.isPlainObject(data)) {
+            Klass = data;
+        }
+        return this.get(url, data)
+            .then((data) => {
+                return new Klass(data);
+            });
+    }
+
     post(url, data) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             request
                 .post(this.getBaseUrl() + url)
                 .send(data)
                 .set("Content-Type", "application/x-www-form-urlencoded")
                 .end((err, result) => {
-                    if (err) {
-                        reject(err);
+                    if (err || result.error) {
+                        reject(err || result.error);
                     } else {
                         resolve(result.body);
                     }

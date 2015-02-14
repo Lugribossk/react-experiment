@@ -19,7 +19,7 @@ export default class AuthenticatingRouteStore extends Store {
             if (!userStore.getUser()) {
                 event.preventDefault();
 
-                userStore.onNextLogin(() => {
+                userStore.onNextSuccessfulLogin(() => {
                     lastValue = null;
                     event.callback();
                 });

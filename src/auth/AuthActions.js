@@ -1,6 +1,6 @@
 import Action from "../flux/Action";
 
 export default {
-    tryCredentials: new Action("tryCredentials"),
+    login: new Action("login"),
     logout: new Action("logout")
 }

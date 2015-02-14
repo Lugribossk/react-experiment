@@ -2,20 +2,8 @@ import "whatwg-fetch/fetch";
 import OAuth2Api from "../util/OAuth2Api";
 
 export default class ExampleApi extends OAuth2Api {
-    authenticate(username, password) {
-        return this.post("/token", {
-            username: username,
-            password: password,
-            grant_type: "password"
-        })
-            .catch((err) => {
-                console.info("Login failed with username", username, err);
-                throw err;
-            })
-            .then((token) => {
-                this.token = token.accessToken;
-                return token;
-            });
+    authenticateWith(token) {
+        this.token = token;
     }
 
     getBaseUrl() {

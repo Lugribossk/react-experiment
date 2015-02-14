@@ -18,8 +18,8 @@ export default class Application extends React.Component {
 
         this.state = {
             user: this.currentUserStore.getUser(),
-            route: null,
-            routeContent: null
+            route: "",
+            routeContent: ""
         };
 
         this.subscribe(this.currentUserStore.onUserChange(this.onUserChange.bind(this)));
