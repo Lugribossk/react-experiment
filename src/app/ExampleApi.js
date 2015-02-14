@@ -1,4 +1,3 @@
-import "whatwg-fetch/fetch";
 import OAuth2Api from "../util/OAuth2Api";
 
 export default class ExampleApi extends OAuth2Api {

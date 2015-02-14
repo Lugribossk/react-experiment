@@ -14,23 +14,23 @@ export default class Application extends React.Component {
         super(props);
         var api = new ExampleApi();
         this.currentUserStore = new CurrentUserStore(api);
-        var routeStore = new ExampleRouteStore(this.currentUserStore);
+        var routeStore = new ExampleRouteStore(window, this.currentUserStore);
 
         this.state = {
             user: this.currentUserStore.getUser(),
-            route: "",
-            routeContent: ""
+            route: routeStore.getRouteUrl(),
+            routeContent: routeStore.getRouteContent()
         };
 
         this.subscribe(this.currentUserStore.onUserChange(this.onUserChange.bind(this)));
-        this.subscribe(routeStore.onRoute(this.onRoute.bind(this)));
+        this.subscribe(routeStore.onRouteChange(this.onRouteChange.bind(this)));
     }
 
     onUserChange(user) {
         this.setState({user: user});
     }
 
-    onRoute(route, content) {
+    onRouteChange(content, route) {
         this.setState({
             route: route,
             routeContent: content
