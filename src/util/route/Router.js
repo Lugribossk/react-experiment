@@ -73,7 +73,6 @@ export default class Router {
         });
 
         if (!foundRoute) {
-            debugger
             this.foundNoMatchingRoute(hash);
         }
     }

@@ -102,11 +102,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks("grunt-jest");
-    grunt.config.set("jest", {
-        options: {}
-    });
-
     //grunt.loadNpmTasks('grunt-eslint');
     //grunt.config.set("eslint", {
     //    options: {
@@ -117,7 +112,20 @@ module.exports = function (grunt) {
     //    }
     //});
 
+    grunt.loadNpmTasks("grunt-mocha-test");
+    grunt.config.set("mochaTest", {
+        options: {
+            require: [
+                "6to5-core/register",
+                "./test/testSetup"
+            ]
+        },
+        test: {
+            src: ["test/**/*Test.js"]
+        }
+    });
+
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
-    grunt.registerTask("test", ["jest"]);
+    grunt.registerTask("test", ["grunt-mocha-test:test"]);
     grunt.registerTask("build", ["webpack:build"]);
 };

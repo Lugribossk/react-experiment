@@ -1,25 +1,29 @@
+import expect from "expect.js";
+import sinon from "sinon";
 import Router from "../../src/util/route/Router";
 
-xdescribe("Router", () => {
+describe("Router", () => {
     var mockWindow;
+    var hashChangeHandler;
     beforeEach(() => {
         mockWindow = {
-            addEventListener: jasmine.createSpy(),
+            addEventListener: (event, handler) => {
+                hashChangeHandler = handler;
+            },
             location: {
                 href: ""
             }
         }
     });
 
-    it("should ...", () => {
-        var handler = jasmine.createSpy();
+    it("should call handler for matching route.", () => {
+        var handler = sinon.spy();
         var router = new Router(mockWindow);
         router.add("test", handler);
         router.init();
 
-        var x = mockWindow.addEventListener.calls.first().args[1];
-        x("test");
+        hashChangeHandler({newURL: "#test"});
 
-        expect(handler).toHaveBeenCalled();
+        expect(handler.called).to.be.ok();
     });
 });
