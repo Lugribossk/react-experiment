@@ -7,12 +7,16 @@ export default class OAuth2Api {
         this.token = null;
     }
 
+    authenticateWith(token) {
+        this.token = token;
+    }
+
     get(url, data) {
         return new Promise((resolve, reject) => {
             var req = request.get(this.getBaseUrl() + url);
 
             if (this.token) {
-                req.set("Authorization", "Bearer " + this.token)
+                this.authenticateRequest(req);
             }
             if (data) {
                 req.query(data);
@@ -38,6 +42,18 @@ export default class OAuth2Api {
             });
     }
 
+    getAsList(url, data, Klass) {
+        if (data && !_.isPlainObject(data)) {
+            Klass = data;
+        }
+        return this.get(url, data)
+            .then((items) => {
+                return _.map(items, (data) => {
+                    return new Klass(data);
+                });
+            });
+    }
+
     post(url, data) {
         return new Promise((resolve, reject) => {
             request
@@ -56,5 +72,9 @@ export default class OAuth2Api {
 
     getBaseUrl() {
         return "";
+    }
+
+    authenticateRequest(req) {
+        req.set("Authorization", "Bearer " + this.token);
     }
 }
