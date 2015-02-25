@@ -25,7 +25,8 @@ module.exports = function (grunt) {
                     { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                     { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
                     { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-                    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" }
+                    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" },
+                    { test: /\.(png|jpg)$/, loader: "url?limit=10000" }
                 ]
             },
             plugins: [
@@ -35,8 +36,8 @@ module.exports = function (grunt) {
                     template: "src/index-build.html"
                 }),
                 new webpack.DefinePlugin({
-                    'process.env': {
-                        NODE_ENV: JSON.stringify('production')
+                    "process.env": {
+                        NODE_ENV: JSON.stringify("production")
                     }
                 }),
                 new ExtractTextPlugin("main-[chunkhash].css"),
@@ -59,8 +60,8 @@ module.exports = function (grunt) {
             webpack: {
                 context: "src",
                 entry: [
-                    'webpack-dev-server/client?http://localhost:8080',
-                    'webpack/hot/only-dev-server',
+                    "webpack-dev-server/client?http://localhost:8080",
+                    "webpack/hot/only-dev-server",
                     "./main.js"
                 ],
                 output: {
@@ -74,7 +75,8 @@ module.exports = function (grunt) {
                         { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                         { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
                         { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-                        { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" }
+                        { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" },
+                        { test: /\.(png|jpg)$/, loader: "url?limit=10000" }
                     ]
                 },
                 plugins: [
@@ -102,15 +104,15 @@ module.exports = function (grunt) {
         }
     });
 
-    //grunt.loadNpmTasks('grunt-eslint');
-    //grunt.config.set("eslint", {
-    //    options: {
-    //        configFile: '.eslintrc'
-    //    },
-    //    all: {
-    //        src: ["src/**/*.js", "test/**/*.js"]
-    //    }
-    //});
+    grunt.loadNpmTasks("grunt-jscs");
+    grunt.config.set("jscs", {
+        options: {
+            config: ".jscsrc"
+        },
+        dev: {
+            src: ["src/**/*.js", "test/**/*.js", "Gruntfile.js"]
+        }
+    });
 
     grunt.loadNpmTasks("grunt-mocha-test");
     grunt.config.set("mochaTest", {
@@ -126,6 +128,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
-    grunt.registerTask("test", ["grunt-mocha-test:test"]);
+    grunt.registerTask("test", ["jscs:dev", "grunt-mocha-test:test"]);
     grunt.registerTask("build", ["webpack:build"]);
 };
