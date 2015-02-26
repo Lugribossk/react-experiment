@@ -1,7 +1,7 @@
 import React from "react";
-import Application from "./app/Application.js";
+import CanvasApp from "./canvas/CanvasApp.js";
 
 React.render(
-    <Application/>,
+    <CanvasApp/>,
     document.getElementById("main")
 );
