@@ -1,28 +1,27 @@
-import React from "react";
-import {Image} from "react-canvas";
+import _ from "lodash";
 import ball from "./ball.png";
 
-export default class Ball extends React.Component {
-    constructor() {
-        //var x = this.props.model;
-        this.state = {
-            top: 0,//x.top,
-            left: 0//x.left
-        };
-
-        //this.subscribe(x.onBlah(this.onBlah.bind(this)));
+export default class Ball {
+    constructor(top, left) {
+        this.id = _.uniqueId("ball");
+        this.top = top || 0;
+        this.left = left || 0;
     }
 
-    onBlah() {
-        this.setState({
-            top: this.props.model.top,
-            left: this.props.model.left
-        });
+    update() {
+        var speed = 1;
+        if (this.left === 180 && this.top !== 0) {
+            this.top -= speed;
+        } else if (this.top === 0 && this.left !== 0) {
+            this.left -= speed;
+        } else if (this.top === 180) {
+            this.left += speed;
+        } else if (this.left === 0) {
+            this.top += speed;
+        }
     }
 
-    render() {
-        return (
-            <Image style={{top: this.state.top, left: this.state.left, width: 20, height: 20}} src={ball} />
-        );
+    getImage() {
+        return ball;
     }
 }

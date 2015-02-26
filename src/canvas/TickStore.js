@@ -9,8 +9,8 @@ export default class TickStore extends Store {
         this.setupRAF();
     }
 
-    onTick(listener) {
-        return this._registerListener("tick", listener);
+    onTick(listener, phase) {
+        return this._registerListener("tick" + phase, listener);
     }
 
     setupRAF() {
@@ -19,7 +19,8 @@ export default class TickStore extends Store {
             startTime = window.performance.now();
             var sinceLast = startTime - endTime;
 
-            this._trigger("tick", sinceLast);
+            this._trigger("tick1", sinceLast);
+            this._trigger("tick2", sinceLast);
             ReactUpdates.flushBatchedUpdates();
 
             requestAnimationFrame(tick);
