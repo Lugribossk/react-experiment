@@ -9,6 +9,9 @@ import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import ExampleApi from "./ExampleApi";
 
+/**
+ * The example application itself.
+ */
 export default class Application extends React.Component {
     constructor(props) {
         super(props);

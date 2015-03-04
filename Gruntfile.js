@@ -128,6 +128,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
-    grunt.registerTask("test", ["jscs:dev", "grunt-mocha-test:test"]);
+    grunt.registerTask("test", ["jscs:dev", "mochaTest:test"]);
     grunt.registerTask("build", ["webpack:build"]);
 };

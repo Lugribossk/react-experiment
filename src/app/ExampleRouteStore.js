@@ -1,6 +1,9 @@
 import React from "react";
 import AuthenticatingRouter from "../util/route/AuthenticatingRouter";
 
+/**
+ * Example routes.
+ */
 export default class ExampleRouteStore extends AuthenticatingRouter {
     constructor(window, userStore) {
         super(window, userStore);
