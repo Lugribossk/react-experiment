@@ -105,16 +105,25 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("grunt-jscs");
+    var styleSrc = ["src/**/*.js", "test/**/*.js", "Gruntfile.js"];
     grunt.config.set("jscs", {
         options: {
             config: ".jscsrc"
         },
         dev: {
-            src: ["src/**/*.js", "test/**/*.js", "Gruntfile.js"]
+            src: styleSrc
+        },
+        ci: {
+            options: {
+                reporter: "junit",
+                reporterOutput: "target/style.xml"
+            },
+            src: styleSrc
         }
     });
 
     grunt.loadNpmTasks("grunt-mocha-test");
+    var testSrc = ["test/**/*Test.js"];
     grunt.config.set("mochaTest", {
         options: {
             require: [
@@ -123,11 +132,43 @@ module.exports = function (grunt) {
             ]
         },
         test: {
-            src: ["test/**/*Test.js"]
+            src: testSrc
+        },
+        ci: {
+            options: {
+                reporter: "xunit",
+                captureFile: "target/tests.xml",
+                quiet: true
+            },
+            src: testSrc
         }
+    });
+
+    grunt.registerTask("coverage", "Generate test coverage report.", function () {
+        var istanbulOptions = ["cover", "--root", "./src", "--dir", "./target/coverage", "./node_modules/mocha/bin/_mocha"];
+        var mochaOptions = ["--require", "6to5-core/register", "--require", "./test/testSetup", /*"--require", "./src/app/Application",*/ "--recursive", "./test"];
+
+        var done = this.async();
+        grunt.util.spawn({
+            cmd: "node",
+            args: ["./node_modules/istanbul/lib/cli"].concat(istanbulOptions).concat("--").concat(mochaOptions),
+            opts: {
+                env: process.env,
+                cwd: process.cwd(),
+                stdio: "inherit"
+            }
+        }, function (err) {
+            if (err) {
+                grunt.fail.warn(err);
+                return;
+            }
+            done();
+        });
     });
 
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
     grunt.registerTask("test", ["jscs:dev", "mochaTest:test"]);
     grunt.registerTask("build", ["webpack:build"]);
+
+    grunt.registerTask("ci", "jscs:ci", "mochaTest:ci", "build");
 };
