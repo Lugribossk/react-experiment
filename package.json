@@ -24,7 +24,7 @@
     "lodash": "^3.1.0",
     "md5": "^1.0.0",
     "mocha": "^2.1.0",
-    "react": "0.13.0-beta.1",
+    "react": "0.13.0",
     "react-bootstrap": "^0.13.3",
     "react-hot-loader": "^1.1.4",
     "sinon": "^1.12.2",
