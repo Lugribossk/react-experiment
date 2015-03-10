@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "6to5-core": "^3.4.0",
-    "6to5-loader": "^3.0.0",
+    "babel-core": "^4.7.8",
+    "babel-loader": "^4.1.0",
     "bluebird": "^2.9.6",
     "bootstrap": "^3.3.2",
     "css-loader": "^0.9.1",

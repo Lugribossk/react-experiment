@@ -20,7 +20,7 @@ module.exports = function (grunt) {
             },
             module: {
                 loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: "6to5"},
+                    { test: /\.js$/, exclude: /node_modules/, loader: "babel"},
                     { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
                     { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                     { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
@@ -70,7 +70,7 @@ module.exports = function (grunt) {
                 },
                 module: {
                     loaders: [
-                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "6to5?sourceMap=true"]},
+                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?sourceMap=true"]},
                         { test: /\.css$/, loader: "style!css"},
                         { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                         { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
@@ -127,7 +127,7 @@ module.exports = function (grunt) {
     grunt.config.set("mochaTest", {
         options: {
             require: [
-                "6to5-core/register",
+                "babel-core/register",
                 "./test/testSetup"
             ]
         },
@@ -146,7 +146,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("coverage", "Generate test coverage report.", function () {
         var istanbulOptions = ["cover", "--root", "./src", "--dir", "./target/coverage", "./node_modules/mocha/bin/_mocha"];
-        var mochaOptions = ["--require", "6to5-core/register", "--require", "./test/testSetup", /*"--require", "./src/app/Application",*/ "--recursive", "./test"];
+        var mochaOptions = ["--require", "babel-core/register", "--require", "./test/testSetup", /*"--require", "./src/app/Application",*/ "--recursive", "./test"];
 
         var done = this.async();
         grunt.util.spawn({
