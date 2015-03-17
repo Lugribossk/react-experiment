@@ -1,5 +1,6 @@
 import Store from "../flux/Store"
 import request from "superagent";
+import Build from "./Build";
 
 export default class BuildsStore extends Store {
     constructor() {
@@ -24,9 +25,12 @@ export default class BuildsStore extends Store {
 
     _updateBuilds() {
         request.get("/job/integration-test-generic-build/api/json")
-            .query("tree=builds[id,building,result,timestamp,duration,actions[parameters[*],causes[userName]]]")
+            .query("tree=builds[id,building,result,timestamp,duration,actions[parameters[*],causes[userName,upstreamBuild,upstreamProject]]]")
             .end((err, result) => {
-                this.setState({builds: result.body.builds});
+                var builds = _.map(result.body.builds, (data) => {
+                    return new Build(data);
+                });
+                this.setState({builds: builds});
             });
     }
 }

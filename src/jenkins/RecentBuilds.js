@@ -8,10 +8,18 @@ export default class RecentBuilds extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            builds: this.props.buildsStore.getRecentBuilds()
+            builds: this.props.buildsStore.getRecentBuilds(),
+            now: Date.now()
         };
 
         this.subscribe(this.props.buildsStore.onRecentBuildsChanged(this.onRecentBuildsChanged.bind(this)));
+        this.interval = setInterval(() => {
+            this.setState({now: Date.now()});
+        }, 10000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     onRecentBuildsChanged(builds) {
@@ -20,7 +28,7 @@ export default class RecentBuilds extends React.Component {
 
     renderBuilds() {
         return _.map(this.state.builds, (build) => {
-            return <BuildStatus key={build.id} {...build}/>
+            return <BuildStatus key={build.id} build={build} now={this.state.now}/>
         });
     }
 

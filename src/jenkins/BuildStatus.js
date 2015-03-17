@@ -1,69 +1,21 @@
 import React from "react";
-import {Input, Button, Alert, Glyphicon, Panel} from "react-bootstrap"
-
-var REPOS = {
-    Backend: "Backend-Service",
-    Supplierintegrations: "Supplier-Integrations",
-    Proxy2: "Tradeshift-Proxy2",
-    Conversions: "Backend-Conversions",
-    Integration: "???",
-    Apptool: "App-Tool",
-    Appservice: "App-Service",
-    Citiscf: "Financing-CitiSCF",
-    Cloudscan: "cloudscan-service"
-};
+import _ from "lodash";
+import {Panel, ProgressBar, ModalTrigger, Button} from "react-bootstrap"
+import Merge from "./Merge";
 
 export default class BuildStatus extends React.Component {
-    getUsername() {
-        var username = "";
-        _.find(this.props.actions, (action) => {
-            if (action.causes && action.causes[0] && action.causes[0].userName) {
-                username = action.causes[0].userName;
-            }
-        });
-        return username;
-    }
-
     getLink() {
-        return "/job/integration-test-generic-build/" + this.props.id;
-    }
-
-    getParameters() {
-        var paramList = [];
-        _.find(this.props.actions, (action) => {
-            if (action.parameters) {
-                paramList = action.parameters;
-            }
-        });
-        var params = {};
-        _.forEach(paramList, (param) => {
-            params[param.name] = param.value;
-        });
-        return params;
-    }
-
-    getRepoBranches() {
-        var repos = {};
-        _.forEach(this.getParameters(), (value, name) => {
-            if (_.endsWith(name, "_GIT_REF")) {
-                var rawRepo = name.substr(0, name.length - 8);
-                rawRepo = _.startCase(rawRepo.toLocaleLowerCase()).replace(" ", "-");
-                var realRepo = REPOS[rawRepo] || rawRepo;
-                var branch = _.startsWith(value, "origin/") ? value.substr(7) : value;
-
-                repos[realRepo] = branch;
-            }
-        });
-
-        return repos;
+        return "/job/integration-test-generic-build/" + this.props.build.id;
     }
 
     renderHeader() {
-        return <a href={this.getLink()} target="_blank">{"#" + this.props.id} - {this.getUsername()}</a>;
+        return (
+            <a href={this.getLink()} target="_blank">{"#" + this.props.build.id} - {this.props.build.getUsername()}</a>
+        );
     }
 
     renderBranches() {
-        return _.map(this.getRepoBranches(), (branch, repo) => {
+        return _.map(this.props.build.getRepoBranches(), (branch, repo) => {
             if (branch && branch !== "master") {
                 return (
                     <div key={repo}>
@@ -76,23 +28,59 @@ export default class BuildStatus extends React.Component {
         });
     }
 
+    renderProgress() {
+        if (this.props.build.building) {
+            var estimatedDuration = 45 * 60 * 1000;
+            var started = this.props.build.timestamp;
+            var runningFor = this.props.now - started;
+            var progress = Math.round(runningFor / estimatedDuration * 100);
+
+            var remainingMins = Math.ceil((estimatedDuration - runningFor) / 60000);
+
+            return (
+                <ProgressBar bsStyle="info" now={progress} label={remainingMins + " mins"} />
+            );
+        } else if (this.props.build.isSuccess()) {
+            return (
+                <ProgressBar bsStyle="success" now={100} label={Math.ceil(this.props.build.duration / 60000) + " mins"}/>
+            );
+        }
+    }
+
+    renderActions() {
+        if (!this.props.build.building) {
+            if (this.props.build.isSuccess()) {
+                return (
+                    <ModalTrigger modal={<Merge build={this.props.build}/>}>
+                        <Button bsStyle="success" style={{float: "right"}}>Merge!</Button>
+                    </ModalTrigger>
+                );
+            } else {
+                return (
+                    <a className="btn btn-default" style={{float: "right"}} href={this.getLink() + "/rebuild/parameterized"}>Rebuild</a>
+                );
+            }
+        }
+    }
+
     render() {
         var style;
-        if (this.props.building) {
-            style = "default";
+        if (this.props.build.building) {
+            style = "info";
         } else {
-            if (this.props.result === "SUCCESS") {
+            if (this.props.build.isSuccess()) {
                 style = "success"
-            } else if (this.props.result === "UNSTABLE") {
+            } else if (this.props.build.isUnstable()) {
                 style = "warning"
             } else {
                 style = "danger";
             }
-
         }
 
         return (
             <Panel bsStyle={style} header={this.renderHeader()}>
+                {this.renderActions()}
+                {this.renderProgress()}
                 {this.renderBranches()}
             </Panel>
         );
