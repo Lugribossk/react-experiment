@@ -25,6 +25,10 @@ export default class Build {
         return this.result === "UNSTABLE";
     }
 
+    isFailed() {
+        return this.result === "FAILED" || this.result === "FAILURE";
+    }
+
     isRebuildOf(id) {
         return !!_.find(this.actions, (action) => {
             return action.causes &&

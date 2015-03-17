@@ -25,7 +25,7 @@ export default class Merge extends React.Component {
 
     render() {
         return (
-            <Modal {...this.props} title="Changelog">
+            <Modal {...this.props} title="Changelog" animation={false}>
                 <div className="modal-body">
                     <Input type="textarea" valueLink={this.linkState("changelog")} autoFocus/>
                 </div>

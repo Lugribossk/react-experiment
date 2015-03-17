@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import moment from "moment";
 import {Panel, ProgressBar, ModalTrigger, Button} from "react-bootstrap"
 import Merge from "./Merge";
 
@@ -9,8 +10,23 @@ export default class BuildStatus extends React.Component {
     }
 
     renderHeader() {
+        var displaytime = "";
+        if (!this.props.build.building) {
+            var time = moment(this.props.build.timestamp + this.props.build.duration);
+            if (time.isBefore(moment().startOf("week"))) {
+                displaytime = time.format("ddd Do MMM HH:mm")
+            } else if (time.isBefore(moment().startOf("day"))) {
+                displaytime = time.format("ddd HH:mm");
+            } else {
+                displaytime = time.format("HH:mm");
+            }
+        }
+
         return (
-            <a href={this.getLink()} target="_blank">{"#" + this.props.build.id} - {this.props.build.getUsername()}</a>
+            <span>
+                <a href={this.getLink()} target="_blank">{"#" + this.props.build.id} - {this.props.build.getUsername()}</a>
+                <span style={{float: "right"}}>{displaytime}</span>
+            </span>
         );
     }
 
