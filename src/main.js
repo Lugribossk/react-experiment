@@ -1,7 +1,7 @@
 import React from "react";
-import Application from "./app/Application.js";
+import JenkinsDashboard from "./jenkins/JenkinsDashboard.js";
 
 React.render(
-    <Application/>,
+    <JenkinsDashboard/>,
     document.getElementById("main")
 );
