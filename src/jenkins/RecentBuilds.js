@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
-import Build from "./Build";
+import BuildStatus from "./BuildStatus";
 
 export default class RecentBuilds extends React.Component {
     constructor(props) {
@@ -20,7 +20,7 @@ export default class RecentBuilds extends React.Component {
 
     renderBuilds() {
         return _.map(this.state.builds, (build) => {
-            return <Build key={build.id} {...build}/>
+            return <BuildStatus key={build.id} {...build}/>
         });
     }
 
