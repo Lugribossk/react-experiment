@@ -5,7 +5,6 @@ var REPOS = {
     Supplierintegrations: "Supplier-Integrations",
     Proxy2: "Tradeshift-Proxy2",
     Conversions: "Backend-Conversions",
-    Integration: "???",
     Apptool: "App-Tool",
     Appservice: "App-Service",
     Citiscf: "Financing-CitiSCF",
@@ -59,7 +58,7 @@ export default class Build {
         return username;
     }
 
-    getParameters() {
+    getParametersList() {
         var paramList = [];
         _.find(this.actions, (action) => {
             if (action.parameters) {
@@ -67,8 +66,12 @@ export default class Build {
                 return true;
             }
         });
+        return paramList;
+    }
+
+    getParameters() {
         var params = {};
-        _.forEach(paramList, (param) => {
+        _.forEach(this.getParametersList(), (param) => {
             params[param.name] = param.value;
         });
         return params;
