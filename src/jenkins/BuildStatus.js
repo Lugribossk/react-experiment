@@ -79,6 +79,29 @@ export default class BuildStatus extends React.Component {
         }
     }
 
+    renderTestFailures() {
+        if (this.props.build.isUnstable() && this.props.testReport) {
+            if (this.props.testReport.failCount > 10) {
+                return <span>{this.props.testReport.failCount} tests failed.</span>
+            }
+
+            return _.map(this.props.testReport.getFailingTests(), (failure) => {
+                var key = this.props.build.id + failure.file + failure.name;
+                key = key.replace(" ", "-").replace(".", "-");
+
+                var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
+                var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
+                var link = "/job/integration-test-generic-build/" + this.props.build.id + "/testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
+
+                return (
+                    <div key={key}>
+                        <a href={link} target="_blank">{klass}: {failure.name}</a>
+                    </div>
+                );
+            });
+        }
+    }
+
     render() {
         var style;
         if (this.props.build.building) {
@@ -98,6 +121,7 @@ export default class BuildStatus extends React.Component {
                 {this.renderActions()}
                 {this.renderProgress()}
                 {this.renderBranches()}
+                {this.renderTestFailures()}
             </Panel>
         );
     }

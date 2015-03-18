@@ -1,4 +1,5 @@
 import Store from "./Store";
+import jjlc from "../util/jjlc";
 
 /**
  * Specialized store that saves its state in localstorage as JSON between sessions.
@@ -23,7 +24,7 @@ export default class CachingStore extends Store {
      * @returns {Object}
      */
     getCachedState() {
-        var rawData = localStorage.getItem(this.storageKey);
+        var rawData = jjlc.getItem(this.storageKey);
         if (rawData) {
             var data = JSON.parse(rawData);
             return this.unmarshalState(data);

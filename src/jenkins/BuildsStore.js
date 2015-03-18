@@ -12,7 +12,7 @@ export default class BuildsStore extends Store {
             reports: {}
         };
 
-        this.pendingReports = this.state.reports;
+        this.pendingReports = {};
 
         this._updateBuilds();
 
@@ -43,26 +43,30 @@ export default class BuildsStore extends Store {
                     return new Build(data);
                 });
 
-                /*_.forEach(builds, (build) => {
+                _.forEach(builds, (build) => {
                     if (build.isUnstable()) {
                         this._updateTestReport(build.id);
                     }
-                });*/
+                });
 
                 this.setState({builds: builds});
             });
     }
 
     _updateTestReport(id) {
-        if (this.pendingReports[id]) {
+        if (this.state.reports[id] || this.pendingReports[id]) {
             return;
         }
         this.pendingReports[id] = true;
 
         request.get("/job/integration-test-generic-build/" + id + "/testReport/api/json")
+            .query("tree=failCount,passCount,skipCount,suites[name,cases[name,status,duration,errorDetails,errorStackTrace,stdout]]")
             .end((err, result) => {
+                if (err) {
+                    return;
+                }
                 var report = new TestReport(result.body);
-                this.setState({reports: _.assign({[id]: report}, this.state)});
+                this.setState({reports: _.assign({[id]: report}, this.state.reports)});
             });
     }
 }
