@@ -29,14 +29,23 @@ export default class Build {
         return this.result === "FAILED" || this.result === "FAILURE";
     }
 
-    isRebuildOf(id) {
-        return !!_.find(this.actions, (action) => {
-            return action.causes &&
+    isAborted() {
+        return this.result === "ABORTED";
+    }
+
+    getUpstream() {
+        var data = {};
+        _.forEach(this.actions, (action) => {
+            if (action.causes &&
                 action.causes[0] &&
-                action.causes[0].upstreamBuild &&
-                action.causes[0].upstreamBuild === id &&
-                action.causes[0].upstreamProject === "integration-test-generic-build"
+                action.causes[0].upstreamBuild) {
+                data = {
+                    id: action.causes[0].upstreamBuild,
+                    name: action.causes[0].upstreamProject
+                }
+            }
         });
+        return data;
     }
 
     getUsername() {

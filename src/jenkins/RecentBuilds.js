@@ -5,33 +5,60 @@ import {TabbedArea, TabPane} from "react-bootstrap"
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import BuildStatus from "./BuildStatus";
+import UnstableStats from "./UnstableStats";
 
 export default class RecentBuilds extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            builds: this.props.buildsStore.getRecentBuilds(),
+            builds: this.props.buildsStore.getBuilds(),
             testReports: this.props.buildsStore.getTestReports(),
-            now: Date.now()
+            failureData: this.props.buildsStore.getFailureData(),
+            now: Date.now(),
+            subsets: this._getSubsets()
         };
 
-        this.subscribe(this.props.buildsStore.onRecentBuildsChanged(this.onRecentBuildsChanged.bind(this)));
+        this.subscribe(this.props.buildsStore.onBuildsChanged(this.onBuildsChanged.bind(this)));
         this.subscribe(this.props.buildsStore.onTestReportsChanged(this.onTestReportsChanged.bind(this)));
+        this.subscribe(this.props.buildsStore.onFailureDataChanged(this.onFailureDataChanged.bind(this)));
         this.interval = setInterval(() => {
             this.setState({now: Date.now()});
         }, 10000);
+        this.subscribe(this.props.subsetStore.onBuildsChanged(this.onSubsetsChanged.bind(this)));
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    onRecentBuildsChanged(builds) {
+    onBuildsChanged(builds) {
         this.setState({builds: builds});
     }
 
     onTestReportsChanged(reports) {
         this.setState({testReports: reports});
+    }
+
+    onFailureDataChanged(data) {
+        this.setState({failureData: data});
+    }
+
+    onSubsetsChanged(data) {
+        this.setState({subsets: this._getSubsets()});
+    }
+
+    _getSubsets() {
+        var buildToSubsets = {};
+        _.forEach(this.props.subsetStore.getBuilds(), (subset) => {
+            var upstream = subset.getUpstream();
+            if (upstream.name === "integration-test-generic-build") {
+                if (!buildToSubsets[upstream.id]) {
+                    buildToSubsets[upstream.id] = [];
+                }
+                buildToSubsets[upstream.id].push(subset);
+            }
+        });
+        return buildToSubsets;
     }
 
     renderBuilds(filter) {
@@ -41,7 +68,12 @@ export default class RecentBuilds extends React.Component {
         }
 
         return _.map(builds, (build) => {
-            return <BuildStatus key={build.id} build={build} testReport={this.state.testReports[build.id]} now={this.state.now}/>
+            return <BuildStatus key={build.id}
+                build={build}
+                testReport={this.state.testReports[build.id]}
+                failureData={this.state.failureData[build.id]}
+                subsets={this.state.subsets[build.id]}
+                now={this.state.now}/>
         });
     }
 
@@ -74,6 +106,9 @@ export default class RecentBuilds extends React.Component {
 
                         return started.isAfter(yesterdayEvening) && started.isBefore(thisMorning);
                     })}
+                </TabPane>
+                <TabPane eventKey={6} tab="Stats">
+                    <UnstableStats buildsStore={this.props.buildsStore}/>
                 </TabPane>
             </TabbedArea>
         );

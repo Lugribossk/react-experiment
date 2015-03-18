@@ -1,8 +1,12 @@
 import React from "react";
 import _ from "lodash";
 import moment from "moment";
-import {Panel, ProgressBar, ModalTrigger, Button} from "react-bootstrap"
+import {Panel, ProgressBar, ModalTrigger, Button, Alert} from "react-bootstrap"
 import Merge from "./Merge";
+import BuildActions from "./BuildActions";
+
+var ESTIMATED_DURATION_MINS = 35,
+    NUM_SUBSETS = 24;
 
 export default class BuildStatus extends React.Component {
     getLink() {
@@ -46,7 +50,7 @@ export default class BuildStatus extends React.Component {
 
     renderProgress() {
         if (this.props.build.building) {
-            var estimatedDuration = 45 * 60 * 1000;
+            var estimatedDuration = ESTIMATED_DURATION_MINS * 60 * 1000;
             var started = this.props.build.timestamp;
             var runningFor = this.props.now - started;
             var progress = Math.round(runningFor / estimatedDuration * 100);
@@ -73,9 +77,19 @@ export default class BuildStatus extends React.Component {
                 );
             } else {
                 return (
-                    <a className="btn btn-default" style={{float: "right"}} href={this.getLink() + "/rebuild/parameterized"}>Rebuild</a>
+                    <a className="btn btn-default" style={{float: "right"}} href={this.getLink() + "/rebuild/parameterized"} target="_blank">Rebuild</a>
                 );
             }
+        } else {
+            var abort = () => {
+                BuildActions.abort(this.props.build);
+                _.forEach(this.props.subsets || [], (subset) => {
+                    BuildActions.abort(subset.abort());
+                });
+            };
+            return (
+                <Button onclick={abort} style={{float: "right"}}>Abort</Button>
+            );
         }
     }
 
@@ -102,6 +116,40 @@ export default class BuildStatus extends React.Component {
         }
     }
 
+    renderBuildFailure() {
+        if (this.props.build.isFailed() && this.props.failureData) {
+            var data = this.props.failureData;
+            if (data.misspelledBranch) {
+                return <span>Branch does not exist: {data.misspelledBranch}</span>;
+            } else if (data.noFastForward) {
+                return <span>Branch not up to date with master: {data.noFastForward}</span>;
+            }
+        }
+
+        if (this.props.build.isAborted()) {
+            return <span>Build aborted.</span>;
+        }
+    }
+
+    renderSubsets() {
+        if (!this.props.build.building || !this.props.subsets || this.props.subsets.length !== NUM_SUBSETS) {
+            return;
+        }
+        var finishedSubsets = _.filter(this.props.subsets, (subset) => {
+            return !subset.building && subset.isSuccess();
+        });
+        var failedSubsets = _.filter(this.props.subsets, (subset) => {
+            return !subset.building && !subset.isSuccess();
+        });
+
+        return (
+            <ProgressBar>
+                <ProgressBar bsStyle="danger" now={Math.round(failedSubsets.length / NUM_SUBSETS * 100)} label={failedSubsets.length} key={1} />
+                <ProgressBar bsStyle="success" now={Math.round(finishedSubsets.length / NUM_SUBSETS * 100)} key={2} />
+            </ProgressBar>
+        );
+    }
+
     render() {
         var style;
         if (this.props.build.building) {
@@ -120,8 +168,10 @@ export default class BuildStatus extends React.Component {
             <Panel bsStyle={style} header={this.renderHeader()}>
                 {this.renderActions()}
                 {this.renderProgress()}
+                {this.renderSubsets()}
                 {this.renderBranches()}
                 {this.renderTestFailures()}
+                {this.renderBuildFailure()}
             </Panel>
         );
     }

@@ -28,7 +28,8 @@ export default class TestReport {
                 if (kase.status !== "PASSED" && kase.status !== "SKIPPED" && kase.status !== "FIXED") {
                     tests.push({
                         file: suite.name,
-                        name: kase.name
+                        name: kase.name,
+                        slave: kase.slave
                     });
                 }
             });
