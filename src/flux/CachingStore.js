@@ -40,4 +40,35 @@ export default class CachingStore extends Store {
     unmarshalState(data) {
         return data;
     }
+
+    /**
+     * Transforms a list of untyped objects into a list of class instances, created with the objects.
+     * @param {Object[]} list
+     * @param {*} Klass
+     * @returns {*[]}
+     */
+    static listOf(list, Klass) {
+        if (!list) {
+            return [];
+        }
+        return _.map(list, (item) => {
+            return new Klass(item);
+        });
+    }
+
+    /**
+     * Transforms a map with untyped object values into a map with class instance values, created with the objects.
+     * @param {Object} obj
+     * @param {*} Klass
+     * @returns {Object}
+     */
+    static mapOf(obj, Klass) {
+        if (!obj) {
+            return {};
+        }
+        return _.reduce(obj, (result, value, key) => {
+            result[key] = new Klass(value);
+            return result;
+        }, {});
+    }
 }

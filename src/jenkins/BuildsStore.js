@@ -1,5 +1,5 @@
 import CachingStore from "../flux/CachingStore"
-import request from "superagent";
+import request from "superagent-bluebird-promise";
 import Build from "./Build";
 import TestReport from "./TestReport";
 import FailureData from "./FailureData";
@@ -55,7 +55,7 @@ export default class BuildsStore extends CachingStore {
     _updateBuilds() {
         request.get("/job/" + this.name + "/api/json")
             .query("tree=builds[id,building,result,timestamp,duration,url,actions[parameters[*],causes[userName,upstreamBuild,upstreamProject]]]{0," + this.limit + "}")
-            .end((err, result) => {
+            .then((result) => {
                 var builds = _.map(result.body.builds, (data) => {
                     return new Build(data);
                 });
@@ -80,10 +80,7 @@ export default class BuildsStore extends CachingStore {
 
         request.get("/job/" + this.name + "/" + id + "/testReport/api/json")
             .query("tree=failCount,passCount,skipCount,suites[name,cases[name,status,stdout]]")
-            .end((err, result) => {
-                if (err) {
-                    return;
-                }
+            .then((result) => {
                 if (result.body && result.body.suites) {
                     var report = new TestReport(result.body);
                     this.setState({reports: _.assign({[id]: report}, this.state.reports)});
@@ -98,28 +95,17 @@ export default class BuildsStore extends CachingStore {
         this.pendingFailureData[id] = true;
 
         request.get("/job/" + this.name + "/" + id + "/consoleText")
-            .end((err, result) => {
-                if (err) {
-                    return;
-                }
+            .then((result) => {
                 var data = new FailureData(result.text);
                 this.setState({failureData: _.assign({[id]: data}, this.state.failureData)});
-            })
+            });
     }
 
     unmarshalState(data) {
         return {
-            builds: data.builds ? _.map(data.builds, (build) => {
-                return new Build(build);
-            }) : [],
-            reports: data.reports ? _.reduce(data.reports, (result, value, key) => {
-                result[key] = new TestReport(value);
-                return result;
-            }, {}) : {},
-            failureData: data.failureData ? _.reduce(data.failureData, (result, value, key) => {
-                result[key] = new FailureData(value);
-                return result;
-            }, {}) : {}
+            builds: CachingStore.listOf(data.builds, Build),
+            reports: CachingStore.mapOf(data.reports, TestReport),
+            failureData: CachingStore.mapOf(data.failureData, FailureData)
         };
     }
 }
