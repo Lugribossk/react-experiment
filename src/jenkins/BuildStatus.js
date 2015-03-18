@@ -91,7 +91,7 @@ export default class BuildStatus extends React.Component {
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
                 var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
-                var link = "/job/integration-test-generic-build/" + this.props.build.id + "/testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
+                var link = this.getLink() + "/testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
 
                 return (
                     <div key={key}>

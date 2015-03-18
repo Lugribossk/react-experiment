@@ -1,13 +1,13 @@
-import Store from "../flux/Store"
+import CachingStore from "../flux/CachingStore"
 import request from "superagent";
 import Build from "./Build";
 import TestReport from "./TestReport";
 
-export default class BuildsStore extends Store {
+export default class BuildsStore extends CachingStore {
     constructor() {
-        super();
+        super(__filename);
 
-        this.state = {
+        this.state = this.getCachedState() || {
             builds: [],
             reports: {}
         };
@@ -60,7 +60,7 @@ export default class BuildsStore extends Store {
         this.pendingReports[id] = true;
 
         request.get("/job/integration-test-generic-build/" + id + "/testReport/api/json")
-            .query("tree=failCount,passCount,skipCount,suites[name,cases[name,status,duration,errorDetails,errorStackTrace,stdout]]")
+            .query("tree=failCount,passCount,skipCount,suites[name,cases[name,status,stdout]]")
             .end((err, result) => {
                 if (err) {
                     return;
@@ -68,5 +68,17 @@ export default class BuildsStore extends Store {
                 var report = new TestReport(result.body);
                 this.setState({reports: _.assign({[id]: report}, this.state.reports)});
             });
+    }
+
+    unmarshalState(data) {
+        return {
+            builds: data.builds ? _.map(data.builds, (build) => {
+                return new Build(build);
+            }) : [],
+            reports: data.reports ? _.reduce(data.reports, (result, value, key) => {
+                result[key] = new TestReport(value);
+                return result;
+            }, {}) : {}
+        };
     }
 }
