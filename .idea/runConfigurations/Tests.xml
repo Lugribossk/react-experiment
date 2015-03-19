@@ -5,7 +5,7 @@
     <pass-parent-env>true</pass-parent-env>
     <envs />
     <ui>BDD</ui>
-    <extra-mocha-options>--require babel-core/register --require ./test/testSetup</extra-mocha-options>
+    <extra-mocha-options>--require babel-core/register</extra-mocha-options>
     <test-directory>$PROJECT_DIR$/test</test-directory>
     <recursive>true</recursive>
     <RunnerSettings RunnerId="RunnerForMochaJavaScript" />
