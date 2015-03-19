@@ -169,5 +169,5 @@ module.exports = function (grunt) {
     grunt.registerTask("test", ["jscs:dev", "mochaTest:test"]);
     grunt.registerTask("build", ["webpack:build"]);
 
-    grunt.registerTask("ci", "jscs:ci", "mochaTest:ci", "build");
+    grunt.registerTask("ci", ["jscs:ci", "mochaTest:ci", "build"]);
 };
