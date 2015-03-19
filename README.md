@@ -1,4 +1,5 @@
 # react-experiment
+[![Circle CI](https://circleci.com/gh/Lugribossk/react-experiment.svg?style=svg)](https://circleci.com/gh/Lugribossk/react-experiment)
 
 Experimenting with React and ES6.
 
