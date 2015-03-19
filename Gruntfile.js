@@ -127,8 +127,7 @@ module.exports = function (grunt) {
     grunt.config.set("mochaTest", {
         options: {
             require: [
-                "babel-core/register",
-                "./test/testSetup"
+                "babel-core/register"
             ]
         },
         test: {
@@ -146,12 +145,12 @@ module.exports = function (grunt) {
 
     grunt.registerTask("coverage", "Generate test coverage report.", function () {
         var istanbulOptions = ["cover", "--root", "./src", "--dir", "./target/coverage", "./node_modules/mocha/bin/_mocha"];
-        var mochaOptions = ["--require", "babel-core/register", "--require", "./test/testSetup", /*"--require", "./src/app/Application",*/ "--recursive", "./test"];
+        var mochaOptions = ["--require", "babel-core/register", /*"--require", "./src/app/Application",*/ "--recursive", "./test"];
 
         var done = this.async();
         grunt.util.spawn({
             cmd: "node",
-            args: ["./node_modules/istanbul/lib/cli"].concat(istanbulOptions).concat("--").concat(mochaOptions),
+            args: ["./node_modules/istanbul/lib/cli"].concat(istanbulOptions).concat(["--"]).concat(mochaOptions),
             opts: {
                 env: process.env,
                 cwd: process.cwd(),
@@ -170,5 +169,5 @@ module.exports = function (grunt) {
     grunt.registerTask("test", ["jscs:dev", "mochaTest:test"]);
     grunt.registerTask("build", ["webpack:build"]);
 
-    grunt.registerTask("ci", "jscs:ci", "mochaTest:ci", "build");
+    grunt.registerTask("ci", ["jscs:ci", "mochaTest:ci", "build"]);
 };

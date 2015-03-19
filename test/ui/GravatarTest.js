@@ -1,12 +1,14 @@
+import React from "react";
 import expect from "expect.js";
 import Gravatar from "../../src/ui/Gravatar";
-import React from "react/addons";
-var TestUtils = React.addons.TestUtils;
+import TestUtils from "../TestUtils";
 
 describe("Gravatar", () => {
+    TestUtils.setupTestDom();
+
     var gravatar, img;
     beforeEach(() => {
-        gravatar = TestUtils.renderIntoDocument(
+        gravatar = TestUtils.React.renderIntoDocument(
             <Gravatar email="MyEmailAddress@example.com" size="40"/>
         );
         img = React.findDOMNode(gravatar);

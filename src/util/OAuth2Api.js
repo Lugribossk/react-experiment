@@ -1,5 +1,5 @@
 import _ from "lodash";
-import request from "superagent";
+import request from "superagent-bluebird-promise";
 import Promise from "bluebird";
 
 export default class OAuth2Api {
