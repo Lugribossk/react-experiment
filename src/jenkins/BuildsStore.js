@@ -4,7 +4,8 @@ import Build from "./Build";
 import TestReport from "./TestReport";
 import FailureData from "./FailureData";
 
-export default class BuildsStore extends CachingStore {
+export default
+class BuildsStore extends CachingStore {
     constructor(name, limit) {
         super(__filename + name);
 
@@ -23,7 +24,7 @@ export default class BuildsStore extends CachingStore {
 
         setInterval(this._updateBuilds.bind(this), 30 * 1000);
 
-        window.clearReports = () => {
+        window["clearReports" + name.replace(/-/g, "")] = () => {
             this.setState({reports: {}, failureData: {}});
         }
     }
@@ -69,7 +70,8 @@ export default class BuildsStore extends CachingStore {
                 });
 
                 this.setState({builds: builds});
-            });
+            })
+            .catch((err) => {});
     }
 
     _updateTestReport(id) {
@@ -85,7 +87,8 @@ export default class BuildsStore extends CachingStore {
                     var report = new TestReport(result.body);
                     this.setState({reports: _.assign({[id]: report}, this.state.reports)});
                 }
-            });
+            })
+            .catch((err) => {});
     }
 
     _updateFailureData(id) {
@@ -98,7 +101,8 @@ export default class BuildsStore extends CachingStore {
             .then((result) => {
                 var data = new FailureData(result.text);
                 this.setState({failureData: _.assign({[id]: data}, this.state.failureData)});
-            });
+            })
+            .catch((err) => {});
     }
 
     unmarshalState(data) {

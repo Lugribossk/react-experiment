@@ -1,12 +1,13 @@
 import React from "react/addons";
 import {Modal, Button, Input} from "react-bootstrap"
 import Mixins from "../util/Mixins";
+import BuildActions from "./BuildActions";
 
 export default class Merge extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            changelog: ""
+            changelog: this.props.build.getParameters().CHANGELOG || ""
         } ;
     }
 
@@ -19,7 +20,7 @@ export default class Merge extends React.Component {
             return;
         }
 
-        console.log(this.props.build, this.state.changelog);
+        BuildActions.triggerPullRequest(this.props.build.getRepoBranches(), this.state.changelog);
         this.props.onRequestHide();
     }
 

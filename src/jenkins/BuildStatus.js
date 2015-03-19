@@ -5,7 +5,7 @@ import {Panel, ProgressBar, ModalTrigger, Button, Alert} from "react-bootstrap"
 import Merge from "./Merge";
 import BuildActions from "./BuildActions";
 
-var ESTIMATED_DURATION_MINS = 35,
+var ESTIMATED_DURATION_MINS = 30,
     NUM_SUBSETS = 24;
 
 export default class BuildStatus extends React.Component {
@@ -76,19 +76,22 @@ export default class BuildStatus extends React.Component {
                     </ModalTrigger>
                 );
             } else {
+                var rebuild = () => {
+                    BuildActions.rebuild(this.props.build);
+                };
                 return (
-                    <a className="btn btn-default" style={{float: "right"}} href={this.getLink() + "/rebuild/parameterized"} target="_blank">Rebuild</a>
+                    <Button onClick={rebuild} style={{float: "right"}}>Rebuild</Button>
                 );
             }
         } else {
             var abort = () => {
                 BuildActions.abort(this.props.build);
                 _.forEach(this.props.subsets || [], (subset) => {
-                    BuildActions.abort(subset.abort());
+                    BuildActions.abort(subset);
                 });
             };
             return (
-                <Button onclick={abort} style={{float: "right"}}>Abort</Button>
+                <Button onClick={abort} style={{float: "right"}} title="Abort build and subsets">Abort</Button>
             );
         }
     }
@@ -123,6 +126,8 @@ export default class BuildStatus extends React.Component {
                 return <span>Branch does not exist: {data.misspelledBranch}</span>;
             } else if (data.noFastForward) {
                 return <span>Branch not up to date with master: {data.noFastForward}</span>;
+            } else if (data.notBuilt) {
+                return <span>Branch not built for repo: {data.notBuilt}</span>;
             }
         }
 

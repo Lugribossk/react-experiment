@@ -1,16 +1,26 @@
 import request from "superagent-bluebird-promise";
 
-var PARAM_NAMES = {
-    "Backend-Service": "BACKEND",
-    "Backend-Conversions": "CONVERSIONS",
-    "App-Service": "APPBACKEND",
-    "Tradeshift-Proxy2": "PROXY2",
-    "Financing-CitiSCF": "CITISCF",
-    "Financing-DD": "DD",
-    "Financing-C8": "C8",
-    BusinessEventHandler: "BUSINESSEVENTSERVICE",
-    "cloudscan-service": "CLOUDSCAN",
-    "Email-Incoming-Service": "EMAILINCOMING"
+var REPO_PARAMS= {
+    INTEGRATION_TEST_GIT_REF: "Integration-Test",
+    FRONTEND_GIT_REF: "Frontend",
+    BACKEND_GIT_REF: "Backend-Service",
+    SUPPLIER_INTEGRATIONS_GIT_REF: "Supplier-Integrations",
+    PROXY2_GIT_REF: "Tradeshift-Proxy2",
+    INTEGRATION_GIT_REF: "Integrations",
+    CONVERSIONS_GIT_REF: "Backend-Conversions",
+    CLOUDSCAN_GIT_REF: "cloudscan-service",
+    APP_TOOL_GIT_REF: "App-Tool",
+    APPS_GIT_REF: "Apps",
+    APPBACKEND_GIT_REF: "App-Service",
+    CITISCF_GIT_REF: "Financing-CitiSCF",
+    DD_GIT_REF: "Financing-DD",
+    AUDITSERVER_GIT_REF: "Audit-Server",
+    WORKFLOW_GIT_REF: "Workflow",
+    BUSINESSEVENTSERVICE_GIT_REF: "BusinessEventHandler",
+    C8_GIT_REF: "Financing-C8",
+    APPS_SERVER_GIT_REF: "Apps-Server",
+    LOCKING_GIT_REF: "Locking",
+    EMAILINCOMING_GIT_REF: "Email-Incoming-Service"
 };
 
 export default {
@@ -38,12 +48,14 @@ export default {
     triggerPullRequest: function (repoBranches, changelog) {
         var params = {
             CHANGELOG: changelog,
-            CHANGELEVEL: "Level 1: (least impact) Functional defect resolution; some performance improvements"
+            CHANGELEVEL: "Level 1: (least impact) Functional defect resolution; some performance improvements",
+            AUTO_TEST_COVERAGE: false,
+            CROSS_BROWSER_TESTED: false
         };
 
-        _.forEach(repoBranches, (branch, repo) => {
-            var repoName = PARAM_NAMES[repo] || repo.toLocaleUpperCase().replace(/-/g, "_");
-            params[repoName + "_GIT_REF"] = "origin/" + branch;
+        _.forEach(REPO_PARAMS, (repo, param) => {
+            var branch = repoBranches[repo];
+            params[param] = "origin/" + (branch || "master");
         });
 
         this.trigger("pull-request", params);
