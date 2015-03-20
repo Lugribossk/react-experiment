@@ -68,7 +68,7 @@ export default class Build {
     }
 
     getUsername() {
-        var username = "";
+        var username = "Unknown";
         _.find(this.actions, (action) => {
             if (action.causes && action.causes[0] && action.causes[0].userName) {
                 username = action.causes[0].userName;

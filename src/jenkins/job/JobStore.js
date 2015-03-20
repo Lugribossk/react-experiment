@@ -1,4 +1,5 @@
 import _ from "lodash";
+import Promise from "bluebird";
 import CachingStore from "../../flux/CachingStore"
 import request from "superagent-bluebird-promise";
 import Build from "../build/Build";
@@ -63,7 +64,7 @@ export default class JobStore extends CachingStore {
 
     onBuildTriggered(jobName) {
         if (this.name === jobName) {
-            Promise.delay(2000)
+            Promise.delay(8000)
                 .then(() => {
                     this._updateBuilds();
                 });
@@ -72,7 +73,7 @@ export default class JobStore extends CachingStore {
 
     onBuildAborted(build) {
         if (_.contains(build.url, this.name)) {
-            Promise.delay(2000)
+            Promise.delay(8000)
                 .then(() => {
                     this._updateBuilds();
                 });
