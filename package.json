@@ -8,6 +8,7 @@
     "lodash": "3.1.0",
     "md5": "1.0.0",
     "moment": "2.9.0",
+    "piecon": "0.0.0",
     "react": "0.13.1",
     "react-bootstrap": "0.17.0",
     "superagent-bluebird-promise": "2.0.0"

@@ -2,8 +2,7 @@ import React from "react";
 import _ from "lodash";
 import {ProgressBar, Button} from "react-bootstrap"
 import BuildActions from "../build/BuildActions";
-
-var ESTIMATED_DURATION_MINS = 30;
+import BuildUtils from "../build/BuildUtils";
 
 export default class InProgressBuild extends React.Component {
     constructor(props) {
@@ -48,19 +47,15 @@ export default class InProgressBuild extends React.Component {
     }
 
     render() {
-        var estimatedDuration = ESTIMATED_DURATION_MINS * 60 * 1000;
-        var started = this.props.build.timestamp;
-        var runningFor = this.props.now - started;
-        var progress = Math.round(runningFor / estimatedDuration * 100);
-
-        var remainingMins = Math.ceil((estimatedDuration - runningFor) / 60000);
+        var percent = BuildUtils.estimatePercentComplete(this.props.build, this.props.now);
+        var remainingMins = BuildUtils.estimateMinutesRemaining(this.props.build, this.props.now);
 
         return (
             <div>
                 <Button onClick={this.abort.bind(this)} style={{float: "right"}} title="Abort build and subsets" disabled={this.state.aborted}>
                     {this.state.aborted ? "Aborted" : "Abort"}
                 </Button>
-                <ProgressBar bsStyle="info" now={Math.min(progress, 100)} label={remainingMins + " mins"} />
+                <ProgressBar bsStyle="info" now={percent} label={remainingMins + " mins"} />
                 {this.renderSubsets()}
                 {this.props.children}
             </div>
