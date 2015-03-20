@@ -67,6 +67,7 @@ export default class RecentBuilds extends React.Component {
             return <BuildStatus
                 key={build.number}
                 build={build}
+                builds={this.state.integrationTests}
                 testReport={this.state.testReports[build.number]}
                 failureData={this.state.failureData[build.number]}
                 subsets={this.state.subsets[build.number]}

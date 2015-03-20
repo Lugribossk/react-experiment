@@ -8,7 +8,7 @@ export default class NotificationService {
         this.userId = userId;
 
         jobStore.onBuildsChanged(this.notifyProgress.bind(this));
-        setInterval(this.notifyProgress.bind(this), 5000);
+        setInterval(this.notifyProgress.bind(this), 10000);
         this.notifyProgress();
     }
 
@@ -18,11 +18,11 @@ export default class NotificationService {
             return;
         }
 
-        Piecon.setProgress(BuildUtils.estimatePercentComplete(build, Date.now()));
+        Piecon.setProgress(BuildUtils.estimatePercentComplete(build, Date.now(), this.jobStore.getBuilds()));
 
         if (build.isBuilding()) {
             this.setFaviconColor("#5bc0de");
-            document.title = BuildUtils.estimateMinutesRemaining(build, Date.now()) + "m - ITs";
+            document.title = BuildUtils.estimateMinutesRemaining(build, Date.now(), this.jobStore.getBuilds()) + "m - ITs";
         } else {
             if (build.isSuccess()) {
                 this.setFaviconColor("#5cb85c");

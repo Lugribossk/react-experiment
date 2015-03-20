@@ -47,8 +47,8 @@ export default class InProgressBuild extends React.Component {
     }
 
     render() {
-        var percent = BuildUtils.estimatePercentComplete(this.props.build, this.props.now);
-        var remainingMins = BuildUtils.estimateMinutesRemaining(this.props.build, this.props.now);
+        var percent = BuildUtils.estimatePercentComplete(this.props.build, this.props.now, this.props.builds);
+        var remainingMins = BuildUtils.estimateMinutesRemaining(this.props.build, this.props.now, this.props.builds);
 
         return (
             <div>

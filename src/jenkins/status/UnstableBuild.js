@@ -18,28 +18,49 @@ export default class UnstableBuild extends React.Component {
 
     renderTestFailures() {
         if (!this.props.testReport) {
-            return;
+            return <span>Test output not found.</span>;
         }
 
         if (this.props.testReport.failCount > 10) {
             return <span>{this.props.testReport.failCount} tests failed.</span>
         }
 
-        return _.map(this.props.testReport.getFailedTests(), (failure) => {
-            var key = this.props.build.number + failure.file + failure.name;
-            key = key.replace(/ /g, "-").replace(/\./g, "-");
+        if (this.props.testReport.failCount > 0) {
+            return _.map(this.props.testReport.getFailedTests(), (failure) => {
+                var key = this.props.build.number + failure.file + failure.name;
+                key = key.replace(/ /g, "-").replace(/\./g, "-");
 
-            var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
-            var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
-            var link = "/job/integration-test-generic-build/" + this.props.build.number +
-                "/testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
+                var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
+                var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
+                var link = "/job/integration-test-generic-build/" + this.props.build.number +
+                    "/testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
 
-            return (
-                <div key={key}>
-                    <a href={link} target="_blank" className="text-warning">{klass}: {failure.name}</a>
-                </div>
-            );
-        });
+                return (
+                    <div key={key}>
+                        <a href={link} target="_blank" className="text-warning">{klass}: {failure.name}</a>
+                    </div>
+                );
+            });
+        }
+
+        if (this.props.subsets) {
+            var failedSubsets = _.filter(this.props.subsets, (subset) => {
+                return !subset.building && !subset.isSuccess();
+            });
+
+            if (failedSubsets.length > 0) {
+                return (
+                    <span>
+                        Unstable with 0 failing tests, failing subsets:
+                        {_.map(failedSubsets, (subset) => {
+                            return <a key={subset.number} href={subset.url} target="_blank"> {subset.number}</a>
+                        })}
+                    </span>
+                );
+            }
+        }
+
+        return <span>Unstable with 0 failing tests, but subset information is no longer available.</span>;
     }
 
     render() {

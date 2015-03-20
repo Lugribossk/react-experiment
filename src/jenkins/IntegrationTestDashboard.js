@@ -13,7 +13,7 @@ export default class IntegrationTestDashboard extends React.Component {
 
         this.state = {
             integrationTests: new JobStore("integration-test-generic-build"),
-            subsets: new JobStore("integration-test-build-subset")
+            subsets: new JobStore("integration-test-build-subset", 100)
         };
 
         new JobService();
