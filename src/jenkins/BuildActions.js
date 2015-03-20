@@ -1,4 +1,5 @@
 import request from "superagent-bluebird-promise";
+import moment from "moment";
 
 var PR_PARAM_REPOS= {
     INTEGRATION_TEST_GIT_REF: "Integration-Test",
@@ -53,5 +54,19 @@ export default {
         });
 
         this.trigger("pull-request", params);
+    },
+
+    unkeepBuilds: function (jobName, olderThan) {
+        request.get("/job/" + jobName + "/api/json")
+            .query("tree=builds[number,timestamp,keepLog]{0,100}")
+            .then((data) => {
+                _.forEach(data.body.builds, (build) => {
+                    if (build.keepLog && build.timestamp && moment(build.timestamp, "x").isBefore(olderThan)) {
+                        request.get("/job/" + jobName + "/" + build.number + "/toggleLogKeep")
+                            .query("json={}")
+                            .end();
+                    }
+                });
+            });
     }
 }

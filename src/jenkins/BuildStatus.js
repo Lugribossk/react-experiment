@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import moment from "moment";
-import {Panel, ProgressBar, ModalTrigger, Button, Alert} from "react-bootstrap"
+import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap"
 import Merge from "./Merge";
 import BuildActions from "./BuildActions";
 
@@ -10,7 +10,7 @@ var ESTIMATED_DURATION_MINS = 30,
 
 export default class BuildStatus extends React.Component {
     getLink() {
-        return "/job/integration-test-generic-build/" + this.props.build.id;
+        return "/job/integration-test-generic-build/" + this.props.build.number;
     }
 
     renderHeader() {
@@ -28,14 +28,14 @@ export default class BuildStatus extends React.Component {
 
         return (
             <span>
-                <a href={this.getLink()} target="_blank">{"#" + this.props.build.id} - {this.props.build.getUsername()}</a>
-                <span style={{float: "right"}}>{displaytime}</span>
+                <a href={this.getLink()} target="_blank">{"#" + this.props.build.number} - {this.props.build.getUsername()}</a>
+                <span style={{float: "right"}}>{this.props.build.keepLog && <Glyphicon glyph="lock" title="Kept forever"/>} {displaytime}</span>
             </span>
         );
     }
 
     renderBranches() {
-        return _.map(this.props.build.getRepoBranches(), (branch, repo) => {
+        var branches = _.map(this.props.build.getRepoBranches(), (branch, repo) => {
             if (branch && branch !== "master") {
                 return (
                     <div key={repo}>
@@ -46,6 +46,13 @@ export default class BuildStatus extends React.Component {
                 );
             }
         });
+        return (
+            <div>
+                {this.props.build.getParameters().BRANCH !== "master" &&
+                    <span>All repos: {this.props.build.getParameters().BRANCH}</span>}
+                {branches}
+            </div>
+        )
     }
 
     renderProgress() {
@@ -103,7 +110,7 @@ export default class BuildStatus extends React.Component {
             }
 
             return _.map(this.props.testReport.getFailingTests(), (failure) => {
-                var key = this.props.build.id + failure.file + failure.name;
+                var key = this.props.build.number + failure.file + failure.name;
                 key = key.replace(/ /g, "-").replace(/\./g, "-");
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
@@ -127,7 +134,7 @@ export default class BuildStatus extends React.Component {
             } else if (data.noFastForward) {
                 return <span>Branch not up to date with master: {data.noFastForward}</span>;
             } else if (data.notBuilt) {
-                return <span>Branch not built for repo: {data.notBuilt}</span>;
+                return <span>Branch not built for projects: {data.notBuilt}</span>;
             }
         }
 

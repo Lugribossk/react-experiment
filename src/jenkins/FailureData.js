@@ -15,7 +15,7 @@ export default class FailureData {
             this.noFastForward = noFastForward[1];
         }
 
-        var notBuilt = / (\S+) for git reference .+? needs to be built/g.exec(data);
+        var notBuilt = /'(\S+) for git reference .+? needs to be built/g.exec(data);
         if (notBuilt && notBuilt[1]) {
             this.notBuilt = notBuilt[1];
         }

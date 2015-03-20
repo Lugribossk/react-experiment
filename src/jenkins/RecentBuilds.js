@@ -1,11 +1,12 @@
 import React from "react";
 import _ from "lodash";
 import moment from "moment";
-import {TabbedArea, TabPane, Badge} from "react-bootstrap"
+import {TabbedArea, TabPane, Badge, Button, Glyphicon} from "react-bootstrap"
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import BuildStatus from "./BuildStatus";
 import UnstableStats from "./UnstableStats";
+import BuildActions from "./BuildActions";
 
 export default
 class RecentBuilds extends React.Component {
@@ -65,11 +66,11 @@ class RecentBuilds extends React.Component {
     renderBuilds(builds) {
         return _.map(builds, (build) => {
             return <BuildStatus
-                key={build.id}
+                key={build.number}
                 build={build}
-                testReport={this.state.testReports[build.id]}
-                failureData={this.state.failureData[build.id]}
-                subsets={this.state.subsets[build.id]}
+                testReport={this.state.testReports[build.number]}
+                failureData={this.state.failureData[build.number]}
+                subsets={this.state.subsets[build.number]}
                 now={this.state.now}/>
         });
     }
@@ -111,6 +112,11 @@ class RecentBuilds extends React.Component {
                 </TabPane>
                 <TabPane eventKey={6} tab="Stats">
                     <UnstableStats buildsStore={this.props.buildsStore}/>
+                </TabPane>
+                <TabPane eventKey={7} tab="Cleanup">
+                    <Button bsStyle="warning" onClick={() => {
+                        BuildActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
+                    }}>Stop keeping builds older than 14 days</Button>
                 </TabPane>
             </TabbedArea>
         );
