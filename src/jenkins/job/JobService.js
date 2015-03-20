@@ -1,5 +1,6 @@
 import request from "superagent-bluebird-promise";
 import moment from "moment";
+import JobActions from "./JobActions";
 
 var PR_PARAM_REPOS= {
     INTEGRATION_TEST_GIT_REF: "Integration-Test",
@@ -24,12 +25,14 @@ var PR_PARAM_REPOS= {
     EMAILINCOMING_GIT_REF: "Email-Incoming-Service"
 };
 
-export default {
-    abort: function (build) {
-        request.post(build.url + "/stop").end();
-    },
+export default class JobService {
+    constructor() {
+        JobActions.trigger.onDispatch(this.trigger.bind(this));
+        JobActions.triggerPullRequest.onDispatch(this.triggerPullRequest.bind(this));
+        JobActions.unkeepBuilds.onDispatch(this.unkeepBuilds.bind(this));
+    }
 
-    trigger: function (jobName, parameters) {
+    trigger(jobName, parameters) {
         var paramList = _.map(parameters, (value, name) => {
             return {name: name, value: value};
         });
@@ -38,9 +41,9 @@ export default {
             .type("form")
             .send({json: JSON.stringify({parameter: paramList})})
             .end();
-    },
+    }
 
-    triggerPullRequest: function (repoBranches, changelog) {
+    triggerPullRequest(repoBranches, changelog) {
         var params = {
             CHANGELOG: changelog,
             CHANGELEVEL: "Level 1: (least impact) Functional defect resolution; some performance improvements",
@@ -54,9 +57,9 @@ export default {
         });
 
         this.trigger("pull-request", params);
-    },
+    }
 
-    unkeepBuilds: function (jobName, olderThan) {
+    unkeepBuilds(jobName, olderThan) {
         request.get("/job/" + jobName + "/api/json")
             .query("tree=builds[number,timestamp,keepLog]{0,100}")
             .then((data) => {

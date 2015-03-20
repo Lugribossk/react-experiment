@@ -1,8 +1,9 @@
-import CachingStore from "../flux/CachingStore"
+import _ from "lodash";
+import CachingStore from "../../flux/CachingStore"
 import request from "superagent-bluebird-promise";
-import Build from "./Build";
-import TestReport from "./TestReport";
-import FailureData from "./FailureData";
+import Build from "../build/Build";
+import TestReport from "../build/TestReport";
+import FailureData from "../build/FailureData";
 
 /**
  * Store for the data from a single Jenkins build job.
@@ -30,7 +31,7 @@ export default class JobStore extends CachingStore {
 
         setInterval(this._updateBuilds.bind(this), 30 * 1000);
 
-        window["clearData-" + name.replace(/-/g, "")] = () => {
+        window["clearData_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
         }
     }
@@ -94,15 +95,7 @@ export default class JobStore extends CachingStore {
                     this.setState({reports: _.assign({[id]: report}, this.state.reports)});
                 }
             })
-            .catch(() => {
-                if (retry) {
-                    // Sometimes the test reports aren't ready when the build finishes.
-                    return Promise.delay(10000)
-                        .then(() => {
-                            this._updateTestReport(id, false);
-                        });
-                }
-            });
+            .catch((err) => {});
     }
 
     _updateFailureData(id) {

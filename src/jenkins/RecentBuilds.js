@@ -6,7 +6,7 @@ import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import BuildStatus from "./BuildStatus";
 import UnstableStats from "./UnstableStats";
-import BuildActions from "./BuildActions";
+import JobActions from "./job/JobActions";
 
 export default class RecentBuilds extends React.Component {
     constructor(props) {
@@ -114,7 +114,7 @@ export default class RecentBuilds extends React.Component {
                 </TabPane>
                 <TabPane eventKey={7} tab="Cleanup">
                     <Button bsStyle="warning" onClick={() => {
-                        BuildActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
+                        JobActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
                     }}>Stop keeping any build that is older than 14 days</Button>
                 </TabPane>
             </TabbedArea>

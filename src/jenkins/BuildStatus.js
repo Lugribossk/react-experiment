@@ -3,7 +3,8 @@ import _ from "lodash";
 import moment from "moment";
 import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap"
 import Merge from "./Merge";
-import BuildActions from "./BuildActions";
+import BuildActions from "./build/BuildActions";
+import JobActions from "./job/JobActions";
 
 var ESTIMATED_DURATION_MINS = 30;
 
@@ -85,7 +86,7 @@ export default class BuildStatus extends React.Component {
                 );
             } else {
                 var rebuild = () => {
-                    BuildActions.trigger("integration-test-generic-build", this.props.build.getParameters());
+                    JobActions.trigger("integration-test-generic-build", this.props.build.getParameters());
                 };
                 return (
                     <Button onClick={rebuild} style={{float: "right"}}>Rebuild</Button>
