@@ -51,6 +51,8 @@ export default class BuildStatus extends React.Component {
                 {this.props.build.getParameters().BRANCH !== "master" &&
                     <span>All repos: {this.props.build.getParameters().BRANCH}</span>}
                 {branches}
+                {this.props.build.getParameters().PACKAGE_PATH !== "com/tradeshift" &&
+                    <span>Only running tests in package: {this.props.build.getParameters().PACKAGE_PATH}</span>}
             </div>
         )
     }
@@ -144,7 +146,7 @@ export default class BuildStatus extends React.Component {
     }
 
     renderSubsets() {
-        if (!this.props.build.building || !this.props.subsets || this.props.subsets.length !== NUM_SUBSETS) {
+        if (!this.props.build.building || !this.props.subsets) {
             return;
         }
         var finishedSubsets = _.filter(this.props.subsets, (subset) => {
@@ -155,9 +157,9 @@ export default class BuildStatus extends React.Component {
         });
 
         return (
-            <ProgressBar>
-                <ProgressBar bsStyle="danger" now={Math.round(failedSubsets.length / NUM_SUBSETS * 100)} label={failedSubsets.length} key={1} />
-                <ProgressBar bsStyle="success" now={Math.round(finishedSubsets.length / NUM_SUBSETS * 100)} key={2} />
+            <ProgressBar label="test">
+                <ProgressBar bsStyle="danger" now={Math.round(failedSubsets.length / this.props.subsets.length * 100)} label={failedSubsets.length} key={1} />
+                <ProgressBar bsStyle="success" now={Math.round(finishedSubsets.length / this.props.subsets.length * 100)} key={2} />
             </ProgressBar>
         );
     }

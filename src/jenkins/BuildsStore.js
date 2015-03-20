@@ -74,7 +74,7 @@ class BuildsStore extends CachingStore {
             .catch((err) => {});
     }
 
-    _updateTestReport(id) {
+    _updateTestReport(id, retry=true) {
         if (this.state.reports[id] || this.pendingReports[id]) {
             return;
         }
@@ -88,7 +88,15 @@ class BuildsStore extends CachingStore {
                     this.setState({reports: _.assign({[id]: report}, this.state.reports)});
                 }
             })
-            .catch((err) => {});
+            .catch(() => {
+                if (retry) {
+                    // Sometimes the test reports aren't ready when the build finishes.
+                    return Promise.delay(10000)
+                        .then(() => {
+                            this._updateTestReport(id, false);
+                        });
+                }
+            });
     }
 
     _updateFailureData(id) {
