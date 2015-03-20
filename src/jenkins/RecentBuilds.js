@@ -1,13 +1,14 @@
 import React from "react";
 import _ from "lodash";
 import moment from "moment";
-import {TabbedArea, TabPane} from "react-bootstrap"
+import {TabbedArea, TabPane, Badge} from "react-bootstrap"
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import BuildStatus from "./BuildStatus";
 import UnstableStats from "./UnstableStats";
 
-export default class RecentBuilds extends React.Component {
+export default
+class RecentBuilds extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,14 +62,10 @@ export default class RecentBuilds extends React.Component {
         return buildToSubsets;
     }
 
-    renderBuilds(filter) {
-        var builds = this.state.builds;
-        if (filter) {
-            builds = _.filter(builds, filter);
-        }
-
+    renderBuilds(builds) {
         return _.map(builds, (build) => {
-            return <BuildStatus key={build.id}
+            return <BuildStatus
+                key={build.id}
                 build={build}
                 testReport={this.state.testReports[build.id]}
                 failureData={this.state.failureData[build.id]}
@@ -78,34 +75,39 @@ export default class RecentBuilds extends React.Component {
     }
 
     render() {
+        var allBuilds = this.state.builds;
+        var failedBuilds = _.filter(allBuilds, (build) => {
+            return build.isFailed() || build.isAborted();
+        });
+        var unstableBuilds = _.filter(allBuilds, (build) => {
+            return build.isUnstable();
+        });
+        var successBuilds = _.filter(allBuilds, (build) => {
+            return build.isSuccess();
+        });
+        var overnightBuilds = _.filter(this.state.builds, (build) => {
+            var started = moment(build.timestamp);
+            var thisMorning = moment().startOf("day").add(7, "hours");
+            var yesterdayEvening = moment().startOf("day").subtract(6, "hours");
+
+            return started.isAfter(yesterdayEvening) && started.isBefore(thisMorning);
+        });
         return (
             <TabbedArea defaultActiveKey={1} animation={false}>
-                <TabPane eventKey={1} tab="All">
-                    {this.renderBuilds()}
+                <TabPane eventKey={1} tab={<span>All <Badge>{allBuilds.length}</Badge></span>}>
+                    {this.renderBuilds(allBuilds)}
                 </TabPane>
-                <TabPane eventKey={2} tab="Failed">
-                    {this.renderBuilds((build) => {
-                        return build.isFailed();
-                    })}
+                <TabPane eventKey={2} tab={<span>Failed <Badge>{failedBuilds.length}</Badge></span>}>
+                    {this.renderBuilds(failedBuilds)}
                 </TabPane>
-                <TabPane eventKey={3} tab="Unstable">
-                    {this.renderBuilds((build) => {
-                        return build.isUnstable();
-                    })}
+                <TabPane eventKey={3} tab={<span>Unstable <Badge>{unstableBuilds.length}</Badge></span>}>
+                    {this.renderBuilds(unstableBuilds)}
                 </TabPane>
-                <TabPane eventKey={4} tab="Succeeded">
-                    {this.renderBuilds((build) => {
-                        return build.isSuccess();
-                    })}
+                <TabPane eventKey={4} tab={<span>Succeeded <Badge>{successBuilds.length}</Badge></span>}>
+                    {this.renderBuilds(successBuilds)}
                 </TabPane>
                 <TabPane eventKey={5} tab="Last night">
-                    {this.renderBuilds((build) => {
-                        var started = moment(build.timestamp);
-                        var thisMorning = moment().startOf("day").add(7, "hours");
-                        var yesterdayEvening = moment().startOf("day").subtract(6, "hours");
-
-                        return started.isAfter(yesterdayEvening) && started.isBefore(thisMorning);
-                    })}
+                    {this.renderBuilds(overnightBuilds)}
                 </TabPane>
                 <TabPane eventKey={6} tab="Stats">
                     <UnstableStats buildsStore={this.props.buildsStore}/>

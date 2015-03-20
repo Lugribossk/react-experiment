@@ -72,12 +72,12 @@ export default class BuildStatus extends React.Component {
             if (this.props.build.isSuccess()) {
                 return (
                     <ModalTrigger modal={<Merge build={this.props.build}/>}>
-                        <Button bsStyle="success" style={{float: "right"}}>Merge!</Button>
+                        <Button style={{float: "right"}}>Merge!</Button>
                     </ModalTrigger>
                 );
             } else {
                 var rebuild = () => {
-                    BuildActions.rebuild(this.props.build);
+                    BuildActions.trigger("integration-test-generic-build", this.props.build.getParameters());
                 };
                 return (
                     <Button onClick={rebuild} style={{float: "right"}}>Rebuild</Button>
@@ -104,7 +104,7 @@ export default class BuildStatus extends React.Component {
 
             return _.map(this.props.testReport.getFailingTests(), (failure) => {
                 var key = this.props.build.id + failure.file + failure.name;
-                key = key.replace(" ", "-").replace(".", "-");
+                key = key.replace(/ /g, "-").replace(/\./g, "-");
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
                 var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
@@ -112,7 +112,7 @@ export default class BuildStatus extends React.Component {
 
                 return (
                     <div key={key}>
-                        <a href={link} target="_blank">{klass}: {failure.name}</a>
+                        <a href={link} target="_blank" className="text-warning">{klass}: {failure.name}</a>
                     </div>
                 );
             });

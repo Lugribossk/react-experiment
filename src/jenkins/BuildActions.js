@@ -1,6 +1,6 @@
 import request from "superagent-bluebird-promise";
 
-var REPO_PARAMS= {
+var PR_PARAM_REPOS= {
     INTEGRATION_TEST_GIT_REF: "Integration-Test",
     FRONTEND_GIT_REF: "Frontend",
     BACKEND_GIT_REF: "Backend-Service",
@@ -28,20 +28,14 @@ export default {
         request.post(build.url + "/stop").end();
     },
 
-    rebuild: function (build) {
-        this.trigger(build.getParametersList());
-    },
-
     trigger: function (jobName, parameters) {
-        if (_.isObject(parameters)) {
-            parameters = _.map(parameters, (value, name) => {
-                return {name: name, value: value};
-            });
-        }
+        var paramList = _.map(parameters, (value, name) => {
+            return {name: name, value: value};
+        });
 
         request.post("/job/" + jobName + "/build") //buildWithParameters?
             .type("form")
-            .send({json: JSON.stringify({parameter: parameters})})
+            .send({json: JSON.stringify({parameter: paramList})})
             .end();
     },
 
@@ -53,7 +47,7 @@ export default {
             CROSS_BROWSER_TESTED: false
         };
 
-        _.forEach(REPO_PARAMS, (repo, param) => {
+        _.forEach(PR_PARAM_REPOS, (repo, param) => {
             var branch = repoBranches[repo];
             params[param] = "origin/" + (branch || "master");
         });
