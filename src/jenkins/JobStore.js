@@ -4,13 +4,19 @@ import Build from "./Build";
 import TestReport from "./TestReport";
 import FailureData from "./FailureData";
 
-export default
-class BuildsStore extends CachingStore {
-    constructor(name, limit) {
+/**
+ * Store for the data from a single Jenkins build job.
+ */
+export default class JobStore extends CachingStore {
+    /**
+     * @param {String} name The job name, as seen in the Jenkins url.
+     * @param {Number} [limit=50] The number of builds to fetch.
+     */
+    constructor(name, limit=50) {
         super(__filename + name);
 
         this.name = name;
-        this.limit = limit || 50;
+        this.limit = limit;
         this.state = this.getCachedState() || {
             builds: [],
             reports: {},
@@ -24,7 +30,7 @@ class BuildsStore extends CachingStore {
 
         setInterval(this._updateBuilds.bind(this), 30 * 1000);
 
-        window["clearReports" + name.replace(/-/g, "")] = () => {
+        window["clearData-" + name.replace(/-/g, "")] = () => {
             this.setState({reports: {}, failureData: {}});
         }
     }
@@ -107,7 +113,7 @@ class BuildsStore extends CachingStore {
 
         request.get("/job/" + this.name + "/" + id + "/consoleText")
             .then((result) => {
-                var data = new FailureData(result.text);
+                var data = FailureData.fromConsoleOutput(result.text);
                 this.setState({failureData: _.assign({[id]: data}, this.state.failureData)});
             })
             .catch((err) => {});

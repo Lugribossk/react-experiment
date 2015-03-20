@@ -9,20 +9,20 @@ export default class UnstableStats extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            testReports: this.props.buildsStore.getTestReports()
+            testReports: this.props.integrationTests.getTestReports()
         };
 
-        this.subscribe(this.props.buildsStore.onTestReportsChanged(this.onTestReportsChanged.bind(this)));
+        this.subscribe(this.props.integrationTests.onTestReportsChanged(this.onTestReportsChanged.bind(this)));
     }
 
-    onTestReportsChanged(reports) {
-        this.setState({testReports: reports});
+    onTestReportsChanged() {
+        this.setState({testReports: this.props.integrationTests.getTestReports()});
     }
 
     blah(getKey) {
         var count = {};
         _.forEach(this.state.testReports, (report) => {
-            _.forEach(report.getFailingTests(), (failure) => {
+            _.forEach(report.getFailedTests(), (failure) => {
                 var key = getKey(failure);
                 if (key) {
                     if (count[key]) {
@@ -82,10 +82,10 @@ export default class UnstableStats extends React.Component {
     render() {
         return (
             <div>
-                <Panel header="Unstable by test">
+                <Panel header="Failures by test">
                     {this.renderTests()}
                 </Panel>
-                <Panel header="Unstable by slave">
+                <Panel header="Failures by slave">
                     {this.renderSlaves()}
                 </Panel>
             </div>

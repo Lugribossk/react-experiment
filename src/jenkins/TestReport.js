@@ -1,12 +1,15 @@
 import _ from "lodash";
 
+/**
+ * The test output from a build.
+ */
 export default class TestReport {
     constructor(data) {
         _.assign(this, data);
 
         _.forEach(this.suites, (suite) => {
             _.forEach(suite.cases, (kase) => {
-                if (kase.stdout && kase.status !== "PASSED" && kase.status !== "SKIPPED" && kase.status !== "FIXED") {
+                if (kase.stdout && TestReport._isFailedCase(kase)) {
                     var slave = /Ran on slave +: (\S+)/.exec(kase.stdout);
                     if (slave) {
                         kase.slave = slave[1];
@@ -21,11 +24,11 @@ export default class TestReport {
         });
     }
 
-    getFailingTests() {
+    getFailedTests() {
         var tests = [];
         _.forEach(this.suites, (suite) => {
             _.forEach(suite.cases, (kase) => {
-                if (kase.status !== "PASSED" && kase.status !== "SKIPPED" && kase.status !== "FIXED") {
+                if (TestReport._isFailedCase(kase)) {
                     tests.push({
                         file: suite.name,
                         name: kase.name,
@@ -41,5 +44,9 @@ export default class TestReport {
         });
 
         return tests;
+    }
+
+    static _isFailedCase(kase) {
+        return kase.status !== "PASSED" && kase.status !== "SKIPPED" && kase.status !== "FIXED";
     }
 }

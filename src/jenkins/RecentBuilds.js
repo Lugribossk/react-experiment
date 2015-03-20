@@ -8,50 +8,49 @@ import BuildStatus from "./BuildStatus";
 import UnstableStats from "./UnstableStats";
 import BuildActions from "./BuildActions";
 
-export default
-class RecentBuilds extends React.Component {
+export default class RecentBuilds extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            builds: this.props.buildsStore.getBuilds(),
-            testReports: this.props.buildsStore.getTestReports(),
-            failureData: this.props.buildsStore.getFailureData(),
-            now: Date.now(),
-            subsets: this._getSubsets()
+            integrationTests: this.props.integrationTests.getBuilds(),
+            testReports: this.props.integrationTests.getTestReports(),
+            failureData: this.props.integrationTests.getFailureData(),
+            subsets: this._getSubsets(),
+            now: Date.now()
         };
 
-        this.subscribe(this.props.buildsStore.onBuildsChanged(this.onBuildsChanged.bind(this)));
-        this.subscribe(this.props.buildsStore.onTestReportsChanged(this.onTestReportsChanged.bind(this)));
-        this.subscribe(this.props.buildsStore.onFailureDataChanged(this.onFailureDataChanged.bind(this)));
+        this.subscribe(this.props.integrationTests.onBuildsChanged(this.onIntegrationTestsChanged.bind(this)));
+        this.subscribe(this.props.integrationTests.onTestReportsChanged(this.onTestReportsChanged.bind(this)));
+        this.subscribe(this.props.integrationTests.onFailureDataChanged(this.onFailureDataChanged.bind(this)));
+        this.subscribe(this.props.subsets.onBuildsChanged(this.onSubsetsChanged.bind(this)));
         this.interval = setInterval(() => {
             this.setState({now: Date.now()});
         }, 10000);
-        this.subscribe(this.props.subsetStore.onBuildsChanged(this.onSubsetsChanged.bind(this)));
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-    onBuildsChanged(builds) {
-        this.setState({builds: builds});
+    onIntegrationTestsChanged() {
+        this.setState({integrationTests: this.props.integrationTests.getBuilds()});
     }
 
-    onTestReportsChanged(reports) {
-        this.setState({testReports: reports});
+    onTestReportsChanged() {
+        this.setState({testReports: this.props.integrationTests.getTestReports()});
     }
 
-    onFailureDataChanged(data) {
-        this.setState({failureData: data});
+    onFailureDataChanged() {
+        this.setState({failureData: this.props.integrationTests.getFailureData()});
     }
 
-    onSubsetsChanged(data) {
+    onSubsetsChanged() {
         this.setState({subsets: this._getSubsets()});
     }
 
     _getSubsets() {
         var buildToSubsets = {};
-        _.forEach(this.props.subsetStore.getBuilds(), (subset) => {
+        _.forEach(this.props.subsets.getBuilds(), (subset) => {
             var upstream = subset.getUpstream();
             if (upstream.name === "integration-test-generic-build") {
                 if (!buildToSubsets[upstream.id]) {
@@ -76,7 +75,7 @@ class RecentBuilds extends React.Component {
     }
 
     render() {
-        var allBuilds = this.state.builds;
+        var allBuilds = this.state.integrationTests;
         var failedBuilds = _.filter(allBuilds, (build) => {
             return build.isFailed() || build.isAborted();
         });
@@ -111,12 +110,12 @@ class RecentBuilds extends React.Component {
                     {this.renderBuilds(overnightBuilds)}
                 </TabPane>
                 <TabPane eventKey={6} tab="Stats">
-                    <UnstableStats buildsStore={this.props.buildsStore}/>
+                    <UnstableStats integrationTests={this.props.integrationTests}/>
                 </TabPane>
                 <TabPane eventKey={7} tab="Cleanup">
                     <Button bsStyle="warning" onClick={() => {
                         BuildActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
-                    }}>Stop keeping builds older than 14 days</Button>
+                    }}>Stop keeping any build that is older than 14 days</Button>
                 </TabPane>
             </TabbedArea>
         );

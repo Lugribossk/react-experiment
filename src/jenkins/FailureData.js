@@ -1,23 +1,30 @@
+import _ from "lodash";
+
+/**
+ * Data on why a build might have failed.
+ */
 export default class FailureData {
     constructor(data) {
-        if (_.isObject(data)) {
-            _.assign(this, data);
-            return;
-        }
+        _.assign(this, data);
+    }
 
-        var misspelledBranch = /fatal: Not a valid object name (\S+)/g.exec(data);
+    static fromConsoleOutput(text) {
+        var data = {};
+        var misspelledBranch = /fatal: Not a valid object name (\S+)/g.exec(text);
         if (misspelledBranch && misspelledBranch[1]) {
-            this.misspelledBranch = misspelledBranch[1];
+            data.misspelledBranch = misspelledBranch[1];
         }
 
-        var noFastForward = /cannot fast-forward master to (\S+)/g.exec(data);
+        var noFastForward = /cannot fast-forward master to (\S+)/g.exec(text);
         if (noFastForward && noFastForward[1]) {
-            this.noFastForward = noFastForward[1];
+            data.noFastForward = noFastForward[1];
         }
 
-        var notBuilt = /'(\S+) for git reference .+? needs to be built/g.exec(data);
+        var notBuilt = /'(\S+) for git reference .+? needs to be built/g.exec(text);
         if (notBuilt && notBuilt[1]) {
-            this.notBuilt = notBuilt[1];
+            data.notBuilt = notBuilt[1];
         }
+
+        return new FailureData(data);
     }
 }

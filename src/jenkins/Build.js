@@ -24,6 +24,9 @@ var IT_PARAM_REPOS = {
     CHINAPAYMENT_GIT_REF: "tradeshift-china-payment"
 };
 
+/**
+ * A build of a specific Jenkins job.
+ */
 export default class Build {
     constructor(data) {
         _.assign(this, data);

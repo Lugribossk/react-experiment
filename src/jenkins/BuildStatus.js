@@ -5,8 +5,7 @@ import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-
 import Merge from "./Merge";
 import BuildActions from "./BuildActions";
 
-var ESTIMATED_DURATION_MINS = 30,
-    NUM_SUBSETS = 24;
+var ESTIMATED_DURATION_MINS = 30;
 
 export default class BuildStatus extends React.Component {
     getLink() {
@@ -111,7 +110,7 @@ export default class BuildStatus extends React.Component {
                 return <span>{this.props.testReport.failCount} tests failed.</span>
             }
 
-            return _.map(this.props.testReport.getFailingTests(), (failure) => {
+            return _.map(this.props.testReport.getFailedTests(), (failure) => {
                 var key = this.props.build.number + failure.file + failure.name;
                 key = key.replace(/ /g, "-").replace(/\./g, "-");
 
