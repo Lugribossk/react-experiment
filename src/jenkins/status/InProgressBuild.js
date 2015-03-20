@@ -33,12 +33,17 @@ export default class InProgressBuild extends React.Component {
         });
 
         return (
-            <ProgressBar>
-                <ProgressBar bsStyle="danger" label={failedSubsets.length} key={1}
-                    now={Math.round(failedSubsets.length / this.props.subsets.length * 100)} />
-                <ProgressBar bsStyle="success" key={2}
-                    now={Math.round(finishedSubsets.length / this.props.subsets.length * 100)} />
-            </ProgressBar>
+            <div>
+                <ProgressBar>
+                    <ProgressBar bsStyle="danger" label={failedSubsets.length} key={1}
+                        now={Math.round(failedSubsets.length / this.props.subsets.length * 100)} />
+                    <ProgressBar bsStyle="success" key={2}
+                        now={Math.round(finishedSubsets.length / this.props.subsets.length * 100)} />
+                </ProgressBar>
+                {_.map(failedSubsets, (subset) => {
+                    return <a key={subset.number} href={subset.url} target="_blank">{subset.number} </a>
+                })}
+            </div>
         );
     }
 
