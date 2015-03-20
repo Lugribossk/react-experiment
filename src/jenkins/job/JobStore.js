@@ -4,6 +4,8 @@ import request from "superagent-bluebird-promise";
 import Build from "../build/Build";
 import TestReport from "../build/TestReport";
 import FailureData from "../build/FailureData";
+import JobActions from "./JobActions";
+import BuildActions from "../build/BuildActions";
 
 /**
  * Store for the data from a single Jenkins build job.
@@ -15,7 +17,6 @@ export default class JobStore extends CachingStore {
      */
     constructor(name, limit=50) {
         super(__filename + name);
-
         this.name = name;
         this.limit = limit;
         this.state = this.getCachedState() || {
@@ -23,17 +24,17 @@ export default class JobStore extends CachingStore {
             reports: {},
             failureData: {}
         };
-
         this.pendingReports = {};
         this.pendingFailureData = {};
 
-        this._updateBuilds();
-
-        setInterval(this._updateBuilds.bind(this), 30 * 1000);
-
         window["clearData_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
-        }
+        };
+        JobActions.trigger.onDispatch(this.onBuildTriggered.bind(this));
+        BuildActions.abort.onDispatch(this.onBuildAborted.bind(this));
+
+        this._updateBuilds();
+        setInterval(this._updateBuilds.bind(this), 30 * 1000);
     }
 
     onBuildsChanged(listener) {
@@ -60,6 +61,24 @@ export default class JobStore extends CachingStore {
         return this.state.failureData;
     }
 
+    onBuildTriggered(jobName) {
+        if (this.name === jobName) {
+            Promise.delay(2000)
+                .then(() => {
+                    this._updateBuilds();
+                });
+        }
+    }
+
+    onBuildAborted(build) {
+        if (_.contains(build.url, this.name)) {
+            Promise.delay(2000)
+                .then(() => {
+                    this._updateBuilds();
+                });
+        }
+    }
+
     _updateBuilds() {
         request.get("/job/" + this.name + "/api/json")
             .query("tree=builds[number,building,result,timestamp,duration,url,keepLog,actions[parameters[*],causes[userName,upstreamBuild,upstreamProject]]]{0," + this.limit + "}")
@@ -81,7 +100,7 @@ export default class JobStore extends CachingStore {
             .catch((err) => {});
     }
 
-    _updateTestReport(id, retry=true) {
+    _updateTestReport(id) {
         if (this.state.reports[id] || this.pendingReports[id]) {
             return;
         }

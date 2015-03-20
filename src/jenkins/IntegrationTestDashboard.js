@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import JobStore from "./job/JobStore";
 import JobService from "./job/JobService";
 import BuildService from "./build/BuildService";
@@ -16,6 +17,16 @@ export default class IntegrationTestDashboard extends React.Component {
 
         new JobService();
         new BuildService();
+
+        this.cleanOldLocalstorage();
+    }
+
+    cleanOldLocalstorage() {
+        _.forEach(localStorage, (value, name) => {
+            if (!_.contains(name, "JobStore")) {
+                localStorage.removeItem(name);
+            }
+        })
     }
 
     render() {
