@@ -60,7 +60,7 @@ export default class InProgressBuild extends React.Component {
                 <Button onClick={this.abort.bind(this)} style={{float: "right"}} title="Abort build and subsets" disabled={this.state.aborted}>
                     {this.state.aborted ? "Aborted" : "Abort"}
                 </Button>
-                <ProgressBar bsStyle="info" now={progress} label={remainingMins + " mins"} />
+                <ProgressBar bsStyle="info" now={Math.min(progress, 100)} label={remainingMins + " mins"} />
                 {this.renderSubsets()}
                 {this.props.children}
             </div>

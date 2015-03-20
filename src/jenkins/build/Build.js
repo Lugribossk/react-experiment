@@ -52,30 +52,46 @@ export default class Build {
         return this.result === "ABORTED";
     }
 
-    getUpstream() {
-        var data = {};
+    _causeWithProperty(name) {
+        var cause = null;
         _.forEach(this.actions, (action) => {
             if (action.causes &&
                 action.causes[0] &&
-                action.causes[0].upstreamBuild) {
-                data = {
-                    id: action.causes[0].upstreamBuild,
-                    name: action.causes[0].upstreamProject
-                }
+                action.causes[0][name]) {
+                cause = action.causes[0];
             }
         });
-        return data;
+        return cause;
     }
 
-    getUsername() {
-        var username = "Unknown";
-        _.find(this.actions, (action) => {
-            if (action.causes && action.causes[0] && action.causes[0].userName) {
-                username = action.causes[0].userName;
-                return true;
+    getUpstream() {
+        var cause = this._causeWithProperty("upstreamBuild");
+        if (cause) {
+            return {
+                id: cause.upstreamBuild,
+                name: cause.upstreamProject
             }
-        });
-        return username;
+        } else {
+            return {};
+        }
+    }
+
+    getUserFullName() {
+        var cause = this._causeWithProperty("userName");
+        if (cause) {
+            return cause.userName;
+        } else {
+            return null;
+        }
+    }
+
+    getUserId() {
+        var cause = this._causeWithProperty("userId");
+        if (cause) {
+            return cause.userId;
+        } else {
+            return null;
+        }
     }
 
     getParametersList() {

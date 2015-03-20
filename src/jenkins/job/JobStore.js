@@ -31,8 +31,8 @@ export default class JobStore extends CachingStore {
         window["clearData_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
         };
-        JobActions.trigger.onDispatch(this.onBuildTriggered.bind(this));
-        BuildActions.abort.onDispatch(this.onBuildAborted.bind(this));
+        JobActions.trigger.onDispatch(this.whenBuildTriggered.bind(this));
+        BuildActions.abort.onDispatch(this.whenBuildAborted.bind(this));
 
         this._updateBuilds();
         setInterval(this._updateBuilds.bind(this), 30 * 1000);
@@ -62,7 +62,7 @@ export default class JobStore extends CachingStore {
         return this.state.failureData;
     }
 
-    onBuildTriggered(jobName) {
+    whenBuildTriggered(jobName) {
         if (this.name === jobName) {
             Promise.delay(8000)
                 .then(() => {
@@ -71,7 +71,7 @@ export default class JobStore extends CachingStore {
         }
     }
 
-    onBuildAborted(build) {
+    whenBuildAborted(build) {
         if (_.contains(build.url, this.name)) {
             Promise.delay(8000)
                 .then(() => {
@@ -82,7 +82,7 @@ export default class JobStore extends CachingStore {
 
     _updateBuilds() {
         request.get("/job/" + this.name + "/api/json")
-            .query("tree=builds[number,building,result,timestamp,duration,url,keepLog,actions[parameters[*],causes[userName,upstreamBuild,upstreamProject]]]{0," + this.limit + "}")
+            .query("tree=builds[number,building,result,timestamp,duration,url,keepLog,actions[parameters[*],causes[userName,userId,upstreamBuild,upstreamProject]]]{0," + this.limit + "}")
             .then((result) => {
                 var builds = _.map(result.body.builds, (data) => {
                     return new Build(data);

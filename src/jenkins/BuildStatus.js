@@ -38,7 +38,7 @@ export default class BuildStatus extends React.Component {
         return (
             <span>
                 <a href={"/job/integration-test-generic-build/" + this.props.build.number} target="_blank">
-                    {"#" + this.props.build.number} - {this.props.build.getUsername()}
+                    {"#" + this.props.build.number} - {this.props.build.getUserFullName() || "Unknown"}
                 </a>
                 <span style={{float: "right"}}>
                     {this.props.build.keepLog &&
