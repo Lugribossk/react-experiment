@@ -4,10 +4,10 @@ import JobStore from "./job/JobStore";
 import JobService from "./job/JobService";
 import BuildService from "./build/BuildService";
 import NotificationService from "./NotificationService";
-import RecentBuilds from "./RecentBuilds";
+import IntegrationTests from "./IntegrationTests";
 import "bootstrap/dist/css/bootstrap.css";
 
-export default class IntegrationTestDashboard extends React.Component {
+export default class DashboardApp extends React.Component {
     constructor(props) {
         super(props);
 
@@ -20,21 +20,13 @@ export default class IntegrationTestDashboard extends React.Component {
         new BuildService();
         new NotificationService(this.state.integrationTests);
 
-        this.cleanOldLocalstorage();
-    }
-
-    cleanOldLocalstorage() {
-        _.forEach(localStorage, (value, name) => {
-            if (!_.contains(name, "JobStore")) {
-                localStorage.removeItem(name);
-            }
-        })
+        localStorage.clear();
     }
 
     render() {
         return (
             <div>
-                <RecentBuilds integrationTests={this.state.integrationTests} subsets={this.state.subsets}/>
+                <IntegrationTests integrationTests={this.state.integrationTests} subsets={this.state.subsets}/>
             </div>
         );
     }

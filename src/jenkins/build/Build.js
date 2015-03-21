@@ -94,6 +94,10 @@ export default class Build {
         }
     }
 
+    getName() {
+        return /\/job\/(.+?)\/./.exec(this.url)[0];
+    }
+
     getParametersList() {
         var paramList = [];
         _.find(this.actions, (action) => {

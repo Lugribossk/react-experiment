@@ -8,7 +8,7 @@ import BuildStatus from "./BuildStatus";
 import UnstableStats from "./UnstableStats";
 import JobActions from "./job/JobActions";
 
-export default class RecentBuilds extends React.Component {
+export default class IntegrationTests extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -123,4 +123,4 @@ export default class RecentBuilds extends React.Component {
     }
 }
 
-Mixins.add(RecentBuilds.prototype, [SubscribeMixin]);
+Mixins.add(IntegrationTests.prototype, [SubscribeMixin]);

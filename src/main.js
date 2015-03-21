@@ -1,7 +1,7 @@
 import React from "react";
-import IntegrationTestDashboard from "./jenkins/IntegrationTestDashboard";
+import DashboardApp from "./jenkins/DashboardApp";
 
 React.render(
-    <IntegrationTestDashboard/>,
+    <DashboardApp/>,
     document.getElementById("main")
 );
