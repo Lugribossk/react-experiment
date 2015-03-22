@@ -1,12 +1,12 @@
 import _ from "lodash";
-import JenkinsUtils from "../JenkinsUtils";
+import BuildLike from "./BuildLike";
 
 /**
  * A build of a specific Jenkins job.
  */
-export default class Build {
-    constructor(data) {
-        _.assign(this, data);
+export default class Build extends BuildLike {
+    getId() {
+        return this.number;
     }
 
     isBuilding() {
@@ -30,7 +30,7 @@ export default class Build {
     }
 
     getUpstream() {
-        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "upstreamBuild");
+        var cause = this._getCauseWithProperty(this.actions, "upstreamBuild");
         if (cause) {
             return {
                 id: cause.upstreamBuild,
@@ -41,29 +41,7 @@ export default class Build {
         }
     }
 
-    getUserFullName() {
-        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "userName");
-        if (cause) {
-            return cause.userName;
-        } else {
-            return null;
-        }
-    }
-
-    getUserId() {
-        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "userId");
-        if (cause) {
-            return cause.userId;
-        } else {
-            return null;
-        }
-    }
-
     getJobName() {
         return /\/job\/(.+?)\/./.exec(this.url)[1];
-    }
-
-    getParameters() {
-        return JenkinsUtils.getParameters(this.actions);
     }
 }

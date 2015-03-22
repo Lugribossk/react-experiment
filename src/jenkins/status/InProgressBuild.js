@@ -41,7 +41,7 @@ export default class InProgressBuild extends React.Component {
                         now={Math.round(finishedSubsets.length / this.props.subsets.length * 100)} />
                 </ProgressBar>
                 {_.map(failedSubsets, (subset) => {
-                    return <a key={subset.number} href={subset.url} target="_blank">{subset.number} </a>
+                    return <a key={subset.getId()} href={subset.url} target="_blank">{subset.getId()} </a>
                 })}
             </div>
         );

@@ -7,6 +7,6 @@ export default class BuildService {
     }
 
     abort(build) {
-        request.post(build.url + "/stop").end();
+        request.post(build.url + "stop").end();
     }
 }

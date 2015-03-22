@@ -1,25 +1,15 @@
 import _ from "lodash";
-import JenkinsUtils from "../JenkinsUtils";
+import BuildLike from "../build/BuildLike";
 
-export default class QueueItem {
-    constructor(data) {
-        _.assign(this, data);
+/**
+ * A queued build that will be started sometime in the future for a particular Jenkins job.
+ */
+export default class QueueItem extends BuildLike {
+    getId() {
+        return this.id;
     }
 
     getJobName() {
         return this.task.name;
-    }
-
-    getUserFullName() {
-        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "userName");
-        if (cause) {
-            return cause.userName;
-        } else {
-            return null;
-        }
-    }
-
-    getParameters() {
-        return JenkinsUtils.getParameters(this.actions);
     }
 }

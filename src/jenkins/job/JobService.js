@@ -65,7 +65,7 @@ export default class JobService {
             .then((data) => {
                 _.forEach(data.body.builds, (build) => {
                     if (build.keepLog && build.timestamp && moment(build.timestamp, "x").isBefore(olderThan)) {
-                        request.get("/job/" + jobName + "/" + build.number + "/toggleLogKeep")
+                        request.get(build.url + "toggleLogKeep")
                             .query("json={}")
                             .end();
                     }

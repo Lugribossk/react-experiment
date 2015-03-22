@@ -25,7 +25,7 @@ export default class IntegrationTestList extends React.Component {
             return;
         }
         return _.map(this.props.queue, (item) => {
-            return <QueueStatus key={"q" + item.id} item={item} />
+            return <QueueStatus key={"q" + item.getId()} item={item} />
         });
     }
 
@@ -34,13 +34,14 @@ export default class IntegrationTestList extends React.Component {
             return <div>No matching builds.</div>;
         }
         return _.map(this.props.builds, (build) => {
+            var id = build.getId();
             return <BuildStatus
-                key={"b" + build.number}
+                key={"b" + id}
                 build={build}
                 builds={this.props.allBuilds}
-                testReport={this.props.testReports[build.number]}
-                failureData={this.props.failureData[build.number]}
-                subsets={this.props.subsets[build.number]}
+                testReport={this.props.testReports[id]}
+                failureData={this.props.failureData[id]}
+                subsets={this.props.subsets[id]}
                 now={this.state.now}/>
         });
     }
