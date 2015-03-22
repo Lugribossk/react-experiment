@@ -44,4 +44,9 @@ export default class Build extends BuildLike {
     getJobName() {
         return /\/job\/(.+?)\/./.exec(this.url)[1];
     }
+
+    hasTestReport() {
+        var cause = this._getCauseWithProperty("failCount");
+        return !!cause;
+    }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import _ from "lodash";
-import {Navbar, Nav, NavItem, Button, Badge} from "react-bootstrap"
+import {Navbar, Nav, NavItem, CollapsableNav, Button, Badge, ModalTrigger} from "react-bootstrap"
 import JobStore from "./job/JobStore";
 import UserStore from "./user/UserStore";
 import QueueStore from "./queue/QueueStore";
@@ -13,6 +13,7 @@ import UnstableStats from "./UnstableStats";
 import JobActions from "./job/JobActions";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
+import TriggerIntegrationTest from "./TriggerIntegrationTest";
 
 export default class DashboardApp extends React.Component {
     constructor(props) {
@@ -117,32 +118,41 @@ export default class DashboardApp extends React.Component {
     renderNavbar() {
         return (
             <Navbar brand="ITs" toggleNavKey={0}>
-                <Nav eventKey={0}>
-                    <NavItem href="#" active={this.isActive("#")}>
-                        All <Badge>{this.state.allBuilds.length}</Badge>
-                    </NavItem>
-                    <NavItem href="#failed" active={this.isActive("failed")}>
-                        Failed <Badge>{this.state.failedBuilds.length}</Badge>
-                    </NavItem>
-                    <NavItem href="#unstable" active={this.isActive("unstable")}>
-                        Unstable <Badge>{this.state.unstableBuilds.length}</Badge>
-                    </NavItem>
-                    <NavItem href="#success" active={this.isActive("success")}>
-                        Succeeded <Badge>{this.state.successBuilds.length}</Badge>
-                    </NavItem>
-                    <NavItem href="#mine" active={this.isActive("mine")}>
-                        Mine <Badge>{this.state.myBuilds.length}</Badge>
-                    </NavItem>
-                    <NavItem href="#lastnight" active={this.isActive("lastnight")}>
-                        Last night
-                    </NavItem>
-                    <NavItem href="#stats" active={this.isActive("stats")}>
-                        Stats
-                    </NavItem>
-                    <NavItem href="#actions" active={this.isActive("actions")}>
-                        Cleanup
-                    </NavItem>
-                </Nav>
+                <CollapsableNav eventKey={0}>
+                    <Nav navbar>
+                        <NavItem href="#" active={this.isActive("#")}>
+                            All <Badge>{this.state.allBuilds.length}</Badge>
+                        </NavItem>
+                        <NavItem href="#failed" active={this.isActive("failed")}>
+                            Failed <Badge>{this.state.failedBuilds.length}</Badge>
+                        </NavItem>
+                        <NavItem href="#unstable" active={this.isActive("unstable")}>
+                            Unstable <Badge>{this.state.unstableBuilds.length}</Badge>
+                        </NavItem>
+                        <NavItem href="#success" active={this.isActive("success")}>
+                            Succeeded <Badge>{this.state.successBuilds.length}</Badge>
+                        </NavItem>
+                        <NavItem href="#mine" active={this.isActive("mine")}>
+                            Mine <Badge>{this.state.myBuilds.length}</Badge>
+                        </NavItem>
+                        <NavItem href="#lastnight" active={this.isActive("lastnight")}>
+                            Last night
+                        </NavItem>
+                        <NavItem href="#stats" active={this.isActive("stats")}>
+                            Stats
+                        </NavItem>
+                        <NavItem href="#actions" active={this.isActive("actions")}>
+                            Cleanup
+                        </NavItem>
+                    </Nav>
+                    <ul>
+                        <ModalTrigger modal={<TriggerIntegrationTest />}>
+                            <Button className="navbar-btn navbar-right" bsStyle="primary">
+                                New
+                            </Button>
+                        </ModalTrigger>
+                    </ul>
+                </CollapsableNav>
             </Navbar>
         );
     }

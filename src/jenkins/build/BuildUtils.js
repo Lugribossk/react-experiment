@@ -26,6 +26,31 @@ var IT_PARAM_REPOS = {
     CHINAPAYMENT_GIT_REF: "tradeshift-china-payment"
 };
 
+var PR_PARAM_REPOS= {
+    INTEGRATION_TEST_GIT_REF: "Integration-Test",
+    FRONTEND_GIT_REF: "Frontend",
+    BACKEND_GIT_REF: "Backend-Service",
+    SUPPLIER_INTEGRATIONS_GIT_REF: "Supplier-Integrations",
+    PROXY2_GIT_REF: "Tradeshift-Proxy2",
+    INTEGRATION_GIT_REF: "Integrations",
+    CONVERSIONS_GIT_REF: "Backend-Conversions",
+    CLOUDSCAN_GIT_REF: "cloudscan-service",
+    APPS_SERVER_GIT_REF: "Apps-Server",
+    APPS_GIT_REF: "Apps",
+    APPBACKEND_GIT_REF: "App-Service",
+    WORKFLOW_GIT_REF: "Workflow",
+    CITISCF_GIT_REF: "Financing-CitiSCF",
+    DD_GIT_REF: "Financing-DD",
+    APP_TOOL_GIT_REF: "App-Tool",
+    AUDITSERVER_GIT_REF: "Audit-Server",
+    BUSINESSEVENTSERVICE_GIT_REF: "BusinessEventHandler",
+    C8_GIT_REF: "Financing-C8",
+    LOCKING_GIT_REF: "Locking",
+    EMAILINCOMING_GIT_REF: "Email-Incoming-Service"
+};
+
+var REPOS = _.values(PR_PARAM_REPOS);
+
 export default {
     estimatePercentComplete(build, now, builds) {
         if (!build.isBuilding()) {
@@ -86,5 +111,11 @@ export default {
         });
 
         return repos;
-    }
+    },
+
+    IT_PARAM_REPOS: IT_PARAM_REPOS,
+
+    PR_PARAM_REPOS:  PR_PARAM_REPOS,
+
+    REPOS: REPOS
 }

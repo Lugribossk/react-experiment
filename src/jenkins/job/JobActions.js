@@ -12,6 +12,11 @@ export default {
      */
     triggerPullRequest: new Action("jobTriggerPullRequest"),
     /**
+     * @param {Object} repoBranches
+     * @param {String} changelog
+     */
+    triggerIntegrationTest: new Action("jobTriggerIntegrationTest"),
+    /**
      * @param {String} jobName
      * @param {moment} olderThan
      */

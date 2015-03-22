@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bluebird": "2.9.14",
-    "bootstrap": "3.3.2",
+    "bootstrap": "3.3.4",
     "lodash": "3.1.0",
     "md5": "1.0.0",
     "moment": "2.9.0",
