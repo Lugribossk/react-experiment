@@ -2,16 +2,16 @@ import React from "react";
 import _ from "lodash";
 import {Navbar, Nav, NavItem, Button, Badge} from "react-bootstrap"
 import JobStore from "./job/JobStore";
+import UserStore from "./user/UserStore";
 import JobService from "./job/JobService";
 import BuildService from "./build/BuildService";
 import NotificationService from "./NotificationService";
-import IntegrationTests from "./IntegrationTests";
+import IntegrationTestList from "./IntegrationTestList";
 import "bootstrap/dist/css/bootstrap.css";
 import UnstableStats from "./UnstableStats";
 import JobActions from "./job/JobActions";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
-import moment from "moment";
 
 export default class DashboardApp extends React.Component {
     constructor(props) {
@@ -19,21 +19,29 @@ export default class DashboardApp extends React.Component {
 
         this.integrationTests = new JobStore("integration-test-generic-build");
         this.subsets = new JobStore("integration-test-build-subset", 100);
+        this.userStore = new UserStore();
 
-        this.state = _.assign({
+        var currentUser = this.userStore.getCurrentUser();
+
+        this.state = {
             testReports: this.integrationTests.getTestReports(),
             failureData: this.integrationTests.getFailureData(),
             subsets: this._getSubsets(),
-            route: window.location.href.split("#")[1] || ""
-        }, this._getBuilds());
+            route: window.location.href.split("#")[1] || "",
+            currentUser: currentUser,
+            allBuilds: this.integrationTests.getBuilds(),
+            failedBuilds: this.integrationTests.getFailedBuilds(),
+            unstableBuilds: this.integrationTests.getUnstableBuilds(),
+            successBuilds: this.integrationTests.getSuccessfulBuilds(),
+            overnightBuilds: this.integrationTests.getLastNightBuilds(),
+            myBuilds: this.integrationTests.getUserBuilds(currentUser)
+        };
 
         this.subscribe(this.integrationTests.onBuildsChanged(this.whenIntegrationTestsChanged.bind(this)));
         this.subscribe(this.integrationTests.onTestReportsChanged(this.whenTestReportsChanged.bind(this)));
         this.subscribe(this.integrationTests.onFailureDataChanged(this.whenFailureDataChanged.bind(this)));
         this.subscribe(this.subsets.onBuildsChanged(this.whenSubsetsChanged.bind(this)));
-        this.interval = setInterval(() => {
-            this.setState({now: Date.now()});
-        }, 10000);
+        this.subscribe(this.userStore.onCurrentUserChanged(this.whenCurrentUserChanged.bind(this)));
 
         window.addEventListener("hashchange", this.whenHashChange.bind(this));
 
@@ -44,12 +52,15 @@ export default class DashboardApp extends React.Component {
         localStorage.clear();
     }
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-
     whenIntegrationTestsChanged() {
-        this.setState(this._getBuilds());
+        this.setState({
+            allBuilds: this.integrationTests.getBuilds(),
+            failedBuilds: this.integrationTests.getFailedBuilds(),
+            unstableBuilds: this.integrationTests.getUnstableBuilds(),
+            successBuilds: this.integrationTests.getSuccessfulBuilds(),
+            overnightBuilds: this.integrationTests.getLastNightBuilds(),
+            myBuilds: this.integrationTests.getUserBuilds(this.state.currentUser)
+        });
     }
 
     whenTestReportsChanged() {
@@ -64,31 +75,13 @@ export default class DashboardApp extends React.Component {
         this.setState({subsets: this._getSubsets()});
     }
 
-    _getBuilds() {
-        var allBuilds = this.integrationTests.getBuilds();
-        var failedBuilds = _.filter(allBuilds, (build) => {
-            return build.isFailed() || build.isAborted();
-        });
-        var unstableBuilds = _.filter(allBuilds, (build) => {
-            return build.isUnstable();
-        });
-        var successBuilds = _.filter(allBuilds, (build) => {
-            return build.isSuccess();
-        });
-        var overnightBuilds = _.filter(allBuilds, (build) => {
-            var started = moment(build.timestamp);
-            var thisMorning = moment().startOf("day").add(7, "hours");
-            var yesterdayEvening = moment().startOf("day").subtract(6, "hours");
+    whenCurrentUserChanged() {
+        this.setState({currentUser: this.userStore.getCurrentUser()});
+    }
 
-            return started.isAfter(yesterdayEvening) && started.isBefore(thisMorning);
-        });
-        return {
-            allBuilds: allBuilds,
-            failedBuilds: failedBuilds,
-            unstableBuilds: unstableBuilds,
-            successBuilds: successBuilds,
-            overnightBuilds: overnightBuilds
-        }
+    whenHashChange(event) {
+        var hash = event.newURL.split("#")[1];
+        this.setState({route: hash});
     }
 
     _getSubsets() {
@@ -105,17 +98,45 @@ export default class DashboardApp extends React.Component {
         return buildToSubsets;
     }
 
-    whenHashChange(event) {
-        var hash = event.newURL.split("#")[1];
-        this.setState({route: hash});
-    }
-
     isActive(link) {
         var route = this.state.route;
         var isDefault = (route === "" && link === "#");
         var isSubpath = (route.indexOf(link) === 0);
 
         return isDefault || isSubpath
+    }
+
+    renderNavbar() {
+        return (
+            <Navbar brand="ITs" toggleNavKey={0}>
+                <Nav eventKey={0}>
+                    <NavItem href="#" active={this.isActive("#")}>
+                        All <Badge>{this.state.allBuilds.length}</Badge>
+                    </NavItem>
+                    <NavItem href="#failed" active={this.isActive("failed")}>
+                        Failed <Badge>{this.state.failedBuilds.length}</Badge>
+                    </NavItem>
+                    <NavItem href="#unstable" active={this.isActive("unstable")}>
+                        Unstable<Badge>{this.state.unstableBuilds.length}</Badge>
+                    </NavItem>
+                    <NavItem href="#success" active={this.isActive("success")}>
+                        Succeeded <Badge>{this.state.successBuilds.length}</Badge>
+                    </NavItem>
+                    <NavItem href="#mine" active={this.isActive("mine")}>
+                        Mine <Badge>{this.state.myBuilds.length}</Badge>
+                    </NavItem>
+                    <NavItem href="#lastnight" active={this.isActive("lastnight")}>
+                        Last night
+                    </NavItem>
+                    <NavItem href="#stats" active={this.isActive("stats")}>
+                        Stats
+                    </NavItem>
+                    <NavItem href="#actions" active={this.isActive("actions")}>
+                        Cleanup
+                    </NavItem>
+                </Nav>
+            </Navbar>
+        );
     }
 
     renderRoute() {
@@ -126,13 +147,15 @@ export default class DashboardApp extends React.Component {
             subsets: this.state.subsets
         };
         if (this.state.route === "failed") {
-            return <IntegrationTests builds={this.state.failedBuilds} {...data}/>
+            return <IntegrationTestList builds={this.state.failedBuilds} {...data}/>
         } else if (this.state.route === "unstable") {
-            return <IntegrationTests builds={this.state.unstableBuilds} {...data}/>
+            return <IntegrationTestList builds={this.state.unstableBuilds} {...data}/>
         } else if (this.state.route === "success") {
-            return <IntegrationTests builds={this.state.successBuilds} {...data}/>
+            return <IntegrationTestList builds={this.state.successBuilds} {...data}/>
+        } else if (this.state.route === "mine") {
+            return <IntegrationTestList builds={this.state.myBuilds} {...data}/>
         } else if (this.state.route === "lastnight") {
-            return <IntegrationTests builds={this.state.overnightBuilds} {...data}/>
+            return <IntegrationTestList builds={this.state.overnightBuilds} {...data}/>
         } else if (this.state.route === "stats") {
             return <UnstableStats integrationTests={this.integrationTests}/>;
         } else if (this.state.route === "actions") {
@@ -142,38 +165,14 @@ export default class DashboardApp extends React.Component {
                 }}>Stop keeping any build that is older than 14 days</Button>
             );
         } else {
-            return <IntegrationTests builds={this.state.allBuilds} {...data}/>
+            return <IntegrationTestList builds={this.state.allBuilds} {...data}/>
         }
     }
 
     render() {
         return (
             <div>
-                <Navbar brand="ITs" toggleNavKey={0}>
-                    <Nav eventKey={0}>
-                        <NavItem href="#" active={this.isActive("#")}>
-                            All <Badge>{this.state.allBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#failed" active={this.isActive("failed")}>
-                            Failed <Badge>{this.state.failedBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#unstable" active={this.isActive("unstable")}>
-                            Unstable<Badge>{this.state.unstableBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#success" active={this.isActive("success")}>
-                            Succeeded <Badge>{this.state.successBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#lastnight" active={this.isActive("lastnight")}>
-                            Last night
-                        </NavItem>
-                        <NavItem href="#stats" active={this.isActive("stats")}>
-                            Stats
-                        </NavItem>
-                        <NavItem href="#actions" active={this.isActive("actions")}>
-                            Cleanup
-                        </NavItem>
-                    </Nav>
-                </Navbar>
+                {this.renderNavbar()}
                 <div className="container">
                     {this.renderRoute()}
                 </div>

@@ -26,7 +26,7 @@ export default {
     },
 
     getEstimatedDurationMs(runningBuild, builds) {
-        if (!builds) {
+        if (!builds || builds.length === 0) {
             return ESTIMATED_DURATION_MINS * 60 * 1000;
         }
 

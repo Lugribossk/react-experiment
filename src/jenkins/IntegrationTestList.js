@@ -3,8 +3,7 @@ import _ from "lodash";
 import {TabbedArea, TabPane, Badge, Button, Glyphicon} from "react-bootstrap"
 import BuildStatus from "./BuildStatus";
 
-
-export default class IntegrationTests extends React.Component {
+export default class IntegrationTestList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,11 +30,17 @@ export default class IntegrationTests extends React.Component {
                 subsets={this.props.subsets[build.number]}
                 now={this.state.now}/>
         });
-        return (
-            <div>
-                {status}
-            </div>
-        );
+        if (this.props.builds.length > 0) {
+            return (
+                <div>
+                    {status}
+                </div>
+            );
+        } else {
+            return (
+                <div>No matching builds.</div>
+            );
+        }
     }
 }
 

@@ -1,7 +1,8 @@
 import _ from "lodash";
 import Promise from "bluebird";
-import CachingStore from "../../flux/CachingStore"
+import moment from "moment";
 import request from "superagent-bluebird-promise";
+import CachingStore from "../../flux/CachingStore"
 import Build from "../build/Build";
 import TestReport from "../build/TestReport";
 import FailureData from "../build/FailureData";
@@ -78,6 +79,43 @@ export default class JobStore extends CachingStore {
                     this._updateBuilds();
                 });
         }
+    }
+
+    getFailedBuilds() {
+        return _.filter(this.getBuilds(), (build) => {
+            return build.isFailed() || build.isAborted();
+        });
+    }
+
+    getUnstableBuilds() {
+        return _.filter(this.getBuilds(), (build) => {
+            return build.isUnstable();
+        });
+    }
+
+    getSuccessfulBuilds() {
+        return _.filter(this.getBuilds(), (build) => {
+            return build.isSuccess();
+        });
+    }
+
+    getLastNightBuilds() {
+        return _.filter(this.getBuilds(), (build) => {
+            var started = moment(build.timestamp);
+            var thisMorning = moment().startOf("day").add(7, "hours");
+            var yesterdayEvening = moment().startOf("day").subtract(6, "hours");
+
+            return started.isAfter(yesterdayEvening) && started.isBefore(thisMorning);
+        });
+    }
+
+    getUserBuilds(user) {
+        if (!user) {
+            return [];
+        }
+        return _.filter(this.getBuilds(), (build) => {
+            return build.getUserId() === user.id;
+        });
     }
 
     _updateBuilds() {
