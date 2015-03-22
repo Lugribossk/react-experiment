@@ -1,28 +1,5 @@
 import _ from "lodash";
-
-var IT_PARAM_REPOS = {
-    INTEGRATION_TEST_GIT_REF: "Integration-Test",
-    FRONTEND_GIT_REF: "Frontend",
-    BACKEND_GIT_REF: "Backend-Service",
-    SUPPLIERINTEGRATIONS_GIT_REF: "Supplier-Integrations", // different
-    PROXY2_GIT_REF: "Tradeshift-Proxy2",
-    CONVERSIONS_GIT_REF: "Backend-Conversions",
-    INTEGRATION_GIT_REF: "Integrations",
-    APPTOOL_GIT_REF: "App-Tool", // different
-    APPSERVICE_GIT_REF: "App-Service", // different
-    APPS_GIT_REF: "Apps",
-    APPS_SERVER_GIT_REF: "Apps-Server",
-    CITISCF_GIT_REF: "Financing-CitiSCF",
-    CLOUDSCAN_GIT_REF: "cloudscan-service",
-    AUDITSERVER_GIT_REF: "Audit-Server",
-    WORKFLOW_GIT_REF: "Workflow",
-    FINANCINGDD_GIT_REF: "Financing-DD", // different
-    C8_GIT_REF: "Financing-C8",
-    BUSINESSEVENTSERVICE_GIT_REF: "BusinessEventHandler",
-    LOCKING_GIT_REF: "Locking",
-    EMAILINCOMING_GIT_REF: "Email-Incoming-Service",
-    CHINAPAYMENT_GIT_REF: "tradeshift-china-payment"
-};
+import JenkinsUtils from "../JenkinsUtils";
 
 /**
  * A build of a specific Jenkins job.
@@ -52,20 +29,8 @@ export default class Build {
         return this.result === "ABORTED";
     }
 
-    _causeWithProperty(name) {
-        var cause = null;
-        _.forEach(this.actions, (action) => {
-            if (action.causes &&
-                action.causes[0] &&
-                action.causes[0][name]) {
-                cause = action.causes[0];
-            }
-        });
-        return cause;
-    }
-
     getUpstream() {
-        var cause = this._causeWithProperty("upstreamBuild");
+        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "upstreamBuild");
         if (cause) {
             return {
                 id: cause.upstreamBuild,
@@ -77,7 +42,7 @@ export default class Build {
     }
 
     getUserFullName() {
-        var cause = this._causeWithProperty("userName");
+        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "userName");
         if (cause) {
             return cause.userName;
         } else {
@@ -86,7 +51,7 @@ export default class Build {
     }
 
     getUserId() {
-        var cause = this._causeWithProperty("userId");
+        var cause = JenkinsUtils.getCauseWithProperty(this.actions, "userId");
         if (cause) {
             return cause.userId;
         } else {
@@ -94,40 +59,11 @@ export default class Build {
         }
     }
 
-    getName() {
-        return /\/job\/(.+?)\/./.exec(this.url)[0];
-    }
-
-    getParametersList() {
-        var paramList = [];
-        _.find(this.actions, (action) => {
-            if (action.parameters) {
-                paramList = action.parameters;
-                return true;
-            }
-        });
-        return paramList;
+    getJobName() {
+        return /\/job\/(.+?)\/./.exec(this.url)[1];
     }
 
     getParameters() {
-        var params = {};
-        _.forEach(this.getParametersList(), (param) => {
-            params[param.name] = param.value;
-        });
-        return params;
-    }
-
-    getRepoBranches() {
-        var repos = {};
-        _.forEach(this.getParameters(), (value, name) => {
-            if (_.endsWith(name, "_GIT_REF")) {
-                var repo = IT_PARAM_REPOS[name];
-                var branch = _.startsWith(value, "origin/") ? value.substr(7) : value;
-
-                repos[repo] = branch;
-            }
-        });
-
-        return repos;
+        return JenkinsUtils.getParameters(this.actions);
     }
 }

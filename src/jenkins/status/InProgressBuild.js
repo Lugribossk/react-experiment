@@ -3,6 +3,7 @@ import _ from "lodash";
 import {ProgressBar, Button} from "react-bootstrap"
 import BuildActions from "../build/BuildActions";
 import BuildUtils from "../build/BuildUtils";
+import ParameterDetails from "../ui/ParameterDetails";
 
 export default class InProgressBuild extends React.Component {
     constructor(props) {
@@ -57,7 +58,7 @@ export default class InProgressBuild extends React.Component {
                 </Button>
                 <ProgressBar bsStyle="info" now={percent} label={remainingMins + " mins"} />
                 {this.renderSubsets()}
-                {this.props.children}
+                <ParameterDetails parameters={this.props.build.getParameters()} />
             </div>
         );
     }

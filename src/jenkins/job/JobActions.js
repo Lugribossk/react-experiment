@@ -5,7 +5,7 @@ export default {
      * @param {String} jobName
      * @param {Object} params
      */
-    trigger: new Action("jobTrigger"),
+    triggerBuild: new Action("jobTrigger"),
     /**
      * @param {Object} repoBranches
      * @param {String} changelog

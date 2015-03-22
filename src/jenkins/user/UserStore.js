@@ -36,5 +36,6 @@ export default class UserStore extends CachingStore {
                     email: email
                 }});
             })
+            .catch((err) => {});
     }
 }

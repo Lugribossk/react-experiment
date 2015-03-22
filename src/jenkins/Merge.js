@@ -2,6 +2,7 @@ import React from "react/addons";
 import {Modal, Button, Input} from "react-bootstrap"
 import Mixins from "../util/Mixins";
 import JobActions from "./job/JobActions";
+import BuildUtils from "./build/BuildUtils";
 
 export default class Merge extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ export default class Merge extends React.Component {
             return;
         }
 
-        JobActions.triggerPullRequest(this.props.build.getRepoBranches(), this.state.changelog);
+        JobActions.triggerPullRequest(BuildUtils.getRepoBranches(this.props.build.getParameters()), this.state.changelog);
         this.props.onRequestHide();
     }
 

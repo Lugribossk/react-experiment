@@ -32,7 +32,7 @@ export default class JobStore extends CachingStore {
         window["clearData_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
         };
-        JobActions.trigger.onDispatch(this.whenBuildTriggered.bind(this));
+        JobActions.triggerBuild.onDispatch(this.whenBuildTriggered.bind(this));
         BuildActions.abort.onDispatch(this.whenBuildAborted.bind(this));
 
         this._updateBuilds();

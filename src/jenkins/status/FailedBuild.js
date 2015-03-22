@@ -2,6 +2,7 @@ import React from "react";
 import _ from "lodash";
 import {Button} from "react-bootstrap"
 import JobActions from "../job/JobActions";
+import ParameterDetails from "../ui/ParameterDetails";
 
 export default class FailedBuild extends React.Component {
     constructor(props) {
@@ -13,7 +14,7 @@ export default class FailedBuild extends React.Component {
 
     rebuild() {
         this.setState({rebuilt: true});
-        JobActions.trigger("integration-test-generic-build", this.props.build.getParameters());
+        JobActions.triggerBuild(this.props.build.getJobName(), this.props.build.getParameters());
     }
 
     renderBuildFailures() {
@@ -39,7 +40,7 @@ export default class FailedBuild extends React.Component {
                 <Button onClick={this.rebuild.bind(this)} style={{float: "right"}} disabled={this.state.rebuilt}>
                     {this.state.rebuilt ? "Rebuilding" : "Rebuild"}
                 </Button>
-                {this.props.children}
+                <ParameterDetails parameters={this.props.build.getParameters()} />
                 {this.renderBuildFailures()}
             </div>
         );

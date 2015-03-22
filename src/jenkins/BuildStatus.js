@@ -6,6 +6,7 @@ import FailedBuild from "./status/FailedBuild";
 import InProgressBuild from "./status/InProgressBuild";
 import SuccessfulBuild from "./status/SuccessfulBuild";
 import UnstableBuild from "./status/UnstableBuild";
+import ParameterDetails from "./ui/ParameterDetails";
 
 export default class BuildStatus extends React.Component {
     getBuildTime() {
@@ -49,38 +50,15 @@ export default class BuildStatus extends React.Component {
         );
     }
 
-    renderBranches() {
-        var branches = _.map(this.props.build.getRepoBranches(), (branch, repo) => {
-            if (branch && branch !== "master") {
-                return (
-                    <div key={repo}>
-                        <a href={"https://github.com/Tradeshift/" + repo + "/tree/" + branch} target="_blank">
-                            {repo}: {branch}
-                        </a>
-                    </div>
-                );
-            }
-        });
-        return (
-            <div>
-                {this.props.build.getParameters().BRANCH !== "master" &&
-                    <span>All repos: {this.props.build.getParameters().BRANCH}</span>}
-                {branches}
-                {this.props.build.getParameters().PACKAGE_PATH !== "com/tradeshift" &&
-                    <span>Only running tests in package: {this.props.build.getParameters().PACKAGE_PATH}</span>}
-            </div>
-        )
-    }
-
     renderStatus() {
         if (this.props.build.isBuilding()) {
-            return <InProgressBuild {...this.props}>{this.renderBranches()}</InProgressBuild>;
+            return <InProgressBuild {...this.props} />;
         } else if (this.props.build.isSuccess()) {
-            return <SuccessfulBuild {...this.props}>{this.renderBranches()}</SuccessfulBuild>;
+            return <SuccessfulBuild {...this.props} />;
         } else if (this.props.build.isUnstable()) {
-            return <UnstableBuild {...this.props}>{this.renderBranches()}</UnstableBuild>;
+            return <UnstableBuild {...this.props} />;
         } else {
-            return <FailedBuild {...this.props}>{this.renderBranches()}</FailedBuild>;
+            return <FailedBuild {...this.props} />;
         }
     }
 

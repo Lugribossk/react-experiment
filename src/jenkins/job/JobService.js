@@ -27,12 +27,12 @@ var PR_PARAM_REPOS= {
 
 export default class JobService {
     constructor() {
-        JobActions.trigger.onDispatch(this.trigger.bind(this));
+        JobActions.triggerBuild.onDispatch(this.triggerBuild.bind(this));
         JobActions.triggerPullRequest.onDispatch(this.triggerPullRequest.bind(this));
         JobActions.unkeepBuilds.onDispatch(this.unkeepBuilds.bind(this));
     }
 
-    trigger(jobName, parameters) {
+    triggerBuild(jobName, parameters) {
         var paramList = _.map(parameters, (value, name) => {
             return {name: name, value: value};
         });
@@ -56,7 +56,7 @@ export default class JobService {
             params[param] = "origin/" + (branch || "master");
         });
 
-        this.trigger("pull-request", params);
+        this.triggerBuild("pull-request", params);
     }
 
     unkeepBuilds(jobName, olderThan) {

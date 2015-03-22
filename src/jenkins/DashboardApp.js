@@ -3,6 +3,7 @@ import _ from "lodash";
 import {Navbar, Nav, NavItem, Button, Badge} from "react-bootstrap"
 import JobStore from "./job/JobStore";
 import UserStore from "./user/UserStore";
+import QueueStore from "./queue/QueueStore";
 import JobService from "./job/JobService";
 import BuildService from "./build/BuildService";
 import NotificationService from "./NotificationService";
@@ -20,6 +21,7 @@ export default class DashboardApp extends React.Component {
         this.integrationTests = new JobStore("integration-test-generic-build");
         this.subsets = new JobStore("integration-test-build-subset", 100);
         this.userStore = new UserStore();
+        this.queueStore = new QueueStore("integration-test-generic-build");
 
         var currentUser = this.userStore.getCurrentUser();
 
@@ -34,7 +36,8 @@ export default class DashboardApp extends React.Component {
             unstableBuilds: this.integrationTests.getUnstableBuilds(),
             successBuilds: this.integrationTests.getSuccessfulBuilds(),
             overnightBuilds: this.integrationTests.getLastNightBuilds(),
-            myBuilds: this.integrationTests.getUserBuilds(currentUser)
+            myBuilds: this.integrationTests.getUserBuilds(currentUser),
+            queue: this.queueStore.getQueue()
         };
 
         this.subscribe(this.integrationTests.onBuildsChanged(this.whenIntegrationTestsChanged.bind(this)));
@@ -42,6 +45,7 @@ export default class DashboardApp extends React.Component {
         this.subscribe(this.integrationTests.onFailureDataChanged(this.whenFailureDataChanged.bind(this)));
         this.subscribe(this.subsets.onBuildsChanged(this.whenSubsetsChanged.bind(this)));
         this.subscribe(this.userStore.onCurrentUserChanged(this.whenCurrentUserChanged.bind(this)));
+        this.subscribe(this.queueStore.onQueueChanged(this.whenQueueChanged.bind(this)));
 
         window.addEventListener("hashchange", this.whenHashChange.bind(this));
 
@@ -82,6 +86,10 @@ export default class DashboardApp extends React.Component {
     whenHashChange(event) {
         var hash = event.newURL.split("#")[1];
         this.setState({route: hash});
+    }
+
+    whenQueueChanged() {
+        this.setState({queue: this.queueStore.getQueue()});
     }
 
     _getSubsets() {
@@ -165,7 +173,7 @@ export default class DashboardApp extends React.Component {
                 }}>Stop keeping any build that is older than 14 days</Button>
             );
         } else {
-            return <IntegrationTestList builds={this.state.allBuilds} {...data}/>
+            return <IntegrationTestList builds={this.state.allBuilds} queue={this.state.queue} {...data}/>
         }
     }
 

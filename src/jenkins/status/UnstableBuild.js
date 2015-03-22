@@ -2,6 +2,7 @@ import React from "react";
 import _ from "lodash";
 import {Button} from "react-bootstrap"
 import JobActions from "../job/JobActions";
+import ParameterDetails from "../ui/ParameterDetails";
 
 export default class UnstableBuild extends React.Component {
     constructor(props) {
@@ -13,7 +14,7 @@ export default class UnstableBuild extends React.Component {
 
     rebuild() {
         this.setState({rebuilt: true});
-        JobActions.trigger("integration-test-generic-build", this.props.build.getParameters());
+        JobActions.triggerBuild(this.props.build.getJobName(), this.props.build.getParameters());
     }
 
     renderTestFailures() {
@@ -32,7 +33,7 @@ export default class UnstableBuild extends React.Component {
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
                 var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
-                var link = "/job/integration-test-generic-build/" + this.props.build.number +
+                var link = "/job/" + this.props.build.getJobName() + "/" + this.props.build.number +
                     "/testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
 
                 return (
@@ -69,7 +70,7 @@ export default class UnstableBuild extends React.Component {
                 <Button onClick={this.rebuild.bind(this)} style={{float: "right"}} disabled={this.state.rebuilt}>
                     {this.state.rebuilt ? "Rebuilding" : "Rebuild"}
                 </Button>
-                {this.props.children}
+                <ParameterDetails parameters={this.props.build.getParameters()} />
                 {this.renderTestFailures()}
             </div>
         );
