@@ -30,7 +30,7 @@ export default class Build extends BuildLike {
     }
 
     getUpstream() {
-        var cause = this._getCauseWithProperty(this.actions, "upstreamBuild");
+        var cause = this._getCauseWithProperty("upstreamBuild");
         if (cause) {
             return {
                 id: cause.upstreamBuild,

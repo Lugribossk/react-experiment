@@ -18,15 +18,11 @@ export default class UnstableBuild extends React.Component {
     }
 
     renderTestFailures() {
-        if (!this.props.testReport) {
-            return <span>Test output not found.</span>;
-        }
-
-        if (this.props.testReport.failCount > 10) {
+        if (this.props.testReport && this.props.testReport.failCount > 10) {
             return <span>{this.props.testReport.failCount} tests failed.</span>
         }
 
-        if (this.props.testReport.failCount > 0) {
+        if (this.props.testReport && this.props.testReport.failCount > 0) {
             return _.map(this.props.testReport.getFailedTests(), (failure) => {
                 var key = this.props.build.getId() + failure.file + failure.name;
                 key = key.replace(/ /g, "-").replace(/\./g, "-");
