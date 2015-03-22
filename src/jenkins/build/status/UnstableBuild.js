@@ -29,7 +29,8 @@ export default class UnstableBuild extends React.Component {
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
                 var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
-                var link = this.props.build.url + "testReport/junit/" + pack + "/" + klass + "/" + failure.name.replace(/ /g, "_");
+                var name = failure.name.replace(/ /g, "_").replace(/\./g, "_");
+                var link = this.props.build.url + "testReport/junit/" + pack + "/" + klass + "/" + name;
 
                 return (
                     <div key={key}>
@@ -47,7 +48,7 @@ export default class UnstableBuild extends React.Component {
             if (failedSubsets.length > 0) {
                 return (
                     <span>
-                        Unstable with 0 failing tests, failing subsets:
+                        Unstable with 0 failing tests, but there were failing subsets:
                         {_.map(failedSubsets, (subset) => {
                             return <a key={subset.getId()} href={subset.url} target="_blank"> {subset.getId()}</a>
                         })}

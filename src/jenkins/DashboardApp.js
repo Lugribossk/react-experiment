@@ -24,20 +24,20 @@ export default class DashboardApp extends React.Component {
         this.userStore = new UserStore();
         this.queueStore = new QueueStore("integration-test-generic-build");
 
-        var currentUser = this.userStore.getCurrentUser();
+        this.currentUser = this.userStore.getCurrentUser();
 
         this.state = {
             testReports: this.integrationTests.getTestReports(),
             failureData: this.integrationTests.getFailureData(),
             subsets: this._getSubsets(),
             route: window.location.href.split("#")[1] || "",
-            currentUser: currentUser,
+            currentUser: this.currentUser,
             allBuilds: this.integrationTests.getBuilds(),
             failedBuilds: this.integrationTests.getFailedBuilds(),
             unstableBuilds: this.integrationTests.getUnstableBuilds(),
             successBuilds: this.integrationTests.getSuccessfulBuilds(),
             overnightBuilds: this.integrationTests.getLastNightBuilds(),
-            myBuilds: this.integrationTests.getUserBuilds(currentUser),
+            myBuilds: this.integrationTests.getUserBuilds(this.currentUser),
             queue: this.queueStore.getQueue()
         };
 
