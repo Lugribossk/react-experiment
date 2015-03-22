@@ -32,8 +32,6 @@ export default class JobStore extends CachingStore {
         window["clearData_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
         };
-        JobActions.triggerBuild.onDispatch(this.whenBuildTriggered.bind(this));
-        BuildActions.abort.onDispatch(this.whenBuildAborted.bind(this));
 
         this._updateBuilds();
         setInterval(this._updateBuilds.bind(this), 30 * 1000);
@@ -61,24 +59,6 @@ export default class JobStore extends CachingStore {
 
     getFailureData() {
         return this.state.failureData;
-    }
-
-    whenBuildTriggered(jobName) {
-        if (this.name === jobName) {
-            Promise.delay(8000)
-                .then(() => {
-                    this._updateBuilds();
-                });
-        }
-    }
-
-    whenBuildAborted(build) {
-        if (_.contains(build.url, this.name)) {
-            Promise.delay(8000)
-                .then(() => {
-                    this._updateBuilds();
-                });
-        }
     }
 
     getFailedBuilds() {

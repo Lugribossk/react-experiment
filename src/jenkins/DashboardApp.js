@@ -52,7 +52,7 @@ export default class DashboardApp extends React.Component {
 
         new JobService();
         new BuildService();
-        new NotificationService(this.integrationTests);
+        new NotificationService(this.integrationTests, this.currentUser && this.currentUser.id);
 
         localStorage.clear();
     }

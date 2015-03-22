@@ -38,11 +38,11 @@ export default class JobService {
         this.triggerBuild("pull-request", params);
     }
 
-    triggerIntegrationTest(repoBranches, changelog) {
+    triggerIntegrationTest(repoBranches, changelog, packagePath) {
         var params = {
             FORCE_BUILD: false,
             REQUIRE_FAST_FORWARD: true,
-            PACKAGE_PATH: "com/tradeshift",
+            PACKAGE_PATH: packagePath || "com/tradeshift",
             BRANCH: "master",
             COPY_ONLY_ARTIFACTS_OF_FAILED_TESTS: true,
             GEB_ENV: "default",

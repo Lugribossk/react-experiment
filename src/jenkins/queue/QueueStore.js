@@ -31,10 +31,6 @@ export default class QueueStore extends CachingStore {
         request.post("/queue/cancelItem")
             .query("id=" + id)
             .end();
-        Promise.delay(8000)
-            .then(() => {
-                this._updateQueue();
-            });
     }
 
     _updateQueue() {

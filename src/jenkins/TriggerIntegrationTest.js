@@ -9,7 +9,8 @@ export default class TriggerIntegrationTest extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            changelog: ""
+            changelog: "",
+            packagePath: ""
         };
         _.forEach(BuildUtils.REPOS, (repo) => {
             this.state[repo] = "";
@@ -42,7 +43,7 @@ export default class TriggerIntegrationTest extends React.Component {
             }
         });
 
-        JobActions.triggerIntegrationTest(branches, this.state.changelog);
+        JobActions.triggerIntegrationTest(branches, this.state.changelog, this.state.packagePath || "com/tradeshift");
         this.props.onRequestHide();
     }
 
@@ -58,7 +59,9 @@ export default class TriggerIntegrationTest extends React.Component {
                 <div className="modal-body">
                     <form className="form-horizontal" onSubmit={this.onSubmit.bind(this)}>
                         {this.renderBranches()}
+                        <hr/>
                         <Input key="changelog" type="textarea" label="Changelog" valueLink={this.linkState("changelog")} {...this.getInputStyling()} />
+                        <Input key="package" type="text" label="Run tests in package" placeholder="com/tradeshift" valueLink={this.linkState("packagePath")} {...this.getInputStyling()} />
                     </form>
                 </div>
                 <div className="modal-footer">
