@@ -1,9 +1,9 @@
 import React from "react";
 import _ from "lodash";
 import {ProgressBar, Button} from "react-bootstrap"
-import BuildActions from "../build/BuildActions";
-import BuildUtils from "../build/BuildUtils";
-import ParameterDetails from "../ui/ParameterDetails";
+import BuildActions from "../BuildActions";
+import BuildUtils from "../BuildUtils";
+import ParameterDetails from "../../ui/ParameterDetails";
 
 export default class InProgressBuild extends React.Component {
     constructor(props) {

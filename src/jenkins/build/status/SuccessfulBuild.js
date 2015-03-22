@@ -1,8 +1,8 @@
 import React from "react";
 import _ from "lodash";
 import {ProgressBar, ModalTrigger, Button} from "react-bootstrap"
-import Merge from "../Merge";
-import ParameterDetails from "../ui/ParameterDetails";
+import Merge from "../../Merge";
+import ParameterDetails from "../../ui/ParameterDetails";
 
 export default class SuccessfulBuild extends React.Component {
     render() {

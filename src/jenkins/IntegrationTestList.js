@@ -1,7 +1,7 @@
 import React from "react";
 import _ from "lodash";
 import {TabbedArea, TabPane, Badge, Button, Glyphicon} from "react-bootstrap"
-import BuildStatus from "./BuildStatus";
+import BuildStatus from "./build/BuildStatus";
 import QueueStatus from "./queue/QueueStatus";
 
 export default class IntegrationTestList extends React.Component {

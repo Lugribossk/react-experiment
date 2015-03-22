@@ -1,8 +1,8 @@
 import React from "react";
 import _ from "lodash";
 import {Button} from "react-bootstrap"
-import JobActions from "../job/JobActions";
-import ParameterDetails from "../ui/ParameterDetails";
+import JobActions from "../../job/JobActions";
+import ParameterDetails from "../../ui/ParameterDetails";
 
 export default class FailedBuild extends React.Component {
     constructor(props) {

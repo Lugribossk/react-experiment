@@ -6,7 +6,7 @@ import FailedBuild from "./status/FailedBuild";
 import InProgressBuild from "./status/InProgressBuild";
 import SuccessfulBuild from "./status/SuccessfulBuild";
 import UnstableBuild from "./status/UnstableBuild";
-import ParameterDetails from "./ui/ParameterDetails";
+import ParameterDetails from "../ui/ParameterDetails";
 
 export default class BuildStatus extends React.Component {
     getBuildTime() {

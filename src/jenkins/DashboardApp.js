@@ -125,7 +125,7 @@ export default class DashboardApp extends React.Component {
                         Failed <Badge>{this.state.failedBuilds.length}</Badge>
                     </NavItem>
                     <NavItem href="#unstable" active={this.isActive("unstable")}>
-                        Unstable<Badge>{this.state.unstableBuilds.length}</Badge>
+                        Unstable <Badge>{this.state.unstableBuilds.length}</Badge>
                     </NavItem>
                     <NavItem href="#success" active={this.isActive("success")}>
                         Succeeded <Badge>{this.state.successBuilds.length}</Badge>
@@ -161,7 +161,10 @@ export default class DashboardApp extends React.Component {
         } else if (this.state.route === "success") {
             return <IntegrationTestList builds={this.state.successBuilds} {...data}/>
         } else if (this.state.route === "mine") {
-            return <IntegrationTestList builds={this.state.myBuilds} {...data}/>
+            var myQueue = _.filter(this.state.queue, (item) => {
+                return item.getUserId() === this.state.currentUser.id;
+            });
+            return <IntegrationTestList builds={this.state.myBuilds} queue={myQueue} {...data}/>
         } else if (this.state.route === "lastnight") {
             return <IntegrationTestList builds={this.state.overnightBuilds} {...data}/>
         } else if (this.state.route === "stats") {
