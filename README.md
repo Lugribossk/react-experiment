@@ -1,5 +1,7 @@
 # react-experiment
-[![Circle CI](https://circleci.com/gh/Lugribossk/react-experiment.svg?style=svg)](https://circleci.com/gh/Lugribossk/react-experiment)
+[![Circle CI](https://circleci.com/gh/Lugribossk/react-experiment.svg?style=shield)](https://circleci.com/gh/Lugribossk/react-experiment)
+[![Dependency Status](https://david-dm.org/Lugribossk/react-experiment.svg)](https://david-dm.org/Lugribossk/react-experiment)
+[![devDependency Status](https://david-dm.org/Lugribossk/react-experiment/dev-status.svg)](https://david-dm.org/Lugribossk/react-experiment#info=devDependencies)
 
 Experimenting with React and ES6.
 
