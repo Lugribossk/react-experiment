@@ -39,16 +39,18 @@ export default class UnstableBuild extends React.Component {
                 );
             });
         }
+    }
 
+    renderSubsetFailures() {
         if (this.props.subsets) {
             var failedSubsets = _.filter(this.props.subsets, (subset) => {
                 return !subset.building && !subset.isSuccess();
             });
 
-            if (failedSubsets.length > 0) {
+            if (failedSubsets.length > 0 && (!this.props.testReport || this.props.testReport.failCount < failedSubsets.length)) {
                 return (
                     <span>
-                        Unstable with 0 failed tests, but there were failed subsets:
+                        Failed subsets:
                         {_.map(failedSubsets, (subset) => {
                             return <a key={subset.getId()} href={subset.url} target="_blank"> {subset.getId()}</a>
                         })}
@@ -56,8 +58,9 @@ export default class UnstableBuild extends React.Component {
                 );
             }
         }
-
-        return <span>Unstable with 0 failed tests, but subset information is no longer available.</span>;
+        if (!this.props.testReport || this.props.testReport.failCount === 0) {
+            return <span>Unstable with 0 failed tests, but subset information is no longer available.</span>;
+        }
     }
 
     render() {
@@ -68,6 +71,7 @@ export default class UnstableBuild extends React.Component {
                 </Button>
                 <ParameterDetails parameters={this.props.build.getParameters()} />
                 {this.renderTestFailures()}
+                {this.renderSubsetFailures()}
             </div>
         );
     }
