@@ -165,9 +165,14 @@ module.exports = function (grunt) {
         });
     });
 
+    grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.config.set("clean", {
+        dist: ["target/dist/*"]
+    });
+
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
     grunt.registerTask("test", ["jscs:dev", "mochaTest:test"]);
-    grunt.registerTask("build", ["webpack:build"]);
+    grunt.registerTask("build", ["clean:dist", "webpack:build"]);
 
     grunt.registerTask("ci", ["jscs:ci", "mochaTest:ci", "build"]);
 };
