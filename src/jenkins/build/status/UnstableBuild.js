@@ -48,7 +48,7 @@ export default class UnstableBuild extends React.Component {
             if (failedSubsets.length > 0) {
                 return (
                     <span>
-                        Unstable with 0 failing tests, but there were failing subsets:
+                        Unstable with 0 failed tests, but there were failed subsets:
                         {_.map(failedSubsets, (subset) => {
                             return <a key={subset.getId()} href={subset.url} target="_blank"> {subset.getId()}</a>
                         })}
@@ -57,7 +57,7 @@ export default class UnstableBuild extends React.Component {
             }
         }
 
-        return <span>Unstable with 0 failing tests, but subset information is no longer available.</span>;
+        return <span>Unstable with 0 failed tests, but subset information is no longer available.</span>;
     }
 
     render() {

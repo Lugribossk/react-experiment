@@ -107,7 +107,7 @@ export default class JobStore extends CachingStore {
                 });
 
                 _.forEach(builds, (build) => {
-                    if (build.isUnstable()) {
+                    if (build.isUnstable() && build.hasTestReport()) {
                         this._updateTestReport(build.getId());
                     } else if (build.isFailed()) {
                         this._updateFailureData(build.getId());

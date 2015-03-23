@@ -46,7 +46,13 @@ export default class Build extends BuildLike {
     }
 
     hasTestReport() {
-        var cause = this._getCauseWithProperty("failCount");
-        return !!cause;
+        var hasTestReport = false;
+        _.forEach(this.actions, (action) => {
+            if (action.totalCount &&
+                action.urlName === "testReport") {
+                hasTestReport = true;
+            }
+        });
+        return hasTestReport;
     }
 }

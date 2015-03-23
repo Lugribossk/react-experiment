@@ -80,7 +80,7 @@ export default {
         }
 
         var finishedBuilds = _.filter(builds, (build) => {
-            return build.isSuccess() || build.isUnstable();
+            return (build.isSuccess() || build.isUnstable()) && build.duration > 5 * 60 * 1000;
         });
         var samePackageBuilds = _.filter(finishedBuilds, (build) => {
             return build.getParameters().PACKAGE_PATH === runningBuild.getParameters().PACKAGE_PATH;
