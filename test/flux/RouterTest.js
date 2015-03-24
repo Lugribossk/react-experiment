@@ -1,8 +1,8 @@
 import expect from "expect.js";
 import sinon from "sinon";
-import Router from "../../../src/util/route2/Router";
+import Router from "../../src/flux/Router";
 
-describe("Router2", () => {
+describe("Router", () => {
     var mockWindow;
     var hashChangeHandler;
     beforeEach(() => {
@@ -85,8 +85,8 @@ describe("Router2", () => {
 
             changeHash("test/12345");
 
-            expect(router.getCurrentParameters()).to.be.ok();
-            expect(router.getCurrentParameters().id).to.be("12345");
+            expect(router.getParameters()).to.be.ok();
+            expect(router.getParameters().id).to.be("12345");
         });
 
         it("should change hash to default path when no route matches.", () => {
@@ -118,15 +118,17 @@ describe("Router2", () => {
 
             expect(router.currentRouteMatches("test")).to.be(true);
             expect(router.currentRouteMatches("test/12345")).to.be(true);
+            expect(router.currentRouteMatches("")).to.be(false);
         });
 
-        it("should match # with empty path.", () => {
+        it("should match empty string with empty path.", () => {
             var router = new Router(mockWindow);
             router.register(() => {}, "");
 
             changeHash("");
 
-            expect(router.currentRouteMatches("#")).to.be(true);
+            expect(router.currentRouteMatches("")).to.be(true);
+            expect(router.currentRouteMatches("test")).to.be(false);
         });
 
         it("should match path with parameters.", () => {

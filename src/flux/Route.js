@@ -33,3 +33,11 @@ export default class Route extends React.Component {
         }
     }
 }
+
+Route.propTypes = {
+    path: React.PropTypes.string,
+    defaultPath: React.PropTypes.bool
+};
+Route.defaultProps = {
+    path: ""
+};

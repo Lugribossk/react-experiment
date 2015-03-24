@@ -2,17 +2,20 @@ import React from "react";
 import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap"
 import Gravatar from "../ui/Gravatar";
 import AuthActions from "../auth/AuthActions";
+import Mixins from "../util/Mixins";
+import SubscribeMixin from "../flux/SubscribeMixin";
 
 /**
  * Example navigation bar.
  */
 export default class ExampleNavbar extends React.Component {
-    isActive(link) {
-        var route = this.props.route;
-        var isDefault = (route === "" && link === "#");
-        var isSubpath = (route.indexOf(link) === 0);
+    constructor(props) {
+        super(props);
+        this.subscribe(this.props.router.onRouteChange(this.forceUpdate.bind(this)));
+    }
 
-        return isDefault || isSubpath
+    isActive(link) {
+        return this.props.router.currentRouteMatches(link);
     }
 
     render () {
@@ -26,7 +29,7 @@ export default class ExampleNavbar extends React.Component {
         return (
             <Navbar brand="Example">
                 <Nav>
-                    <NavItem href="#" active={this.isActive("#")}>Dashboard</NavItem>
+                    <NavItem href="#" active={this.isActive("")}>Dashboard</NavItem>
                     <NavItem href="#test1" active={this.isActive("test1")}>Test 1</NavItem>
                     <NavItem href="#test2/12345" active={this.isActive("test2")}>Test 2</NavItem>
                 </Nav>
@@ -45,5 +48,7 @@ export default class ExampleNavbar extends React.Component {
 ExampleNavbar.propTypes = {
     email: React.PropTypes.string.isRequired,
     name: React.PropTypes.string.isRequired,
-    route: React.PropTypes.string.isRequired
+    router: React.PropTypes.any.isRequired
 };
+
+Mixins.add(ExampleNavbar.prototype, [SubscribeMixin]);

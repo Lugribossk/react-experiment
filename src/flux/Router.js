@@ -14,6 +14,8 @@ export default class Router {
         this.extractors = [];
         this.hash = "";
         this.parameters = {};
+        this.defaultPath = null;
+        this.notFound = false;
         this.window = win || window;
 
         this.window.addEventListener("hashchange", this.whenHashChange.bind(this));
@@ -29,7 +31,7 @@ export default class Router {
         this.extractors.push(extractor);
 
         if (defaultPath) {
-            if (this.defaultPath) {
+            if (this.defaultPath !== null) {
                 throw new Error("Multiple default paths!");
             }
             this.defaultPath = path;
@@ -52,6 +54,15 @@ export default class Router {
         }
     }
 
+    onRouteChange(listener) {
+        this.listeners.push(listener);
+        return () => {
+            _.remove(this.listeners, (el) => {
+                return el === listener;
+            });
+        }
+    }
+
     getParameters() {
         return this.parameters;
     }
@@ -65,8 +76,8 @@ export default class Router {
             path = path.substr(0, path.indexOf(":"));
         }
 
-        var isDefault = (this.hash === "" && path === "#");
-        var isSubpath = (this.hash.indexOf(path) === 0);
+        var isDefault = (path === "" && this.hash === "");
+        var isSubpath = (path.length > 0 && this.hash.indexOf(path) === 0);
 
         return isDefault || isSubpath;
     }
@@ -89,7 +100,7 @@ export default class Router {
             return;
         }
 
-        if (this.defaultPath) {
+        if (this.defaultPath !== null) {
             this.window.location.hash = this.defaultPath + " ";
             return;
         }
@@ -98,7 +109,7 @@ export default class Router {
     }
 
     static createExtractor(path) {
-        var parameterNames = Router._getMatches(/:(\w+)(?:\/|$)/g, path);
+        var parameterNames = Router.getMatches(/:(\w+)(?:\/|$)/g, path);
         var matchAndExtract = new RegExp("^" + path.replace(/\\/g, "\\/").replace(/(:\w+)/g, "(\\w+)") + "$");
 
         return (possiblePath) => {
@@ -118,7 +129,7 @@ export default class Router {
         }
     }
 
-    static _getMatches(regex, text) {
+    static getMatches(regex, text) {
         if (!regex.global) {
             throw new Error("Regex must have global flag set");
         }
@@ -134,8 +145,8 @@ export default class Router {
         return singleton.register(...args);
     }
 
-    static getCurrentParameters(...args) {
-        return singleton.getCurrentParameters(...args);
+    static getParameters(...args) {
+        return singleton.getParameters(...args);
     }
 
     static currentRouteMatches(...args) {

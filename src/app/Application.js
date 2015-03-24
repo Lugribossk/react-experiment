@@ -2,12 +2,14 @@ import React from "react";
 import Promise from "bluebird";
 import "bootstrap/dist/css/bootstrap.css";
 import ExampleNavbar from "./ExampleNavbar"
-import ExampleRouteStore from "./ExampleRouteStore";
 import LoginForm from "../auth/LoginForm"
 import CurrentUserStore from "../auth/CurrentUserStore";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import ExampleApi from "./ExampleApi";
+import Router from "../flux/Router";
+import Route from "../flux/Route";
+import Test2Page from "./Test2Page";
 
 /**
  * The example application itself.
@@ -17,36 +19,34 @@ export default class Application extends React.Component {
         super(props);
         var api = new ExampleApi();
         this.currentUserStore = new CurrentUserStore(api);
-        var routeStore = new ExampleRouteStore(window, this.currentUserStore);
+        this.router = new Router();
 
         this.state = {
-            user: this.currentUserStore.getUser(),
-            route: routeStore.getRouteUrl(),
-            routeContent: routeStore.getRouteContent()
+            user: this.currentUserStore.getUser()
         };
 
         this.subscribe(this.currentUserStore.onUserChange(this.onUserChange.bind(this)));
-        this.subscribe(routeStore.onRouteChange(this.onRouteChange.bind(this)));
     }
 
     onUserChange(user) {
         this.setState({user: user});
     }
 
-    onRouteChange(content, route) {
-        this.setState({
-            route: route,
-            routeContent: content
-        });
-    }
-
     render () {
         if (this.state.user) {
             return (
                 <div>
-                    <ExampleNavbar {...this.state.user} route={this.state.route}/>
+                    <ExampleNavbar {...this.state.user} router={this.router} />
                     <div className="container">
-                        {this.state.routeContent}
+                        <Route path="test1">
+                            <h1>Test 1</h1>
+                        </Route>
+                        <Route path="test2/:id">
+                            <Test2Page />
+                        </Route>
+                        <Route defaultPath>
+                            <h1>Dashboard</h1>
+                        </Route>
                     </div>
                 </div>
             );

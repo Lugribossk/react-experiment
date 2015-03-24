@@ -1,8 +1,8 @@
 import React from "react/addons";
 import expect from "expect.js";
-import Route from "../../../src/util/route2/Route";
-import Router from "../../../src/util/route2/Router";
-import TestUtils from "../../TestUtils";
+import Route from "../../src/flux/Route";
+import Router from "../../src/flux/Router";
+import TestUtils from "../TestUtils";
 
 class HasId extends React.Component {
     render() {
