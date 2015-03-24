@@ -110,15 +110,19 @@ describe("Router", () => {
     });
 
     describe("route matching", () => {
-        it("should match beginning of route.", () => {
+        it("should match starting route segments.", () => {
             var router = new Router(mockWindow);
-            router.register(() => {}, "test/:id");
+            router.register(() => {}, "test/demo/:id");
 
-            changeHash("test/12345");
+            changeHash("test/demo/12345");
 
             expect(router.currentRouteMatches("test")).to.be(true);
-            expect(router.currentRouteMatches("test/12345")).to.be(true);
+            expect(router.currentRouteMatches("test/demo")).to.be(true);
+            expect(router.currentRouteMatches("test/demo/12345")).to.be(true);
+
             expect(router.currentRouteMatches("")).to.be(false);
+            expect(router.currentRouteMatches("tes")).to.be(false);
+            expect(router.currentRouteMatches("test/de")).to.be(false);
         });
 
         it("should match empty string with empty path.", () => {

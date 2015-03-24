@@ -4,6 +4,8 @@ var singleton;
 
 /**
  * Hash fragment navigation router for the Route component.
+ *
+ * Router instance must be created before rendering any Route components.
  */
 export default class Router {
     /**
@@ -22,6 +24,55 @@ export default class Router {
         this.whenHashChange({newURL: this.window.location.href});
 
         singleton = this;
+    }
+
+    /**
+     * Listen for the current route changing.
+     * @param {function} listener
+     * @returns {Function}
+     */
+    onRouteChange(listener) {
+        this.listeners.push(listener);
+        return () => {
+            _.remove(this.listeners, (el) => {
+                return el === listener;
+            });
+        }
+    }
+
+    /**
+     * Get the parameters extracted from the current route.
+     * @returns {Object}
+     */
+    getParameters() {
+        return this.parameters;
+    }
+
+    /**
+     * Get the current route.
+     * @returns {String}
+     */
+    getRoute() {
+        return this.hash;
+    }
+
+    /**
+     * Check whether the provided path is a part of the current route.
+     * This is useful for marking links that lead to the current route as active.
+     *
+     * @param {String} path
+     * @returns {Boolean}
+     */
+    currentRouteMatches(path) {
+        if (_.contains(path, ":")) {
+            path = path.substr(0, path.indexOf(":") - 1);
+        }
+
+        var isDefault = (path === "" && this.hash === "");
+        var isSubpath = (path.length > 0 && this.hash.indexOf(path) === 0);
+        var nextIsSlash = this.hash.length > path.length && this.hash.charAt(path.length) === "/" || this.hash.length === path.length;
+
+        return isDefault || (isSubpath && nextIsSlash);
     }
 
     register(listener, path, defaultPath=false) {
@@ -52,34 +103,6 @@ export default class Router {
                 this.defaultPath = null;
             }
         }
-    }
-
-    onRouteChange(listener) {
-        this.listeners.push(listener);
-        return () => {
-            _.remove(this.listeners, (el) => {
-                return el === listener;
-            });
-        }
-    }
-
-    getParameters() {
-        return this.parameters;
-    }
-
-    getRoute() {
-        return this.hash;
-    }
-
-    currentRouteMatches(path) {
-        if (_.contains(path, ":")) {
-            path = path.substr(0, path.indexOf(":"));
-        }
-
-        var isDefault = (path === "" && this.hash === "");
-        var isSubpath = (path.length > 0 && this.hash.indexOf(path) === 0);
-
-        return isDefault || isSubpath;
     }
 
     whenHashChange(event) {
