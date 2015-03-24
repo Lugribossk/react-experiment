@@ -127,7 +127,8 @@ module.exports = function (grunt) {
     grunt.config.set("mochaTest", {
         options: {
             require: [
-                "babel-core/register"
+                "babel-core/register",
+                "test/testSetup"
             ]
         },
         test: {
