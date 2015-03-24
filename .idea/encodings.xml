@@ -3,5 +3,12 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/util/route2/Route.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/util/route2/Router.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/TestUtils.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/testSetup.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/ui/GravatarTest.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/util/route2/RouteTest.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/util/route2/Router2Test.js" charset="UTF-8" />
   </component>
 </project>

@@ -4,8 +4,6 @@ import Gravatar from "../../src/ui/Gravatar";
 import TestUtils from "../TestUtils";
 
 describe("Gravatar", () => {
-    TestUtils.setupTestDom();
-
     var gravatar, img;
     beforeEach(() => {
         gravatar = TestUtils.React.renderIntoDocument(
