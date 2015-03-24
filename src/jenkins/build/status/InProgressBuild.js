@@ -1,9 +1,9 @@
 import React from "react";
 import _ from "lodash";
-import {ProgressBar, Button} from "react-bootstrap"
-import BuildActions from "../BuildActions";
+import {ProgressBar} from "react-bootstrap"
 import BuildUtils from "../BuildUtils";
 import ParameterDetails from "../../ui/ParameterDetails";
+import AbortButton from "./AbortButton";
 
 export default class InProgressBuild extends React.Component {
     constructor(props) {
@@ -11,14 +11,6 @@ export default class InProgressBuild extends React.Component {
         this.state = {
             aborted: false
         };
-    }
-
-    abort() {
-        this.setState({aborted: true});
-        BuildActions.abort(this.props.build);
-        _.forEach(this.props.subsets || [], (subset) => {
-            BuildActions.abort(subset);
-        });
     }
 
     renderSubsets() {
@@ -35,9 +27,9 @@ export default class InProgressBuild extends React.Component {
         return (
             <div>
                 <ProgressBar>
-                    <ProgressBar bsStyle="danger" label={failedSubsets.length} key={1}
+                    <ProgressBar bsStyle="danger" label={failedSubsets.length + " failed subsets"} key={1}
                         now={Math.round(failedSubsets.length / this.props.subsets.length * 100)} />
-                    <ProgressBar bsStyle="success" key={2}
+                    <ProgressBar bsStyle="success" label={finishedSubsets.length + " successful subsets"} key={2}
                         now={Math.round(finishedSubsets.length / this.props.subsets.length * 100)} />
                 </ProgressBar>
                 {failedSubsets.length > 0 &&
@@ -55,10 +47,8 @@ export default class InProgressBuild extends React.Component {
 
         return (
             <div>
-                <Button onClick={this.abort.bind(this)} style={{float: "right"}} title="Abort build and subsets" disabled={this.state.aborted}>
-                    {this.state.aborted ? "Aborted" : "Abort"}
-                </Button>
-                <ProgressBar bsStyle="info" now={percent} label={remainingMins + " mins"} />
+                <AbortButton build={this.props.build} subsets={this.props.subsets} />
+                <ProgressBar bsStyle="info" now={percent} label={remainingMins + " minutes remaining"} />
                 {this.renderSubsets()}
                 <ParameterDetails parameters={this.props.build.getParameters()} />
             </div>

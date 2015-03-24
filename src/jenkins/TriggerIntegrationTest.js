@@ -9,11 +9,15 @@ export default class TriggerIntegrationTest extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            changelog: "",
-            packagePath: ""
+            changelog: this.props.changelog || "",
+            packagePath: this.props.packagePath || ""
         };
         _.forEach(BuildUtils.REPOS, (repo) => {
-            this.state[repo] = "";
+            if (this.props.repoBranches && this.props.repoBranches[repo] !== "master") {
+                this.state[repo] = this.props.repoBranches[repo];
+            } else {
+                this.state[repo] = "";
+            }
         });
     }
 
@@ -60,7 +64,7 @@ export default class TriggerIntegrationTest extends React.Component {
                     <form className="form-horizontal" onSubmit={this.onSubmit.bind(this)}>
                         {this.renderBranches()}
                         <hr/>
-                        <Input key="changelog" type="textarea" label="Changelog" valueLink={this.linkState("changelog")} {...this.getInputStyling()} />
+                        <Input key="changelog" rows="5" type="textarea" label="Changelog" valueLink={this.linkState("changelog")} {...this.getInputStyling()} />
                         <Input key="package" type="text" label="Run tests in package" placeholder="com/tradeshift" valueLink={this.linkState("packagePath")} {...this.getInputStyling()} />
                     </form>
                 </div>

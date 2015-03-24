@@ -1,22 +1,9 @@
 import React from "react";
 import _ from "lodash";
-import {Button} from "react-bootstrap"
-import JobActions from "../../job/JobActions";
 import ParameterDetails from "../../ui/ParameterDetails";
+import RebuildButton from "./RebuildButton";
 
 export default class FailedBuild extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            rebuilt: false
-        };
-    }
-
-    rebuild() {
-        this.setState({rebuilt: true});
-        JobActions.triggerBuild(this.props.build.getJobName(), this.props.build.getParameters());
-    }
-
     renderBuildFailures() {
         if (this.props.build.isFailed() && this.props.failureData) {
             var data = this.props.failureData;
@@ -37,9 +24,7 @@ export default class FailedBuild extends React.Component {
     render() {
         return (
             <div>
-                <Button onClick={this.rebuild.bind(this)} style={{float: "right"}} disabled={this.state.rebuilt}>
-                    {this.state.rebuilt ? "Rebuilding" : "Rebuild"}
-                </Button>
+                <RebuildButton build={this.props.build} />
                 <ParameterDetails parameters={this.props.build.getParameters()} />
                 {this.renderBuildFailures()}
             </div>

@@ -1,22 +1,9 @@
 import React from "react";
 import _ from "lodash";
-import {Button} from "react-bootstrap"
-import JobActions from "../../job/JobActions";
 import ParameterDetails from "../../ui/ParameterDetails";
+import RebuildButton from "./RebuildButton";
 
 export default class UnstableBuild extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            rebuilt: false
-        };
-    }
-
-    rebuild() {
-        this.setState({rebuilt: true});
-        JobActions.triggerBuild(this.props.build.getJobName(), this.props.build.getParameters());
-    }
-
     renderTestFailures() {
         if (this.props.testReport && this.props.testReport.failCount > 10) {
             return <span>{this.props.testReport.failCount} tests failed.</span>
@@ -29,7 +16,7 @@ export default class UnstableBuild extends React.Component {
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
                 var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
-                var name = failure.name.replace(/[ \.\[\]]/g, "_");
+                var name = failure.name.replace(/[ \.\[\]-]/g, "_");
                 var link = this.props.build.url + "testReport/junit/" + pack + "/" + klass + "/" + name;
 
                 return (
@@ -66,9 +53,7 @@ export default class UnstableBuild extends React.Component {
     render() {
         return (
             <div>
-                <Button onClick={this.rebuild.bind(this)} style={{float: "right"}} disabled={this.state.rebuilt}>
-                    {this.state.rebuilt ? "Rebuilding" : "Rebuild"}
-                </Button>
+                <RebuildButton build={this.props.build} />
                 <ParameterDetails parameters={this.props.build.getParameters()} />
                 {this.renderTestFailures()}
                 {this.renderSubsetFailures()}

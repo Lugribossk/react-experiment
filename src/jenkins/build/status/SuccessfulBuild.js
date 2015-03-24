@@ -11,7 +11,7 @@ export default class SuccessfulBuild extends React.Component {
                 <ModalTrigger modal={<TriggerPullRequest build={this.props.build}/>}>
                     <Button style={{float: "right"}}>Merge!</Button>
                 </ModalTrigger>
-                <ProgressBar bsStyle="success" now={100} label={Math.ceil(this.props.build.duration / 60000) + " mins"}/>
+                <ProgressBar bsStyle="success" now={100} label={Math.ceil(this.props.build.duration / 60000) + " minutes"}/>
                 <ParameterDetails parameters={this.props.build.getParameters()} />
             </div>
         );
