@@ -29,7 +29,7 @@ export default class UnstableBuild extends React.Component {
 
                 var pack = failure.file.substr(0, failure.file.lastIndexOf("."));
                 var klass = failure.file.substr(failure.file.lastIndexOf(".") + 1);
-                var name = failure.name.replace(/ /g, "_").replace(/\./g, "_");
+                var name = failure.name.replace(/[ \.\[\]]/g, "_");
                 var link = this.props.build.url + "testReport/junit/" + pack + "/" + klass + "/" + name;
 
                 return (
