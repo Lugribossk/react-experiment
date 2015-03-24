@@ -14,6 +14,8 @@ import JobActions from "./job/JobActions";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import TriggerIntegrationTest from "./TriggerIntegrationTest";
+import Router from "../flux/Router";
+import Route from "../flux/Route";
 
 export default class DashboardApp extends React.Component {
     constructor(props) {
@@ -23,6 +25,7 @@ export default class DashboardApp extends React.Component {
         this.subsets = new JobStore("integration-test-build-subset", 100);
         this.userStore = new UserStore();
         this.queueStore = new QueueStore("integration-test-generic-build");
+        this.router = new Router();
 
         this.currentUser = this.userStore.getCurrentUser();
 
@@ -30,7 +33,6 @@ export default class DashboardApp extends React.Component {
             testReports: this.integrationTests.getTestReports(),
             failureData: this.integrationTests.getFailureData(),
             subsets: this._getSubsets(),
-            route: window.location.href.split("#")[1] || "",
             currentUser: this.currentUser,
             allBuilds: this.integrationTests.getBuilds(),
             failedBuilds: this.integrationTests.getFailedBuilds(),
@@ -47,8 +49,7 @@ export default class DashboardApp extends React.Component {
         this.subscribe(this.subsets.onBuildsChanged(this.whenSubsetsChanged.bind(this)));
         this.subscribe(this.userStore.onCurrentUserChanged(this.whenCurrentUserChanged.bind(this)));
         this.subscribe(this.queueStore.onQueueChanged(this.whenQueueChanged.bind(this)));
-
-        window.addEventListener("hashchange", this.whenHashChange.bind(this));
+        this.subscribe(this.router.onRouteChange(this.forceUpdate.bind(this)));
 
         new JobService();
         new BuildService();
@@ -84,11 +85,6 @@ export default class DashboardApp extends React.Component {
         this.setState({currentUser: this.userStore.getCurrentUser()});
     }
 
-    whenHashChange(event) {
-        var hash = event.newURL.split("#")[1];
-        this.setState({route: hash});
-    }
-
     whenQueueChanged() {
         this.setState({queue: this.queueStore.getQueue()});
     }
@@ -108,11 +104,7 @@ export default class DashboardApp extends React.Component {
     }
 
     isActive(link) {
-        var route = this.state.route;
-        var isDefault = (route === "" && link === "#");
-        var isSubpath = (route.indexOf(link) === 0);
-
-        return isDefault || isSubpath
+        return this.router.currentRouteMatches(link);
     }
 
     renderNavbar() {
@@ -120,7 +112,7 @@ export default class DashboardApp extends React.Component {
             <Navbar brand="ITs" toggleNavKey={0}>
                 <CollapsableNav eventKey={0}>
                     <Nav navbar>
-                        <NavItem href="#" active={this.isActive("#")}>
+                        <NavItem href="#" active={this.isActive("")}>
                             All <Badge>{this.state.allBuilds.length}</Badge>
                         </NavItem>
                         <NavItem href="#failed" active={this.isActive("failed")}>
@@ -164,30 +156,39 @@ export default class DashboardApp extends React.Component {
             failureData: this.state.failureData,
             subsets: this.state.subsets
         };
-        if (this.state.route === "failed") {
-            return <IntegrationTestList builds={this.state.failedBuilds} {...data}/>
-        } else if (this.state.route === "unstable") {
-            return <IntegrationTestList builds={this.state.unstableBuilds} {...data}/>
-        } else if (this.state.route === "success") {
-            return <IntegrationTestList builds={this.state.successBuilds} {...data}/>
-        } else if (this.state.route === "mine") {
-            var myQueue = _.filter(this.state.queue, (item) => {
-                return item.getUserId() === this.state.currentUser.id;
-            });
-            return <IntegrationTestList builds={this.state.myBuilds} queue={myQueue} {...data}/>
-        } else if (this.state.route === "lastnight") {
-            return <IntegrationTestList builds={this.state.overnightBuilds} {...data}/>
-        } else if (this.state.route === "stats") {
-            return <UnstableStats integrationTests={this.integrationTests}/>;
-        } else if (this.state.route === "actions") {
-            return (
-                <Button bsStyle="warning" onClick={() => {
-                    JobActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
-                }}>Stop keeping any build that is older than 14 days</Button>
-            );
-        } else {
-            return <IntegrationTestList builds={this.state.allBuilds} queue={this.state.queue} {...data}/>
-        }
+        var myQueue = _.filter(this.state.queue, (item) => {
+            return item.getUserId() === this.state.currentUser.id;
+        });
+        return (
+            <div>
+                <Route path="failed">
+                    <IntegrationTestList builds={this.state.failedBuilds} {...data} />
+                </Route>
+                <Route path="unstable">
+                    <IntegrationTestList builds={this.state.unstableBuilds} {...data} />
+                </Route>
+                <Route path="success">
+                    <IntegrationTestList builds={this.state.successBuilds} {...data} />
+                </Route>
+                <Route path="mine">
+                    <IntegrationTestList builds={this.state.myBuilds} queue={myQueue} {...data} />
+                </Route>
+                <Route path="lastnight">
+                    <IntegrationTestList builds={this.state.overnightBuilds} {...data}/>
+                </Route>
+                <Route path="stats">
+                    <UnstableStats integrationTests={this.integrationTests}/>
+                </Route>
+                <Route path="actions">
+                    <Button bsStyle="warning" onClick={() => {
+                        JobActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
+                    }}>Stop keeping any build that is older than 14 days</Button>
+                </Route>
+                <Route defaultPath>
+                    <IntegrationTestList builds={this.state.allBuilds} queue={this.state.queue} {...data} />
+                </Route>
+            </div>
+        );
     }
 
     render() {
