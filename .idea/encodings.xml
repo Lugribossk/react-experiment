@@ -10,6 +10,8 @@
     <file url="file://$PROJECT_DIR$/src/flux/Route.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/flux/Router.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/jenkins/DashboardApp.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/jenkins/TriggerIntegrationTest.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/jenkins/TriggerPullRequest.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/jenkins/UnstableStats.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test/TestUtils.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test/flux/RouteTest.js" charset="UTF-8" />

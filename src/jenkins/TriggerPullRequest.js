@@ -29,7 +29,7 @@ export default class TriggerPullRequest extends React.Component {
         return (
             <Modal {...this.props} title="Changelog" bsStyle="success" animation={false}>
                 <div className="modal-body">
-                    <Input type="textarea" valueLink={this.linkState("changelog")} autoFocus/>
+                    <Input type="textarea" rows="6" valueLink={this.linkState("changelog")} autoFocus/>
                 </div>
                 <div className="modal-footer">
                     <Button bsStyle="success" onClick={this.onSubmit.bind(this)} disabled={!this.isValid()}>Trigger PR job</Button>
