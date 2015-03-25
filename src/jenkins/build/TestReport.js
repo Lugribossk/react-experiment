@@ -46,6 +46,12 @@ export default class TestReport {
         return tests;
     }
 
+    hasFailedTest(klass, method) {
+        return _.some(this.getFailedTests(), (failedTest) => {
+            return failedTest.file === klass && failedTest.name === method;
+        });
+    }
+
     static _isFailedCase(kase) {
         return kase.status !== "PASSED" && kase.status !== "SKIPPED" && kase.status !== "FIXED";
     }
