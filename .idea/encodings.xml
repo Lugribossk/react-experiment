@@ -5,8 +5,10 @@
     <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Gruntfile.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/app/Application.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/app/ExampleApi.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/app/ExampleNavbar.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/app/Test2Page.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/dashboard/circleci/CircleCiApi.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/flux/Route.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/flux/Router.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test/TestUtils.js" charset="UTF-8" />

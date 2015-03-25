@@ -20,7 +20,7 @@ export default class CurrentUserStore extends CachingStore {
         };
 
         if (this.state.accessToken) {
-            this.api.authenticateWith(this.state.accessToken.accessToken);
+            this.api.setAuthToken(this.state.accessToken.accessToken);
             // Reload current user in case the token has expired.
             this._fetchCurrentUser();
         }
@@ -29,11 +29,10 @@ export default class CurrentUserStore extends CachingStore {
         AuthActions.logout.onDispatch(this.logout.bind(this));
 
         this._registerListener("accessToken", () => {
-            // TODO have api listen for token changes? But that results in a circular dependency
             if (this.state.accessToken) {
-                this.api.authenticateWith(this.state.accessToken.accessToken);
+                this.api.setAuthToken(this.state.accessToken.accessToken);
             } else {
-                this.api.authenticateWith(null);
+                this.api.setAuthToken(null);
             }
         })
     }
@@ -107,28 +106,32 @@ export default class CurrentUserStore extends CachingStore {
     }
 
     _fetchAccesstoken(username, password) {
-        return this.api.post("/token", {
-            username: username,
-            password: password,
-            grant_type: "password"
-        })
+        return this.api.post("/token")
+            .send({
+                username: username,
+                password: password,
+                grant_type: "password"
+            })
+            .set("Content-Type", "application/x-www-form-urlencoded")
+            .as(OAuth2AccessToken)
             .catch((err) => {
                 console.info("Login failed with username", username, err);
                 this._trigger("invalidLogin");
             })
-            .then((data) => {
-                var accessToken = new OAuth2AccessToken(data);
+            .then((accessToken) => {
                 this.setState({accessToken: accessToken});
                 return accessToken;
             });
     }
 
     _fetchCurrentUser() {
-        return this.api.getAs("/users/current", User)
+        return this.api.get("/users/current")
+            .as(User)
             .then((user) => {
                 log.info("Logged in as", user.username);
                 this.setState({user: user});
-            }).catch((err) => {
+            })
+            .catch((err) => {
                 log.error("Unable to get current user:", err);
                 this.setState({
                     user: null,

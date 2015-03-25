@@ -16,7 +16,8 @@ export default class BranchesStore extends Store {
     }
 
     _fetchBranches() {
-        this.api.getAsList("/" + this.repo + "/git/refs/heads", GitRef)
+        this.api.get("/" + this.repo + "/git/refs/heads")
+            .as(GitRef)
             .then((branches) => {
                 var withLastCommit = _.map(branches, (branch) => {
                     return this.api.getAs(branch.object.url, Commit)
