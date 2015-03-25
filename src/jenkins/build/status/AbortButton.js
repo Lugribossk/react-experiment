@@ -9,6 +9,7 @@ class AbortModal extends React.Component {
         _.forEach(this.props.subsets || [], (subset) => {
             BuildActions.abort(subset);
         });
+        this.props.onRequestHide();
     }
 
     render() {
