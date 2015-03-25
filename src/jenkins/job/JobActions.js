@@ -17,6 +17,11 @@ export default {
      */
     triggerIntegrationTest: new Action("jobTriggerIntegrationTest"),
     /**
+     * @param {String} [label]
+     * @param {String} [owner]
+     */
+    triggerSpawnNewInstance: new Action("jobTriggerSpawnNewInstance"),
+    /**
      * @param {String} jobName
      * @param {moment} olderThan
      */

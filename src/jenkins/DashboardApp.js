@@ -16,6 +16,8 @@ import SubscribeMixin from "../flux/SubscribeMixin";
 import TriggerIntegrationTest from "./TriggerIntegrationTest";
 import Router from "../flux/Router";
 import Route from "../flux/Route";
+import NodeStore from "./node/NodeStore";
+import Nodes from "./node/Nodes";
 
 export default class DashboardApp extends React.Component {
     constructor(props) {
@@ -25,6 +27,7 @@ export default class DashboardApp extends React.Component {
         this.subsets = new JobStore("integration-test-build-subset", 100);
         this.userStore = new UserStore();
         this.queueStore = new QueueStore("integration-test-generic-build");
+        this.nodeStore = new NodeStore("it");
         this.router = new Router();
 
         this.currentUser = this.userStore.getCurrentUser();
@@ -40,7 +43,8 @@ export default class DashboardApp extends React.Component {
             successBuilds: this.integrationTests.getSuccessfulBuilds(),
             overnightBuilds: this.integrationTests.getLastNightBuilds(),
             myBuilds: this.integrationTests.getUserBuilds(this.currentUser),
-            queue: this.queueStore.getQueue()
+            queue: this.queueStore.getQueue(),
+            totalNodes: this.nodeStore.getNumTotalNodes()
         };
 
         this.subscribe(this.integrationTests.onBuildsChanged(this.whenIntegrationTestsChanged.bind(this)));
@@ -49,6 +53,7 @@ export default class DashboardApp extends React.Component {
         this.subscribe(this.subsets.onBuildsChanged(this.whenSubsetsChanged.bind(this)));
         this.subscribe(this.userStore.onCurrentUserChanged(this.whenCurrentUserChanged.bind(this)));
         this.subscribe(this.queueStore.onQueueChanged(this.whenQueueChanged.bind(this)));
+        this.subscribe(this.nodeStore.onNodeCountChanged(this.whenNodeCountChanged.bind(this)));
         this.subscribe(this.router.onRouteChange(this.forceUpdate.bind(this)));
 
         new JobService();
@@ -87,6 +92,10 @@ export default class DashboardApp extends React.Component {
 
     whenQueueChanged() {
         this.setState({queue: this.queueStore.getQueue()});
+    }
+
+    whenNodeCountChanged() {
+        this.setState({totalNodes: this.nodeStore.getNumTotalNodes()});
     }
 
     _getSubsets() {
@@ -133,8 +142,8 @@ export default class DashboardApp extends React.Component {
                         <NavItem href="#stats" active={this.isActive("stats")}>
                             Stats
                         </NavItem>
-                        <NavItem href="#actions" active={this.isActive("actions")}>
-                            Cleanup
+                        <NavItem href="#nodes" active={this.isActive("nodes")}>
+                            Nodes <Badge className={this.state.totalNodes < 24 && "alert-danger"}>{this.state.totalNodes}</Badge>
                         </NavItem>
                     </Nav>
                     <ul>
@@ -179,10 +188,8 @@ export default class DashboardApp extends React.Component {
                 <Route path="stats">
                     <UnstableStats integrationTests={this.integrationTests}/>
                 </Route>
-                <Route path="actions">
-                    <Button bsStyle="warning" onClick={() => {
-                        JobActions.unkeepBuilds("integration-test-generic-build", moment().subtract(14, "days"));
-                    }}>Stop keeping any build that is older than 14 days</Button>
+                <Route path="nodes">
+                    <Nodes nodeStore={this.nodeStore} />
                 </Route>
                 <Route defaultPath>
                     <IntegrationTestList builds={this.state.allBuilds} queue={this.state.queue} {...data} />

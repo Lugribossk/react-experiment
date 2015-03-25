@@ -8,6 +8,7 @@ export default class JobService {
         JobActions.triggerBuild.onDispatch(this.triggerBuild.bind(this));
         JobActions.triggerPullRequest.onDispatch(this.triggerPullRequest.bind(this));
         JobActions.triggerIntegrationTest.onDispatch(this.triggerIntegrationTest.bind(this));
+        JobActions.triggerSpawnNewInstance.onDispatch(this.triggerSpawnNewInstance.bind(this));
         JobActions.unkeepBuilds.onDispatch(this.unkeepBuilds.bind(this));
     }
 
@@ -56,6 +57,29 @@ export default class JobService {
         });
 
         this.triggerBuild("integration-test-generic-build", params);
+    }
+
+    triggerSpawnNewInstance(label="it", owner="operations") {
+        var params = {
+            Environment: "testing",
+            Role: "buildslave",
+            Name: "test-slave",
+            Puppetbranch: "master",
+            Buildgroup: label,
+            Type: "c3.2xlarge",
+            Region: "eu-west-1",
+            Zone: "a",
+            Number: 1,
+            EBSPIOPS: false,
+            UbuntuDistroVersion: "precise-it-slave",
+            DOCKER: false,
+            VIRTUALIZATION_AND_STORAGE_TYPE: "ebs",
+            Owner: owner,
+            Purpose: "it-slave",
+            EXPECTED_DECOMISSION_DATE: "undefined"
+        };
+
+        this.triggerBuild("Spawn new instance", params);
     }
 
     unkeepBuilds(jobName, olderThan) {
