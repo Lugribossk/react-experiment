@@ -133,7 +133,7 @@ export default class Router {
 
     static createExtractor(path) {
         var parameterNames = Router.getMatches(/:(\w+)(?:\/|$)/g, path);
-        var matchAndExtract = new RegExp("^" + path.replace(/\\/g, "\\/").replace(/(:\w+)/g, "(\\w+)") + "$");
+        var matchAndExtract = new RegExp("^" + path.replace(/\\/g, "\\/").replace(/(:\w+)/g, "([\\w\\%\\-]*)") + "$");
 
         return (possiblePath) => {
             var match = possiblePath.match(matchAndExtract);
@@ -145,7 +145,7 @@ export default class Router {
             for (var i = 0; i < parameterNames.length; i++) {
                 var name = parameterNames[i];
                 var value = match[i + 1];
-                parameters[name] = value;
+                parameters[name] = decodeURIComponent(value);
             }
 
             return parameters;

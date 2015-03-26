@@ -18,6 +18,7 @@ import Router from "../flux/Router";
 import Route from "../flux/Route";
 import NodeStore from "./node/NodeStore";
 import Nodes from "./node/Nodes";
+import SearchableIntegrationTestList from "./SearchableIntegrationTestList";
 
 export default class DashboardApp extends React.Component {
     constructor(props) {
@@ -185,8 +186,11 @@ export default class DashboardApp extends React.Component {
                 <Route path="lastnight">
                     <IntegrationTestList builds={this.state.overnightBuilds} {...data}/>
                 </Route>
+                <Route path="search/:query">
+                    <SearchableIntegrationTestList builds={this.state.allBuilds} {...data}/>
+                </Route>
                 <Route path="stats">
-                    <UnstableStats integrationTests={this.integrationTests}/>
+                    <UnstableStats integrationTests={this.integrationTests} {...data}/>
                 </Route>
                 <Route path="nodes">
                     <Nodes nodeStore={this.nodeStore} />
