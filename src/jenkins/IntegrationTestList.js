@@ -5,6 +5,9 @@ import BuildStatus from "./build/BuildStatus";
 import QueueStatus from "./queue/QueueStatus";
 import BuildUtils from "./build/BuildUtils";
 
+/**
+ * Show a list of integration test builds, and possibly any queued builds.
+ */
 export default class IntegrationTestList extends React.Component {
     constructor(props) {
         super(props);

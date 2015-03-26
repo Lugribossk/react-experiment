@@ -1,6 +1,9 @@
 import request from "superagent-bluebird-promise";
 import Store from "../../flux/Store";
 
+/**
+ * Flux store with the Jenkins nodes/slaves/computers with a specific label.
+ */
 export default class NodeStore extends Store {
     constructor(label) {
         super();

@@ -6,6 +6,9 @@ import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import FlakyTestDetector from "./FlakyTestDetector";
 
+/**
+ * Statistics about flaky and failing tests.
+ */
 export default class UnstableStats extends React.Component {
     constructor(props) {
         super(props);

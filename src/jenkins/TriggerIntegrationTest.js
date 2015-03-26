@@ -7,6 +7,9 @@ import BuildUtils from "./build/BuildUtils";
 
 var importantRepos = ["Integration-Test", "Frontend", "Backend-Service", "Apps", "App-Service", "Apps-Server", "Backend-Conversions"];
 
+/**
+ * Modal for setting parameters and triggering a integration test build.
+ */
 export default class TriggerIntegrationTest extends React.Component {
     constructor(props) {
         super(props);

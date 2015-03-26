@@ -20,6 +20,9 @@ import NodeStore from "./node/NodeStore";
 import Nodes from "./node/Nodes";
 import SearchableIntegrationTestList from "./SearchableIntegrationTestList";
 
+/**
+ * Dashboard for showing status and parameters of the integration test build job in Jenkins.
+ */
 export default class DashboardApp extends React.Component {
     constructor(props) {
         super(props);

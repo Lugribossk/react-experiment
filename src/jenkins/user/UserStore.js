@@ -1,6 +1,9 @@
 import request from "superagent-bluebird-promise";
 import CachingStore from "../../flux/CachingStore";
 
+/**
+ * Flux store with the current Jenkins user.
+ */
 export default class UserStore extends CachingStore {
     constructor() {
         super(__filename);

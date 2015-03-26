@@ -2,6 +2,9 @@ import _ from "lodash";
 import Piecon from "piecon";
 import BuildUtils from "./build/BuildUtils";
 
+/**
+ * Show notifications of build progress in the favicon and title.
+ */
 export default class NotificationService {
     constructor(jobStore, userId) {
         this.jobStore = jobStore;
@@ -21,27 +24,24 @@ export default class NotificationService {
         Piecon.setProgress(BuildUtils.estimatePercentComplete(build, Date.now(), this.jobStore.getBuilds()));
 
         if (build.isBuilding()) {
-            this.setFaviconColor("#5bc0de");
+            NotificationService.setFaviconColor("#5bc0de");
             document.title = BuildUtils.estimateMinutesRemaining(build, Date.now(), this.jobStore.getBuilds()) + "m - ITs";
         } else {
             if (build.isSuccess()) {
-                this.setFaviconColor("#5cb85c");
+                NotificationService.setFaviconColor("#5cb85c");
             } else if (build.isUnstable()) {
-                this.setFaviconColor("#f0ad4e");
+                NotificationService.setFaviconColor("#f0ad4e");
             } else {
-                this.setFaviconColor("#d9534f");
+                NotificationService.setFaviconColor("#d9534f");
             }
             document.title = "ITs";
         }
     }
 
-    setFaviconColor(color) {
-        Piecon.setOptions({
-            color: color,
-            background: "#ffffff"
-        });
-    }
-
+    /**
+     * Get the newest running build triggered by the current user, or the newest running build, or the newest build.
+     * @returns {Build}
+     */
     getMostInterestingBuild() {
         var builds = this.jobStore.getBuilds();
         var runningBuilds = _.filter(builds, (build) => {
@@ -65,5 +65,12 @@ export default class NotificationService {
         } else {
             return null;
         }
+    }
+
+    static setFaviconColor(color) {
+        Piecon.setOptions({
+            color: color,
+            background: "#ffffff"
+        });
     }
 }

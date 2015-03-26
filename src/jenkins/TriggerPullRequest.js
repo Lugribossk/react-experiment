@@ -4,6 +4,9 @@ import Mixins from "../util/Mixins";
 import JobActions from "./job/JobActions";
 import BuildUtils from "./build/BuildUtils";
 
+/**
+ * Modal for confirming the changelog and starting a pull request build.
+ */
 export default class TriggerPullRequest extends React.Component {
     constructor(props) {
         super(props);
