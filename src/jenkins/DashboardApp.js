@@ -140,6 +140,9 @@ export default class DashboardApp extends React.Component {
                         <NavItem href="#lastnight" active={this.isActive("lastnight")}>
                             Last night
                         </NavItem>
+                        <NavItem href="#search/" active={this.isActive("search")}>
+                            Search
+                        </NavItem>
                         <NavItem href="#stats" active={this.isActive("stats")}>
                             Stats
                         </NavItem>
