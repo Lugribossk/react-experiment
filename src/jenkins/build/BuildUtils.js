@@ -99,6 +99,23 @@ export default {
         return Math.ceil(durationSum / samePackageBuilds.length);
     },
 
+    getEstimatedDurationText(build, now, builds) {
+        if (!build.isBuilding()) {
+            return "Completing...";
+        }
+        var estimatedDuration = this.getEstimatedDurationMs(build, builds);
+        var started = build.timestamp;
+        var runningFor = now - started;
+
+        if (estimatedDuration > runningFor) {
+	        let mins = Math.ceil((estimatedDuration - runningFor) / 60000);
+            return mins + " minute" + (mins === 1 ? "" : "s") + " remaining";
+        } else {
+	        let mins = Math.ceil((runningFor - estimatedDuration) / 60000);
+            return mins + " minute" + (mins === 1 ? "" : "s") + " overdue";
+        }
+    },
+
     getRepoBranches(parameters) {
         var repos = {};
         _.forEach(parameters, (value, name) => {

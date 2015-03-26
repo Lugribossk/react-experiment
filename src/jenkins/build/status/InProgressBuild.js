@@ -43,12 +43,12 @@ export default class InProgressBuild extends React.Component {
 
     render() {
         var percent = BuildUtils.estimatePercentComplete(this.props.build, this.props.now, this.props.builds);
-        var remainingMins = BuildUtils.estimateMinutesRemaining(this.props.build, this.props.now, this.props.builds);
+        var remainingMins = BuildUtils.getEstimatedDurationText(this.props.build, this.props.now, this.props.builds);
 
         return (
             <div>
                 <AbortButton build={this.props.build} subsets={this.props.subsets} />
-                <ProgressBar bsStyle="info" now={percent} label={remainingMins + " minutes remaining"} />
+                <ProgressBar bsStyle="info" now={percent} label={remainingMins} />
                 {this.renderSubsets()}
                 <ParameterDetails parameters={this.props.build.getParameters()} />
             </div>
