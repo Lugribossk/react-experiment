@@ -5,7 +5,7 @@ import JobActions from "../job/JobActions";
 
 class NewNodeModal extends React.Component {
     spawn() {
-        JobActions.triggerSpawnNewInstance("it", this.props.userId);
+        JobActions.triggerSpawnNewInstance("it", this.props.user);
         this.props.onRequestHide();
     }
 
@@ -33,7 +33,7 @@ export default class Nodes extends React.Component {
                     <p>Busy nodes: {this.props.nodeStore.getNumBusyNodes()}</p>
                     <p>Idle nodes: {this.props.nodeStore.getNumIdleNodes()}</p>
 
-                    <ModalTrigger modal={<NewNodeModal userId={this.props.userId} />}>
+                    <ModalTrigger modal={<NewNodeModal user={this.props.currentUser} />}>
                         <Button bsStyle="primary">Spawn new node</Button>
                     </ModalTrigger>
                 </Panel>

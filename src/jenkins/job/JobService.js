@@ -59,7 +59,7 @@ export default class JobService {
         this.triggerBuild("integration-test-generic-build", params);
     }
 
-    triggerSpawnNewInstance(label="it", owner="operations") {
+    triggerSpawnNewInstance(label, owner) {
         var params = {
             Environment: "testing",
             Role: "buildslave",
@@ -74,8 +74,8 @@ export default class JobService {
             UbuntuDistroVersion: "precise-it-slave",
             DOCKER: false,
             VIRTUALIZATION_AND_STORAGE_TYPE: "ebs",
-            Owner: owner,
-            Purpose: "it-slave",
+            Owner: "operations",
+            Purpose: "it-slave (spawned by " + owner.id + ")",
             EXPECTED_DECOMISSION_DATE: "undefined"
         };
 

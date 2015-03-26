@@ -196,7 +196,7 @@ export default class DashboardApp extends React.Component {
                     <UnstableStats integrationTests={this.integrationTests} {...data}/>
                 </Route>
                 <Route path="nodes">
-                    <Nodes nodeStore={this.nodeStore} />
+                    <Nodes nodeStore={this.nodeStore} currentUser={this.state.currentUser} />
                 </Route>
                 <Route defaultPath>
                     <IntegrationTestList builds={this.state.allBuilds} queue={this.state.queue} {...data} />

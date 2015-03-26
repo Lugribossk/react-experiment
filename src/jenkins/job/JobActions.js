@@ -18,7 +18,7 @@ export default {
     triggerIntegrationTest: new Action("jobTriggerIntegrationTest"),
     /**
      * @param {String} [label]
-     * @param {String} [owner]
+     * @param {Object} [owner]
      */
     triggerSpawnNewInstance: new Action("jobTriggerSpawnNewInstance"),
     /**
