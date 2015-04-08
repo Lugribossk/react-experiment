@@ -7,8 +7,12 @@ export default class FailedBuild extends React.Component {
     renderBuildFailures() {
         if (this.props.build.isFailed() && this.props.failureData) {
             var data = this.props.failureData;
-            if (data.misspelledBranch) {
-                return <span>Branch does not exist: {data.misspelledBranch}</span>;
+            if (data.missingBranch) {
+                if (data.missingBranchRepo) {
+                    return <span>Branch {data.missingBranch} does not exist in {data.missingBranchRepo}.</span>;
+                } else {
+                    return <span>Branch {data.missingBranch} does not exist.</span>;
+                }
             } else if (data.noFastForward) {
                 return <span>Branch not up to date with master: {data.noFastForward}</span>;
             } else if (data.notBuilt) {

@@ -10,9 +10,14 @@ export default class FailureData {
 
     static fromConsoleOutput(text) {
         var data = {};
-        var misspelledBranch = /fatal: Not a valid object name (\S+)/g.exec(text);
-        if (misspelledBranch && misspelledBranch[1]) {
-            data.misspelledBranch = misspelledBranch[1];
+        var missingBranch = /fatal: Not a valid object name (\S+)/g.exec(text);
+        if (missingBranch && missingBranch[1]) {
+            data.missingBranch = missingBranch[1];
+        }
+        var missingBranch2 = /SHORT_HASH=\n(?:\w|\W)+?checking merge validity for (.+?)\/origin\/(.+?) /g.exec(text);
+        if (missingBranch2 && missingBranch2[1]) {
+            data.missingBranch = missingBranch2[2];
+            data.missingBranchRepo = missingBranch2[1];
         }
 
         var noFastForward = /cannot fast-forward master to (\S+)/g.exec(text);
