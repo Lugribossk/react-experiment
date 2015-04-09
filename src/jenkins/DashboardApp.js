@@ -122,7 +122,7 @@ export default class DashboardApp extends React.Component {
 
     renderNavbar() {
         return (
-            <Navbar brand="ITs" toggleNavKey={0}>
+            <Navbar brand="ITs" toggleNavKey={0} fluid>
                 <CollapsableNav eventKey={0}>
                     <Nav navbar>
                         <NavItem href="#" active={this.isActive("")}>

@@ -64,7 +64,7 @@ export default class BuildStatus extends React.Component {
 
     render() {
         return (
-            <Panel bsStyle={this.getStyle()} header={this.renderHeader()}>
+            <Panel bsStyle={this.getStyle()} style={{overflow: "hidden"}} header={this.renderHeader()}>
                 {this.renderStatus()}
             </Panel>
         );

@@ -4,6 +4,7 @@ import Promise from "bluebird";
 import CachingStore from "../../flux/CachingStore";
 import QueueItem from "./QueueItem";
 import QueueActions from "./QueueActions";
+import JobActions from "../job/JobActions";
 
 export default class QueueStore extends CachingStore {
     constructor(jobName) {
@@ -14,6 +15,7 @@ export default class QueueStore extends CachingStore {
         };
 
         QueueActions.abort.onDispatch(this.abort.bind(this));
+        JobActions.triggerBuild.onDispatch(this.triggerBuild.bind(this));
 
         this._updateQueue();
         setInterval(this._updateQueue.bind(this), 30 * 1000);
@@ -30,7 +32,17 @@ export default class QueueStore extends CachingStore {
     abort(id) {
         request.post("/queue/cancelItem")
             .query("id=" + id)
-            .end();
+            .then(() => {
+                this._updateQueue();
+            });
+    }
+
+    triggerBuild(jobName) {
+        if (jobName === this.jobName) {
+            setTimeout(() => {
+                this._updateQueue();
+            }, 500);
+        }
     }
 
     _updateQueue() {
@@ -40,10 +52,10 @@ export default class QueueStore extends CachingStore {
                 var items = _.map(result.body.items, (item) => {
                     return new QueueItem(item);
                 });
-                var x = _.filter(items, (item) => {
+                var sameJob = _.filter(items, (item) => {
                     return item.getJobName() === this.jobName;
                 });
-                this.setState({queue: x});
+                this.setState({queue: sameJob});
             })
             .catch((err) => {});
     }
