@@ -1,16 +1,6 @@
 {
     "ecmaFeatures": {
-        "arrowFunctions": true,
-        "blockBindings": true,
-        "defaultParams": true,
-        "destructuring": true,
-        "forOf": true,
-        "generators": true,
         "modules": true,
-        "objectLiteralComputedProperties ": true,
-        "spread": true,
-        "superInFunctions": true,
-        "templateStrings ": true,
         "jsx": true
     },
     "env": {
