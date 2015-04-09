@@ -1,9 +1,27 @@
 {
-    "settings": {
-        "ecmascript": 6,
+    "ecmaFeatures": {
+        "arrowFunctions": true,
+        "blockBindings": true,
+        "defaultParams": true,
+        "destructuring": true,
+        "forOf": true,
+        "generators": true,
+        "modules": true,
+        "objectLiteralComputedProperties ": true,
+        "spread": true,
+        "superInFunctions": true,
+        "templateStrings ": true,
         "jsx": true
     },
     "env": {
-        "browser": true
+        "browser": true,
+        "node": true,
+        "mocha": true,
+        "es6": true
+    },
+    "rules": {
+        "no-underscore-dangle": 0,
+        "eol-last": 0,
+        "camelcase": 0
     }
 }

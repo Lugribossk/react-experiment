@@ -1,5 +1,4 @@
 module.exports = function (grunt) {
-    "use strict";
     var webpack = require("webpack");
     var HtmlWebpackPlugin = require("html-webpack-plugin");
     var ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -105,20 +104,37 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks("grunt-jscs");
-    var styleSrc = ["src/**/*.js", "test/**/*.js", "Gruntfile.js"];
+    var src = ["src/**/*.js", "test/**/*.js", "Gruntfile.js"];
     grunt.config.set("jscs", {
         options: {
             config: ".jscsrc"
         },
         dev: {
-            src: styleSrc
+            src: src
         },
         ci: {
             options: {
                 reporter: "junit",
                 reporterOutput: "target/style.xml"
             },
-            src: styleSrc
+            src: src
+        }
+    });
+
+    grunt.loadNpmTasks("grunt-eslint");
+    grunt.config.set("eslint", {
+        options: {
+            configFile: ".eslintrc"
+        },
+        dev: {
+            src: src
+        },
+        ci: {
+            options: {
+                format: "junit",
+                outputFile: "target/lint.xml"
+            },
+            src: src
         }
     });
 
@@ -172,8 +188,8 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
-    grunt.registerTask("test", ["jscs:dev", "mochaTest:test"]);
+    grunt.registerTask("test", ["eslint:dev", "jscs:dev", "mochaTest:test"]);
     grunt.registerTask("build", ["clean:dist", "webpack:build"]);
 
-    grunt.registerTask("ci", ["jscs:ci", "mochaTest:ci", "build"]);
+    grunt.registerTask("ci", ["eslint:ci", "jscs:ci", "mochaTest:ci", "build"]);
 };

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import request from "superagent-bluebird-promise";
 
 var Request = request.Request;
@@ -52,7 +53,7 @@ export default class SuperagentApi {
     _authenticateRequest(req) {
         return req;
     }
-    
+
     _getBaseUrl() {
         return "";
     }

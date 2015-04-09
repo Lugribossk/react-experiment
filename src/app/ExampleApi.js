@@ -1,4 +1,4 @@
-import request from "superagent";
+import SuperagentApi from "../util/SuperagentApi";
 
 export default class ExampleApi extends SuperagentApi {
     _getBaseUrl() {

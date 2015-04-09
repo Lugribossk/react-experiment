@@ -11,6 +11,7 @@ Experimenting with React and ES6.
 - Building with Webpack.
 - Tests with Mocha and Jsdom.
 - Code style with JSCS.
+- Linting with ESLint.
 
 ## Getting started
 

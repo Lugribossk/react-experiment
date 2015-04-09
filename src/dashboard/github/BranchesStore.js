@@ -1,6 +1,8 @@
+import _ from "lodash";
 import Promise from "bluebird";
 import Store from "../../flux/Store";
 import GitRef from "./GitRef";
+import Commit from "./Commit";
 
 export default class BranchesStore extends Store {
     constructor(repo, api) {

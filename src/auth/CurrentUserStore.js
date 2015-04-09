@@ -34,7 +34,7 @@ export default class CurrentUserStore extends CachingStore {
             } else {
                 this.api.setAuthToken(null);
             }
-        })
+        });
     }
 
     login(username, password) {

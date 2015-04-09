@@ -37,7 +37,7 @@ export default class Router {
             _.remove(this.listeners, (el) => {
                 return el === listener;
             });
-        }
+        };
     }
 
     /**
@@ -102,7 +102,7 @@ export default class Router {
             if (defaultPath) {
                 this.defaultPath = null;
             }
-        }
+        };
     }
 
     whenHashChange(event) {
@@ -149,7 +149,7 @@ export default class Router {
             }
 
             return parameters;
-        }
+        };
     }
 
     static getMatches(regex, text) {

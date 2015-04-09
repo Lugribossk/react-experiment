@@ -14,7 +14,7 @@ describe("Router", () => {
                 href: "",
                 hash: ""
             }
-        }
+        };
     });
     var changeHash = (newHash) => {
         mockWindow.location.href = "http://example.com/#" + newHash;

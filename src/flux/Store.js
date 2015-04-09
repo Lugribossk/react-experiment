@@ -38,7 +38,7 @@ export default class Store {
             _.remove(this.listeners, (el) => {
                 return el === listener;
             });
-        }
+        };
     }
 
     /**

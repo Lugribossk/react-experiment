@@ -14,6 +14,6 @@ export default {
     componentWillUnmount: function () {
         _.forEach(this.unsubscribers, (unsubscriber) => {
             unsubscriber();
-        })
+        });
     }
 }
