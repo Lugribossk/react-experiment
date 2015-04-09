@@ -27,7 +27,7 @@ export default class ExampleNavbar extends React.Component {
         );
 
         return (
-            <Navbar brand="Example">
+            <Navbar brand="Example" fluid>
                 <Nav>
                     <NavItem href="#" active={this.isActive("")}>Dashboard</NavItem>
                     <NavItem href="#test1" active={this.isActive("test1")}>Test 1</NavItem>
