@@ -100,7 +100,8 @@ export default class JobStore extends CachingStore {
 
     _updateBuilds() {
         request.get("/job/" + this.name + "/api/json")
-            .query("tree=builds[number,building,result,timestamp,duration,url,keepLog,actions[parameters[*],causes[userName,userId,upstreamBuild,upstreamProject],totalCount,urlName]]{0," + this.limit + "}")
+            .query("tree=builds[number,building,result,timestamp,duration,url,keepLog,actions[parameters[*]," +
+            "causes[userName,userId,upstreamBuild,upstreamProject],totalCount,urlName]]{0," + this.limit + "}")
             .then((result) => {
                 var builds = _.map(result.body.builds, (data) => {
                     return new Build(data);

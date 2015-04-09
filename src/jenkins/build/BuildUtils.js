@@ -108,10 +108,10 @@ export default {
         var runningFor = now - started;
 
         if (estimatedDuration > runningFor) {
-	        let mins = Math.ceil((estimatedDuration - runningFor) / 60000);
+            let mins = Math.ceil((estimatedDuration - runningFor) / 60000);
             return mins + " minute" + (mins === 1 ? "" : "s") + " remaining";
         } else {
-	        let mins = Math.ceil((runningFor - estimatedDuration) / 60000);
+            let mins = Math.ceil((runningFor - estimatedDuration) / 60000);
             return mins + " minute" + (mins === 1 ? "" : "s") + " overdue";
         }
     },
