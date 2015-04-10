@@ -1,6 +1,5 @@
 import React from "react";
 import _ from "lodash";
-import {Navbar, Nav, NavItem, CollapsableNav, Button, Badge, ModalTrigger} from "react-bootstrap"
 import JobStore from "./job/JobStore";
 import UserStore from "./user/UserStore";
 import QueueStore from "./queue/QueueStore";
@@ -9,16 +8,16 @@ import BuildService from "./build/BuildService";
 import NotificationService from "./NotificationService";
 import IntegrationTestList from "./IntegrationTestList";
 import "bootstrap/dist/css/bootstrap.css";
-import UnstableStats from "./UnstableStats";
+import UnstableStats from "./stats/UnstableStats";
 import JobActions from "./job/JobActions";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
-import TriggerIntegrationTest from "./TriggerIntegrationTest";
 import Router from "../flux/Router";
 import Route from "../flux/Route";
 import NodeStore from "./node/NodeStore";
 import Nodes from "./node/Nodes";
 import SearchableIntegrationTestList from "./SearchableIntegrationTestList";
+import BuildsNavbar from "./BuildsNavbar";
 
 /**
  * Dashboard for showing status and parameters of the integration test build job in Jenkins.
@@ -116,55 +115,6 @@ export default class DashboardApp extends React.Component {
         return buildToSubsets;
     }
 
-    isActive(link) {
-        return this.router.currentRouteMatches(link);
-    }
-
-    renderNavbar() {
-        return (
-            <Navbar brand="ITs" toggleNavKey={0} fluid>
-                <CollapsableNav eventKey={0}>
-                    <Nav navbar>
-                        <NavItem href="#" active={this.isActive("")}>
-                            All <Badge>{this.state.allBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#failed" active={this.isActive("failed")}>
-                            Failed <Badge>{this.state.failedBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#unstable" active={this.isActive("unstable")}>
-                            Unstable <Badge>{this.state.unstableBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#success" active={this.isActive("success")}>
-                            Succeeded <Badge>{this.state.successBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#mine" active={this.isActive("mine")}>
-                            Mine <Badge>{this.state.myBuilds.length}</Badge>
-                        </NavItem>
-                        <NavItem href="#lastnight" active={this.isActive("lastnight")}>
-                            Last night
-                        </NavItem>
-                        <NavItem href="#search/" active={this.isActive("search")}>
-                            Search
-                        </NavItem>
-                        <NavItem href="#stats" active={this.isActive("stats")}>
-                            Stats
-                        </NavItem>
-                        <NavItem href="#nodes" active={this.isActive("nodes")}>
-                            Nodes <Badge className={this.state.totalNodes < 24 && "alert-danger"}>{this.state.totalNodes}</Badge>
-                        </NavItem>
-                    </Nav>
-                    <ul>
-                        <ModalTrigger modal={<TriggerIntegrationTest />}>
-                            <Button className="navbar-btn navbar-right" bsStyle="primary">
-                                New
-                            </Button>
-                        </ModalTrigger>
-                    </ul>
-                </CollapsableNav>
-            </Navbar>
-        );
-    }
-
     renderRoute() {
         var data = {
             allBuilds: this.state.allBuilds,
@@ -209,9 +159,18 @@ export default class DashboardApp extends React.Component {
     }
 
     render() {
+        var navbarProps = {
+            all: this.state.allBuilds.length,
+            failed: this.state.failedBuilds.length,
+            unstable: this.state.unstableBuilds.length,
+            success: this.state.successBuilds.length,
+            mine: this.state.myBuilds.length,
+            totalNodes: this.state.totalNodes,
+            router: this.router
+        };
         return (
             <div>
-                {this.renderNavbar()}
+                <BuildsNavbar {...navbarProps} />
                 <div className="container">
                     {this.renderRoute()}
                 </div>
