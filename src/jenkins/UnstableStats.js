@@ -71,7 +71,7 @@ export default class UnstableStats extends React.Component {
                     <td>{method}</td>
                     <td>{item.count}</td>
                 </tr>
-            )
+            );
         });
     }
 
@@ -96,7 +96,7 @@ export default class UnstableStats extends React.Component {
                     </td>
                     <td>{item.count}</td>
                 </tr>
-            )
+            );
         });
     }
 

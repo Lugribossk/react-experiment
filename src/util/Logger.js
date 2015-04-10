@@ -1,3 +1,4 @@
+/*eslint no-console: 0*/
 import _ from "lodash";
 
 var loggers = {};

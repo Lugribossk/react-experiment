@@ -1,3 +1,4 @@
+import _ from "lodash";
 import request from "superagent-bluebird-promise";
 import CachingStore from "../../flux/CachingStore";
 
@@ -39,6 +40,6 @@ export default class UserStore extends CachingStore {
                     email: email
                 }});
             })
-            .catch((err) => {});
+            .catch(() => {});
     }
 }

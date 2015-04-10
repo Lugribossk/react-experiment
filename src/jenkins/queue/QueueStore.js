@@ -57,7 +57,7 @@ export default class QueueStore extends CachingStore {
                 });
                 this.setState({queue: sameJob});
             })
-            .catch((err) => {});
+            .catch(() => {});
     }
 
     unmarshalState(data) {

@@ -7,7 +7,7 @@ export default class GithubLink extends React.Component {
         if (this.props.branch) {
             url += "/tree/" + this.props.branch;
         } else if (this.props.sha || this.props.hash || this.props.commit) {
-            url += "/commit/" + (this.props.sha || this.props.hash || this.props.commit)
+            url += "/commit/" + (this.props.sha || this.props.hash || this.props.commit);
         }
 
         return (

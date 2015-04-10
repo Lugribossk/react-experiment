@@ -5,13 +5,16 @@
     },
     "env": {
         "browser": true,
-        "node": true,
         "mocha": true,
         "es6": true
     },
     "rules": {
         "no-underscore-dangle": 0,
         "eol-last": 0,
-        "camelcase": 0
+        "camelcase": 0,
+        "no-new": 0
+    },
+    "globals": {
+        "__filename": true
     }
 }

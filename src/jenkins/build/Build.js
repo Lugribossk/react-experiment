@@ -35,7 +35,7 @@ export default class Build extends BuildLike {
             return {
                 id: cause.upstreamBuild,
                 name: cause.upstreamProject
-            }
+            };
         } else {
             return {};
         }

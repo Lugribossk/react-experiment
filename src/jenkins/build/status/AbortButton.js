@@ -22,7 +22,7 @@ class AbortModal extends React.Component {
                     <Button bsStyle="danger" onClick={this.abort.bind(this)}>Abort</Button>
                 </div>
             </Modal>
-        )
+        );
     }
 }
 

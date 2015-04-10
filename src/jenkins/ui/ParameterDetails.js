@@ -13,7 +13,7 @@ export default class ParameterDetails extends React.Component {
         });
 
         if (this.props.parameters.BRANCH !== "master" || onlyMaster) {
-            return <span>All repos: {this.props.parameters.BRANCH}</span>
+            return <span>All repos: {this.props.parameters.BRANCH}</span>;
         }
     }
 
@@ -29,7 +29,7 @@ export default class ParameterDetails extends React.Component {
 
     renderPackage() {
         if (this.props.parameters.PACKAGE_PATH !== "com/tradeshift") {
-            return <span>Only running tests in package: {this.props.parameters.PACKAGE_PATH}</span>
+            return <span>Only running tests in package: {this.props.parameters.PACKAGE_PATH}</span>;
         }
     }
 
@@ -40,6 +40,6 @@ export default class ParameterDetails extends React.Component {
                 {this.renderBranches()}
                 {this.renderPackage()}
             </div>
-        )
+        );
     }
 }

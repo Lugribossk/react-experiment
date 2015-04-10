@@ -26,7 +26,7 @@ var IT_PARAM_REPOS = {
     CHINAPAYMENT_GIT_REF: "tradeshift-china-payment"
 };
 
-var PR_PARAM_REPOS= {
+var PR_PARAM_REPOS = {
     INTEGRATION_TEST_GIT_REF: "Integration-Test",
     FRONTEND_GIT_REF: "Frontend",
     BACKEND_GIT_REF: "Backend-Service",
@@ -132,7 +132,7 @@ export default {
 
     IT_PARAM_REPOS: IT_PARAM_REPOS,
 
-    PR_PARAM_REPOS:  PR_PARAM_REPOS,
+    PR_PARAM_REPOS: PR_PARAM_REPOS,
 
     REPOS: REPOS
 }

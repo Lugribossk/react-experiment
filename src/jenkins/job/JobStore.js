@@ -117,7 +117,7 @@ export default class JobStore extends CachingStore {
 
                 this.setState({builds: builds});
             })
-            .catch((err) => {});
+            .catch(() => {});
     }
 
     _updateTestReport(id) {
@@ -134,7 +134,7 @@ export default class JobStore extends CachingStore {
                     this.setState({reports: _.assign({[id]: report}, this.state.reports)});
                 }
             })
-            .catch((err) => {});
+            .catch(() => {});
     }
 
     _updateFailureData(id) {
@@ -148,7 +148,7 @@ export default class JobStore extends CachingStore {
                 var data = FailureData.fromConsoleOutput(result.text);
                 this.setState({failureData: _.assign({[id]: data}, this.state.failureData)});
             })
-            .catch((err) => {});
+            .catch(() => {});
     }
 
     unmarshalState(data) {

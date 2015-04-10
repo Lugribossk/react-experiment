@@ -6,7 +6,7 @@ import RebuildButton from "./RebuildButton";
 export default class UnstableBuild extends React.Component {
     renderTestFailures() {
         if (this.props.testReport && this.props.testReport.failCount > 10) {
-            return <span>{this.props.testReport.failCount} tests failed.</span>
+            return <span>{this.props.testReport.failCount} tests failed.</span>;
         }
 
         if (this.props.testReport && this.props.testReport.failCount > 0) {
@@ -21,7 +21,7 @@ export default class UnstableBuild extends React.Component {
 
                 return (
                     <div key={key}>
-                        <a href={link} target="_blank" className="text-warning">{klass}: {failure.name}</a>
+                        <a href={link} target="_blank" className="text-warning">{klass}: {failure.name}</a>;
                     </div>
                 );
             });
@@ -39,7 +39,7 @@ export default class UnstableBuild extends React.Component {
                     <span>
                         Failed subsets:
                         {_.map(failedSubsets, (subset) => {
-                            return <a key={subset.getId()} href={subset.url} target="_blank"> {subset.getId()}</a>
+                            return <a key={subset.getId()} href={subset.url} target="_blank"> {subset.getId()}</a>;
                         })}
                     </span>
                 );

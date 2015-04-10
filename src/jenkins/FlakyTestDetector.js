@@ -1,3 +1,4 @@
+import _ from "lodash";
 import BuildUtils from "./build/BuildUtils";
 
 export default class FlakyTestDetector {
@@ -38,7 +39,7 @@ export default class FlakyTestDetector {
             if (build !== otherBuild && _.keys(otherBranches).length === _.keys(branches).length) {
                 return _.every(otherBranches, (branch, repo) => {
                     return branches[repo] === branch;
-                })
+                });
             }
             return false;
         });

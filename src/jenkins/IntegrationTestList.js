@@ -26,10 +26,10 @@ export default class IntegrationTestList extends React.Component {
 
     renderQueue() {
         if (!this.props.queue || this.props.queue.length === 0) {
-            return;
+            return null;
         }
         return _.map(this.props.queue, (item) => {
-            return <QueueStatus key={"q" + item.getId()} item={item} />
+            return <QueueStatus key={"q" + item.getId()} item={item} />;
         });
     }
 
@@ -47,7 +47,7 @@ export default class IntegrationTestList extends React.Component {
                 testReport={this.props.testReports[id]}
                 failureData={this.props.failureData[id]}
                 subsets={this.props.subsets[id]}
-                now={this.state.now}/>
+                now={this.state.now}/>;
         });
     }
 

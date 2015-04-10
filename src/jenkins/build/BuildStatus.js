@@ -9,13 +9,13 @@ import UnstableBuild from "./status/UnstableBuild";
 import ParameterDetails from "../ui/ParameterDetails";
 
 export default class BuildStatus extends React.Component {
-    getBuildTime() {
+    renderBuildTime() {
         if (this.props.build.isBuilding()) {
-            return;
+            return null;
         }
         var time = moment(this.props.build.timestamp + this.props.build.duration);
         if (time.isBefore(moment().startOf("week"))) {
-            return time.format("ddd Do MMM HH:mm")
+            return time.format("ddd Do MMM HH:mm");
         } else if (time.isBefore(moment().startOf("day"))) {
             return time.format("ddd HH:mm");
         } else {
@@ -27,9 +27,9 @@ export default class BuildStatus extends React.Component {
         if (this.props.build.isBuilding()) {
             return "info";
         } else if (this.props.build.isSuccess()) {
-            return "success"
+            return "success";
         } else if (this.props.build.isUnstable()) {
-            return "warning"
+            return "warning";
         } else {
             return "danger";
         }
@@ -44,7 +44,7 @@ export default class BuildStatus extends React.Component {
                 <span style={{float: "right"}}>
                     {this.props.build.keepLog &&
                         <Glyphicon glyph="lock" title="Kept forever"/>}
-                    {this.getBuildTime()}
+                    {this.renderBuildTime()}
                 </span>
             </span>
         );

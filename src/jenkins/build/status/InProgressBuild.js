@@ -15,7 +15,7 @@ export default class InProgressBuild extends React.Component {
 
     renderSubsets() {
         if (!this.props.subsets) {
-            return;
+            return null;
         }
         var finishedSubsets = _.filter(this.props.subsets, (subset) => {
             return !subset.building && subset.isSuccess();
@@ -35,7 +35,7 @@ export default class InProgressBuild extends React.Component {
                 {failedSubsets.length > 0 &&
                     <span>Failed subsets: </span>}
                 {_.map(failedSubsets, (subset) => {
-                    return <a key={subset.getId()} href={subset.url} target="_blank">{subset.getId()} </a>
+                    return <a key={subset.getId()} href={subset.url} target="_blank">{subset.getId()} </a>;
                 })}
             </div>
         );

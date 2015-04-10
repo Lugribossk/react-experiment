@@ -12,7 +12,7 @@ export default class TriggerPullRequest extends React.Component {
         super(props);
         this.state = {
             changelog: this.props.build.getParameters().CHANGELOG || ""
-        } ;
+        };
     }
 
     isValid() {
