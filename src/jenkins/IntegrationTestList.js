@@ -1,9 +1,7 @@
 import React from "react";
 import _ from "lodash";
-import {TabbedArea, TabPane, Badge, Button, Glyphicon} from "react-bootstrap"
 import BuildStatus from "./build/BuildStatus";
 import QueueStatus from "./queue/QueueStatus";
-import BuildUtils from "./build/BuildUtils";
 
 /**
  * Show a list of integration test builds, and possibly any queued builds.

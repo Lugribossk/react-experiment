@@ -18,6 +18,7 @@ import NodeStore from "./node/NodeStore";
 import Nodes from "./node/Nodes";
 import SearchableIntegrationTestList from "./SearchableIntegrationTestList";
 import BuildsNavbar from "./BuildsNavbar";
+import DesktopNotificationPrompt from "./ui/DesktopNotificationPrompt";
 
 /**
  * Dashboard for showing status and parameters of the integration test build job in Jenkins.
@@ -172,6 +173,7 @@ export default class DashboardApp extends React.Component {
             <div>
                 <BuildsNavbar {...navbarProps} />
                 <div className="container">
+                    <DesktopNotificationPrompt />
                     {this.renderRoute()}
                 </div>
             </div>

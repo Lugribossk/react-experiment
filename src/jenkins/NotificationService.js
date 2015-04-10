@@ -11,6 +11,7 @@ export default class NotificationService {
         this.userId = userId;
 
         jobStore.onBuildsChanged(this.notifyProgress.bind(this));
+        jobStore.onBuildFinished(this.notifyBuildFinished.bind(this));
         setInterval(this.notifyProgress.bind(this), 10000);
         this.notifyProgress();
     }
@@ -35,6 +36,29 @@ export default class NotificationService {
                 NotificationService.setFaviconColor("#d9534f");
             }
             document.title = "ITs";
+        }
+    }
+
+    notifyBuildFinished(id) {
+        if (Notification.permission !== "granted") {
+            return;
+        }
+
+        var build = this.jobStore.getBuild(id);
+        if (build.getUserId() === this.userId) {
+            if (build.isSuccess()) {
+                new Notification("Build succesful!", {
+                    icon: "/static/19bcd89f/images/32x32/blue.png"
+                });
+            } else if (build.isUnstable()) {
+                new Notification("Build unstable", {
+                    icon: "/static/19bcd89f/images/32x32/yellow.png"
+                });
+            } else {
+                new Notification("Build failed", {
+                    icon: "/static/19bcd89f/images/32x32/red.png"
+                });
+            }
         }
     }
 

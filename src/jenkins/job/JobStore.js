@@ -18,11 +18,11 @@ export default class JobStore extends CachingStore {
      * @param {Number} [limit=50] The number of builds to fetch.
      */
     constructor(name, limit=50) {
-        super(__filename + name);
+        super(__filename + name + "2");
         this.name = name;
         this.limit = limit;
         this.state = this.getCachedState() || {
-            builds: [],
+            builds: {},
             reports: {},
             failureData: {}
         };
@@ -41,8 +41,16 @@ export default class JobStore extends CachingStore {
         return this._registerListener("builds", listener);
     }
 
+    onBuildFinished(listener) {
+        return this._registerListener("finished", listener);
+    }
+
     getBuilds() {
-        return this.state.builds;
+        return _.values(this.state.builds).reverse();
+    }
+
+    getBuild(id) {
+        return this.state.builds[id];
     }
 
     onTestReportsChanged(listener) {
@@ -103,19 +111,28 @@ export default class JobStore extends CachingStore {
             .query("tree=builds[number,building,result,timestamp,duration,url,keepLog,actions[parameters[*]," +
             "causes[userName,userId,upstreamBuild,upstreamProject],totalCount,urlName]]{0," + this.limit + "}")
             .then((result) => {
-                var builds = _.map(result.body.builds, (data) => {
-                    return new Build(data);
+                var builds = {};
+                _.forEach(result.body.builds, (data) => {
+                    var build = new Build(data);
+                    builds[build.getId()] = build;
                 });
+
+                var oldState = this.state.builds;
+                this.setState({builds: builds});
 
                 _.forEach(builds, (build) => {
+                    var id = build.getId();
                     if (build.isUnstable() && build.hasTestReport()) {
-                        this._updateTestReport(build.getId());
+                        this._updateTestReport(id);
                     } else if (build.isFailed()) {
-                        this._updateFailureData(build.getId());
+                        this._updateFailureData(id);
+                    }
+
+                    var previous = oldState[id];
+                    if (previous && previous.isBuilding() && !build.isBuilding()) {
+                        this._trigger("finished", id);
                     }
                 });
-
-                this.setState({builds: builds});
             })
             .catch(() => {});
     }

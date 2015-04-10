@@ -41,7 +41,7 @@ export default class QueueStore extends CachingStore {
         if (jobName === this.jobName) {
             setTimeout(() => {
                 this._updateQueue();
-            }, 500);
+            }, 1000);
         }
     }
 
