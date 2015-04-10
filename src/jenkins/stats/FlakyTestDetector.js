@@ -1,5 +1,5 @@
 import _ from "lodash";
-import BuildUtils from "./build/BuildUtils";
+import BuildUtils from "../build/BuildUtils";
 
 export default class FlakyTestDetector {
     constructor(jobStore) {

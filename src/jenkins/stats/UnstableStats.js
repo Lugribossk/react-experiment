@@ -2,8 +2,8 @@ import React from "react";
 import _ from "lodash";
 import moment from "moment";
 import {Panel, Table} from "react-bootstrap"
-import Mixins from "../util/Mixins";
-import SubscribeMixin from "../flux/SubscribeMixin";
+import Mixins from "../../util/Mixins";
+import SubscribeMixin from "../../flux/SubscribeMixin";
 import FlakyTestDetector from "./FlakyTestDetector";
 
 /**
