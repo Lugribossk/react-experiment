@@ -1,9 +1,17 @@
 {
-    "settings": {
-        "ecmascript": 6,
+    "ecmaFeatures": {
+        "modules": true,
         "jsx": true
     },
     "env": {
-        "browser": true
+        "browser": true,
+        "node": true,
+        "mocha": true,
+        "es6": true
+    },
+    "rules": {
+        "no-underscore-dangle": 0,
+        "eol-last": 0,
+        "camelcase": 0
     }
 }

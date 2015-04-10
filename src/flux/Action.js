@@ -43,6 +43,6 @@ export default class Action {
             _.remove(this.listeners, (el) => {
                 return el === listener;
             });
-        }
+        };
     }
 }

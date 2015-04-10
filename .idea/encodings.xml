@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/.editorconfig" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/.gitignore" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Gruntfile.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/app/Application.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/app/ExampleNavbar.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/app/Test2Page.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/flux/Route.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/flux/Router.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/DashboardApp.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/FlakyTestDetector.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/TriggerIntegrationTest.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/TriggerPullRequest.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/UnstableStats.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/build/TestReport.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/build/status/UnstableBuild.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/job/JobActions.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/job/JobService.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/node/NodeStore.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/jenkins/node/Nodes.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/test/TestUtils.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/test/flux/RouteTest.js" charset="UTF-8" />
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/flux/SubscribeMixin.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/test/flux/RouterTest.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/test/testSetup.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/test/ui/GravatarTest.js" charset="UTF-8" />
-    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -35,7 +35,7 @@ export default {
                     _.forEach(mixedInMethods, (method) => {
                         method.apply(this, args);
                     });
-                }
+                };
             }
         });
 
@@ -49,7 +49,7 @@ export default {
                     }
                     context[methodName] = method;
                 }
-            })
+            });
         });
     }
 }

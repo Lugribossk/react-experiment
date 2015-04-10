@@ -8,7 +8,7 @@ export default class BuildsStore extends Store {
 
         this.state = {
             builds: []
-        }
+        };
     }
 
     _fetchBuilds() {

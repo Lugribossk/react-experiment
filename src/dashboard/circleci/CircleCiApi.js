@@ -1,15 +1,11 @@
-import OAuth2Api from "./OAuth2Api";
+import SuperagentApi from "../../util/SuperagentApi";
 
-export default class CircleCiApi extends OAuth2Api {
-    constructor() {
-        super();
-    }
-
-    getBaseUrl() {
+export default class CircleCiApi extends SuperagentApi {
+    _getBaseUrl() {
         return "https://circleci.com/api/v1";
     }
 
-    authenticateRequest(req) {
+    _authenticateRequest(req) {
         req.query({"circle-token": this.token});
     }
 }
