@@ -1,4 +1,4 @@
-import expect from "expect.js";
+import expect from "unexpected";
 import sinon from "sinon";
 import Router from "../../src/flux/Router";
 
@@ -28,14 +28,14 @@ describe("Router", () => {
                 var extractor = Router.createExtractor("test");
                 var result = extractor("test");
 
-                expect(result).to.be.ok();
+                expect(result, "to be ok");
             });
 
             it("should reject different path.", () => {
                 var extractor = Router.createExtractor("test");
                 var result = extractor("nottest");
 
-                expect(result).not.to.be.ok();
+                expect(result, "to be null");
             });
         });
 
@@ -44,15 +44,15 @@ describe("Router", () => {
                 var extractor = Router.createExtractor("test/:id");
                 var result = extractor("test/12345");
 
-                expect(result).to.be.ok();
-                expect(result.id).to.be("12345");
+                expect(result, "to be ok");
+                expect(result.id, "to be", "12345");
             });
 
             it("should reject different path", () => {
                 var extractor = Router.createExtractor("test/:id");
                 var result = extractor("nottest/12345");
 
-                expect(result).not.to.be.ok();
+                expect(result, "to be null");
             });
         });
 
@@ -61,9 +61,9 @@ describe("Router", () => {
                 var extractor = Router.createExtractor("test/:id/:type");
                 var result = extractor("test/12345/demo");
 
-                expect(result).to.be.ok();
-                expect(result.id).to.be("12345");
-                expect(result.type).to.be("demo");
+                expect(result, "to be ok");
+                expect(result.id, "to be", "12345");
+                expect(result.type, "to be", "demo");
             });
         });
     });
@@ -75,8 +75,8 @@ describe("Router", () => {
 
             changeHash("test");
 
-            expect(router.currentRouteMatches("test")).to.be(true);
-            expect(router.currentRouteMatches("nottest")).to.be(false);
+            expect(router.currentRouteMatches("test"), "to be", true);
+            expect(router.currentRouteMatches("nottest"), "to be", false);
         });
 
         it("should route to path with parameters and extract them.", () => {
@@ -85,8 +85,8 @@ describe("Router", () => {
 
             changeHash("test/12345");
 
-            expect(router.getParameters()).to.be.ok();
-            expect(router.getParameters().id).to.be("12345");
+            expect(router.getParameters(), "to be ok");
+            expect(router.getParameters().id, "to be", "12345");
         });
 
         it("should change hash to default path when no route matches.", () => {
@@ -95,7 +95,7 @@ describe("Router", () => {
 
             changeHash("nottest");
 
-            expect(mockWindow.location.hash).to.be("test "); // extra space
+            expect(mockWindow.location.hash, "to be", "test "); // extra space
         });
 
         it("should route to empty path.", () => {
@@ -104,8 +104,8 @@ describe("Router", () => {
 
             changeHash("");
 
-            expect(router.currentRouteMatches("")).to.be(true);
-            expect(router.currentRouteMatches("nottest")).to.be(false);
+            expect(router.currentRouteMatches(""), "to be", true);
+            expect(router.currentRouteMatches("nottest"), "to be", false);
         });
     });
 
@@ -116,13 +116,13 @@ describe("Router", () => {
 
             changeHash("test/demo/12345");
 
-            expect(router.currentRouteMatches("test")).to.be(true);
-            expect(router.currentRouteMatches("test/demo")).to.be(true);
-            expect(router.currentRouteMatches("test/demo/12345")).to.be(true);
+            expect(router.currentRouteMatches("test"), "to be", true);
+            expect(router.currentRouteMatches("test/demo"), "to be", true);
+            expect(router.currentRouteMatches("test/demo/12345"), "to be", true);
 
-            expect(router.currentRouteMatches("")).to.be(false);
-            expect(router.currentRouteMatches("tes")).to.be(false);
-            expect(router.currentRouteMatches("test/de")).to.be(false);
+            expect(router.currentRouteMatches(""), "to be", false);
+            expect(router.currentRouteMatches("tes"), "to be", false);
+            expect(router.currentRouteMatches("test/de"), "to be", false);
         });
 
         it("should match empty string with empty path.", () => {
@@ -131,8 +131,8 @@ describe("Router", () => {
 
             changeHash("");
 
-            expect(router.currentRouteMatches("")).to.be(true);
-            expect(router.currentRouteMatches("test")).to.be(false);
+            expect(router.currentRouteMatches(""), "to be", true);
+            expect(router.currentRouteMatches("test"), "to be", false);
         });
 
         it("should match path with parameters.", () => {
@@ -141,7 +141,7 @@ describe("Router", () => {
 
             changeHash("test/12345");
 
-            expect(router.currentRouteMatches("test/:id")).to.be(true);
+            expect(router.currentRouteMatches("test/:id"), "to be", true);
         });
     });
 
@@ -153,7 +153,7 @@ describe("Router", () => {
 
             changeHash("test");
 
-            expect(listener.called).to.be.ok();
+            expect(listener, "was called");
         });
 
         it("should not be called when no route matches.", () => {
@@ -163,7 +163,7 @@ describe("Router", () => {
 
             changeHash("nottest");
 
-            expect(listener.called).not.to.be.ok();
+            expect(listener, "was not called");
         });
     });
 });

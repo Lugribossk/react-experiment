@@ -1,5 +1,5 @@
 import React from "react";
-import expect from "expect.js";
+import expect from "unexpected";
 import Gravatar from "../../src/ui/Gravatar";
 import TestUtils from "../TestUtils";
 
@@ -13,10 +13,10 @@ describe("Gravatar", () => {
     });
 
     it("should show Gravatar image.", () => {
-        expect(img.src).to.contain("gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346");
+        expect(img.src, "to contain", "gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346");
     });
 
     it("should use HTTPS.", () => {
-        expect(img.src).to.contain("https://secure.gravatar.com");
+        expect(img.src, "to contain", "https://secure.gravatar.com");
     });
 });
