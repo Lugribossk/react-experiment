@@ -16,11 +16,13 @@ export default class JobStore extends CachingStore {
     /**
      * @param {String} name The job name, as seen in the Jenkins url.
      * @param {Number} [limit=50] The number of builds to fetch.
+     * @param {Boolean} [reports=true] Wheter to retrieve test and failure reports.
      */
-    constructor(name, limit=50) {
+    constructor(name, limit=50, reports=true) {
         super(__filename + name + "2");
         this.name = name;
         this.limit = limit;
+        this.reports = reports;
         this.state = this.getCachedState() || {
             builds: {},
             reports: {},
@@ -29,7 +31,7 @@ export default class JobStore extends CachingStore {
         this.pendingReports = {};
         this.pendingFailureData = {};
 
-        window["clearData_" + name.replace(/-/g, "_")] = () => {
+        window["clearReports_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
         };
 
@@ -112,23 +114,39 @@ export default class JobStore extends CachingStore {
             "causes[userName,userId,upstreamBuild,upstreamProject],totalCount,urlName]]{0," + this.limit + "}")
             .then((result) => {
                 var builds = {};
+                var reports = {};
+                var failureData = {};
                 _.forEach(result.body.builds, (data) => {
                     var build = new Build(data);
-                    builds[build.getId()] = build;
+                    var id = build.getId();
+                    builds[id] = build;
+
+                    if (this.state.reports[id]) {
+                        reports[id] = this.state.reports[id];
+                    }
+                    if (this.state.failureData[id]) {
+                        failureData[id] = this.state.failureData[id];
+                    }
                 });
 
-                var oldState = this.state.builds;
-                this.setState({builds: builds});
+                var oldBuilds = this.state.builds;
+                this.setState({
+                    builds: builds,
+                    reports: reports,
+                    failureData: failureData
+                });
 
                 _.forEach(builds, (build) => {
                     var id = build.getId();
-                    if (build.isUnstable() && build.hasTestReport()) {
-                        this._updateTestReport(id);
-                    } else if (build.isFailed()) {
-                        this._updateFailureData(id);
+                    if (this.reports) {
+                        if (build.isUnstable() && build.hasTestReport()) {
+                            this._updateTestReport(id);
+                        } else if (build.isFailed()) {
+                            this._updateFailureData(id);
+                        }
                     }
 
-                    var previous = oldState[id];
+                    var previous = oldBuilds[id];
                     if (previous && previous.isBuilding() && !build.isBuilding()) {
                         this._trigger("finished", id);
                     }
@@ -170,7 +188,7 @@ export default class JobStore extends CachingStore {
 
     unmarshalState(data) {
         return {
-            builds: CachingStore.listOf(data.builds, Build),
+            builds: CachingStore.mapOf(data.builds, Build),
             reports: CachingStore.mapOf(data.reports, TestReport),
             failureData: CachingStore.mapOf(data.failureData, FailureData)
         };

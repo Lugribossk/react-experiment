@@ -28,7 +28,7 @@ export default class DashboardApp extends React.Component {
         super(props);
 
         this.integrationTests = new JobStore("integration-test-generic-build", 80);
-        this.subsets = new JobStore("integration-test-build-subset", 100);
+        this.subsets = new JobStore("integration-test-build-subset", 100, false);
         this.userStore = new UserStore();
         this.queueStore = new QueueStore("integration-test-generic-build");
         this.nodeStore = new NodeStore("it");
