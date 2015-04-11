@@ -1,3 +1,4 @@
+/*global module, require, process*/
 module.exports = function (grunt) {
     var webpack = require("webpack");
     var HtmlWebpackPlugin = require("html-webpack-plugin");

@@ -17,6 +17,7 @@
     "babel-loader": "5.0.0",
     "css-loader": "0.10.0",
     "eslint": "0.18.0",
+    "eslint-plugin-react": "2.1.0",
     "esprima-fb": "12001.1.0-dev-harmony-fb",
     "expect-dom": "^1.0.0",
     "expect.js": "0.3.1",

@@ -114,8 +114,8 @@ export default class CurrentUserStore extends CachingStore {
             })
             .set("Content-Type", "application/x-www-form-urlencoded")
             .as(OAuth2AccessToken)
-            .catch((err) => {
-                console.info("Login failed with username", username, err);
+            .catch(() => {
+                //console.info("Login failed with username", username, err);
                 this._trigger("invalidLogin");
             })
             .then((accessToken) => {
