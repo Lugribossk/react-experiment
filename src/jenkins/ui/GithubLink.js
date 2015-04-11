@@ -1,5 +1,6 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
+import Mixins from "../../util/Mixins";
 
 export default class GithubLink extends React.Component {
     render() {
@@ -13,9 +14,16 @@ export default class GithubLink extends React.Component {
         return (
             <div>
                 <a href={url} target="_blank">
-                    {this.props.repo}: {this.props.branch}
+                    {this.props.repo}: {this.props.branch || this.props.sha || this.props.hash || this.props.commit}
                 </a>
             </div>
         );
     }
 }
+
+Mixins.add(GithubLink.prototype, [React.addons.PureRenderMixin]);
+
+GithubLink.propTypes = {
+    owner: React.PropTypes.string.isRequired,
+    repo: React.PropTypes.string.isRequired
+};

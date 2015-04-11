@@ -42,4 +42,4 @@ export default class TriggerPullRequest extends React.Component {
     }
 }
 
-Mixins.add(TriggerPullRequest.prototype, [React.addons.LinkedStateMixin]);
+Mixins.add(TriggerPullRequest.prototype, [React.addons.LinkedStateMixin, React.addons.PureRenderMixin]);

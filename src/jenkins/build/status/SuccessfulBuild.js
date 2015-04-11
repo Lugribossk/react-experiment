@@ -1,8 +1,9 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import {ProgressBar, ModalTrigger, Button} from "react-bootstrap"
 import TriggerPullRequest from "../../TriggerPullRequest";
 import ParameterDetails from "../../ui/ParameterDetails";
+import Mixins from "../../../util/Mixins";
 
 export default class SuccessfulBuild extends React.Component {
     render() {
@@ -17,3 +18,5 @@ export default class SuccessfulBuild extends React.Component {
         );
     }
 }
+
+Mixins.add(SuccessfulBuild.prototype, [React.addons.PureRenderMixin]);

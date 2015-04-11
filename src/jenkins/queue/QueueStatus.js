@@ -1,8 +1,9 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
-import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap"
+import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap";
 import ParameterDetails from "../ui/ParameterDetails";
 import QueueActions from "./QueueActions";
+import Mixins from "../../util/Mixins";
 
 export default class QueueStatus extends React.Component {
     constructor(props) {
@@ -38,3 +39,5 @@ export default class QueueStatus extends React.Component {
         );
     }
 }
+
+Mixins.add(QueueStatus.prototype, [React.addons.PureRenderMixin]);

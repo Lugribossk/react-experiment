@@ -1,7 +1,8 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import BuildStatus from "./build/BuildStatus";
 import QueueStatus from "./queue/QueueStatus";
+import Mixins from "../util/Mixins";
 
 /**
  * Show a list of integration test builds, and possibly any queued builds.
@@ -59,3 +60,4 @@ export default class IntegrationTestList extends React.Component {
     }
 }
 
+Mixins.add(IntegrationTestList.prototype, [React.addons.PureRenderMixin]);

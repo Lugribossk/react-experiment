@@ -1,8 +1,9 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import {Button, ModalTrigger} from "react-bootstrap"
 import TriggerIntegrationTest from "../../TriggerIntegrationTest";
 import BuildUtils from "../BuildUtils";
+import Mixins from "../../../util/Mixins";
 
 export default class RebuildButton extends React.Component {
     render() {
@@ -19,3 +20,5 @@ export default class RebuildButton extends React.Component {
         );
     }
 }
+
+Mixins.add(RebuildButton.prototype, [React.addons.PureRenderMixin]);

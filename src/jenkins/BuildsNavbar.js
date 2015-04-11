@@ -1,5 +1,5 @@
 import React from "react";
-import {Navbar, Nav, NavItem, CollapsableNav, Button, Badge, ModalTrigger} from "react-bootstrap"
+import {Navbar, Nav, NavItem, CollapsableNav, Button, Badge, ModalTrigger} from "react-bootstrap";
 import TriggerIntegrationTest from "./TriggerIntegrationTest";
 
 export default class BuildsNavbar extends React.Component {

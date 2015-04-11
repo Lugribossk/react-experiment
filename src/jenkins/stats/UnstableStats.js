@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import moment from "moment";
 import {Panel, Table} from "react-bootstrap"
@@ -184,4 +184,4 @@ export default class UnstableStats extends React.Component {
     }
 }
 
-Mixins.add(UnstableStats.prototype, [SubscribeMixin]);
+Mixins.add(UnstableStats.prototype, [SubscribeMixin, React.addons.PureRenderMixin]);

@@ -103,4 +103,4 @@ export default class TriggerIntegrationTest extends React.Component {
     }
 }
 
-Mixins.add(TriggerIntegrationTest.prototype, [React.addons.LinkedStateMixin]);
+Mixins.add(TriggerIntegrationTest.prototype, [React.addons.LinkedStateMixin, React.addons.PureRenderMixin]);

@@ -1,7 +1,8 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import ParameterDetails from "../../ui/ParameterDetails";
 import RebuildButton from "./RebuildButton";
+import Mixins from "../../../util/Mixins";
 
 export default class UnstableBuild extends React.Component {
     renderTestFailures() {
@@ -61,3 +62,5 @@ export default class UnstableBuild extends React.Component {
         );
     }
 }
+
+Mixins.add(UnstableBuild.prototype, [React.addons.PureRenderMixin]);

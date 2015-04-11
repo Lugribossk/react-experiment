@@ -1,9 +1,10 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import {ProgressBar} from "react-bootstrap"
 import BuildUtils from "../BuildUtils";
 import ParameterDetails from "../../ui/ParameterDetails";
 import AbortButton from "./AbortButton";
+import Mixins from "../../../util/Mixins";
 
 export default class InProgressBuild extends React.Component {
     constructor(props) {
@@ -55,3 +56,5 @@ export default class InProgressBuild extends React.Component {
         );
     }
 }
+
+Mixins.add(InProgressBuild.prototype, [React.addons.PureRenderMixin]);

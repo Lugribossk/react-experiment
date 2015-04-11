@@ -1,7 +1,8 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import {Panel, Button, Modal, ModalTrigger} from "react-bootstrap"
 import JobActions from "../job/JobActions";
+import Mixins from "../../util/Mixins";
 
 class NewNodeModal extends React.Component {
     spawn() {
@@ -25,6 +26,8 @@ class NewNodeModal extends React.Component {
     }
 }
 
+Mixins.add(NewNodeModal.prototype, [React.addons.PureRenderMixin]);
+
 export default class Nodes extends React.Component {
     render() {
         return (
@@ -41,3 +44,5 @@ export default class Nodes extends React.Component {
         );
     }
 }
+
+Mixins.add(Nodes.prototype, [React.addons.PureRenderMixin]);

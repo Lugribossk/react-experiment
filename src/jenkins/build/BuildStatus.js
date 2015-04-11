@@ -1,12 +1,13 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import moment from "moment";
-import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap"
+import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap";
 import FailedBuild from "./status/FailedBuild";
 import InProgressBuild from "./status/InProgressBuild";
 import SuccessfulBuild from "./status/SuccessfulBuild";
 import UnstableBuild from "./status/UnstableBuild";
 import ParameterDetails from "../ui/ParameterDetails";
+import Mixins from "../../util/Mixins";
 
 export default class BuildStatus extends React.Component {
     renderBuildTime() {
@@ -70,3 +71,5 @@ export default class BuildStatus extends React.Component {
         );
     }
 }
+
+Mixins.add(BuildStatus.prototype, [React.addons.PureRenderMixin]);

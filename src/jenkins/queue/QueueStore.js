@@ -8,7 +8,7 @@ import JobActions from "../job/JobActions";
 
 export default class QueueStore extends CachingStore {
     constructor(jobName) {
-        super(__filename);
+        super(__filename + jobName);
         this.jobName = jobName;
         this.state = this.getCachedState() || {
             queue: []

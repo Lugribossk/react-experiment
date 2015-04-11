@@ -1,7 +1,8 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import GithubLink from "./GithubLink";
 import BuildUtils from "../build/BuildUtils";
+import Mixins from "../../util/Mixins";
 
 export default class ParameterDetails extends React.Component {
     renderAllBranch() {
@@ -43,3 +44,5 @@ export default class ParameterDetails extends React.Component {
         );
     }
 }
+
+Mixins.add(ParameterDetails.prototype, [React.addons.PureRenderMixin]);

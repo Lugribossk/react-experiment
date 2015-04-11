@@ -66,4 +66,4 @@ SearchableIntegrationTestList.defaultProps = {
     query: ""
 };
 
-Mixins.add(SearchableIntegrationTestList.prototype, [React.addons.LinkedStateMixin]);
+Mixins.add(SearchableIntegrationTestList.prototype, [React.addons.LinkedStateMixin, React.addons.PureRenderMixin]);

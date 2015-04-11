@@ -1,7 +1,8 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
 import {Modal, Button, ModalTrigger} from "react-bootstrap";
 import BuildActions from "../BuildActions";
+import Mixins from "../../../util/Mixins";
 
 class AbortModal extends React.Component {
     abort() {
@@ -26,6 +27,8 @@ class AbortModal extends React.Component {
     }
 }
 
+Mixins.add(AbortModal.prototype, [React.addons.PureRenderMixin]);
+
 export default class AbortButton extends React.Component {
     render() {
         return (
@@ -37,3 +40,5 @@ export default class AbortButton extends React.Component {
         );
     }
 }
+
+Mixins.add(AbortButton.prototype, [React.addons.PureRenderMixin]);
