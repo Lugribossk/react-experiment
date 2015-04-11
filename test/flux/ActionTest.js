@@ -1,4 +1,4 @@
-import expect from "expect.js";
+import expect from "unexpected";
 import sinon from "sinon";
 import Action from "../../src/flux/Action";
 
@@ -11,7 +11,7 @@ describe("Action", () => {
 
         action("test");
 
-        expect(listener.calledOnce).to.be.ok();
+        expect(listener, "was called once");
     });
 
     it("should not call listeners that have been removed.", () => {
@@ -23,7 +23,7 @@ describe("Action", () => {
 
         action();
 
-        expect(listener.called).not.to.be.ok();
+        expect(listener, "was not called");
     });
 
     it("should share dispatching across different instances with the same name.", () => {
@@ -35,6 +35,6 @@ describe("Action", () => {
 
         action2("test");
 
-        expect(listener.calledWith("test")).to.be.ok();
+        expect(listener, "was called with", "test");
     });
 });

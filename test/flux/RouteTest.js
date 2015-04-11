@@ -1,5 +1,5 @@
 import React from "react/addons";
-import expect from "expect.js";
+import expect from "unexpected";
 import Route from "../../src/flux/Route";
 import Router from "../../src/flux/Router";
 import TestUtils from "../TestUtils";
@@ -35,20 +35,20 @@ describe("Route", () => {
         it("should be rendered if route matches.", () => {
             router.whenHashChange({newURL: "blah#test"});
 
-            expect(componentNode.querySelectorAll("#route").length).to.be(1);
+            expect(componentNode.querySelectorAll("#route").length, "to be", 1);
         });
 
         it("should not be rendered if route does not match.", () => {
-            expect(componentNode.querySelectorAll("#route").length).to.be(0);
-            expect(componentNode.querySelectorAll("#unrelated").length).to.be(1);
+            expect(componentNode.querySelectorAll("#route").length, "to be", 0);
+            expect(componentNode.querySelectorAll("#unrelated").length, "to be", 1);
         });
 
         it("should set route parameters as props on child.", () => {
             router.whenHashChange({newURL: "blah#hasid/12345"});
 
-            expect(componentNode.querySelectorAll(".insideRoute").length).to.be(1);
+            expect(componentNode.querySelectorAll(".insideRoute").length, "to be", 1);
             var hasId = TestUtils.React.findRenderedComponentWithType(component, HasId);
-            expect(hasId.props.id).to.be("12345");
+            expect(hasId.props.id, "to be", "12345");
         });
     });
 
@@ -66,12 +66,12 @@ describe("Route", () => {
             );
             componentNode = React.findDOMNode(component);
 
-            expect(window.location.hash).to.be("#test2");
+            expect(window.location.hash, "to be", "#test2");
 
             // jsdom doesn't seem to trigger the hashchange event, so do it manually.
             router.whenHashChange({newURL: window.location.href});
 
-            expect(componentNode.querySelectorAll("#test2").length).to.be(1);
+            expect(componentNode.querySelectorAll("#test2").length, "to be", 1);
         });
     });
 });

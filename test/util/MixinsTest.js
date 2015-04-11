@@ -1,4 +1,4 @@
-import expect from "expect.js";
+import expect from "unexpected";
 import sinon from "sinon";
 import Mixins from "../../src/util/Mixins";
 
@@ -11,7 +11,7 @@ describe("Mixins", () => {
 
         Mixins.add(context, [mixin]);
 
-        expect(context.test).to.be(mixin.test);
+        expect(context.test, "to be", mixin.test);
     });
 
     it("should merge React lifecycle methods with context.", () => {
@@ -26,8 +26,8 @@ describe("Mixins", () => {
         Mixins.add(context, [mixin]);
         context.componentWillUnmount();
 
-        expect(mixin.componentWillUnmount.called).to.be.ok();
-        expect(originalContextUnmount).to.be.ok();
+        expect(mixin.componentWillUnmount, "was called");
+        expect(originalContextUnmount, "was called");
     });
 
     it("should merge React lifecycle methods with multiple mixins.", () => {
@@ -42,7 +42,7 @@ describe("Mixins", () => {
         Mixins.add(context, [mixin1, mixin2]);
         context.componentWillUnmount();
 
-        expect(mixin1.componentWillUnmount.called).to.be.ok();
-        expect(mixin2.componentWillUnmount.called).to.be.ok();
+        expect(mixin1.componentWillUnmount, "was called");
+        expect(mixin2.componentWillUnmount, "was called");
     });
 });

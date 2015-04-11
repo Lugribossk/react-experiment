@@ -9,7 +9,7 @@ Experimenting with React and ES6.
 - Flux architecture inspired by Reflux.
 - ES6 syntax with Babel.
 - Building with Webpack.
-- Tests with Mocha and Jsdom.
+- Tests with Mocha, Unexpected, Sinon and Jsdom.
 - Code style with JSCS.
 - Linting with ESLint.
 

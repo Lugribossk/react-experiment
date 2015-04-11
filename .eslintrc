@@ -8,13 +8,27 @@
         "mocha": true,
         "es6": true
     },
+    "globals": {
+        "__filename": true
+    },
+    "plugins": [
+        "react"
+    ],
     "rules": {
         "no-underscore-dangle": 0,
         "eol-last": 0,
         "camelcase": 0,
-        "no-new": 0
-    },
-    "globals": {
-        "__filename": true
+        "no-new": 0,
+
+        "react/jsx-quotes": [2, "double"],
+        "react/jsx-no-undef": 2,
+        "react/jsx-uses-react": 2,
+        "react/jsx-uses-vars": 2,
+        "react/no-did-mount-set-state": 2,
+        "react/no-did-update-set-state": 2,
+        "react/no-unknown-property": 2,
+        "react/react-in-jsx-scope": 2,
+        "react/self-closing-comp": 2,
+        "react/wrap-multilines": 2
     }
 }
