@@ -39,14 +39,16 @@ export default class IntegrationTestList extends React.Component {
         }
         return _.map(builds, (build) => {
             var id = build.getId();
-            return <BuildStatus
-                key={"b" + id}
-                build={build}
-                builds={this.props.allBuilds}
-                testReport={this.props.testReports[id]}
-                failureData={this.props.failureData[id]}
-                subsets={this.props.subsets[id]}
-                now={this.state.now}/>;
+            return (
+                <BuildStatus
+                    key={"b" + id}
+                    build={build}
+                    builds={this.props.allBuilds}
+                    testReport={this.props.testReports[id]}
+                    failureData={this.props.failureData[id]}
+                    subsets={this.props.subsets[id]}
+                    now={this.state.now}/>
+            );
         });
     }
 
