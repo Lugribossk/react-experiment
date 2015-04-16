@@ -1,11 +1,7 @@
 import _ from "lodash";
 
-var singleton;
-
 /**
  * Hash fragment navigation router for the Route component.
- *
- * Router instance must be created before rendering any Route components.
  */
 export default class Router {
     /**
@@ -17,13 +13,11 @@ export default class Router {
         this.hash = "";
         this.parameters = {};
         this.defaultPath = null;
-        this.notFound = false;
+        this.currentHashNotMatched = false;
         this.window = win || window;
 
         this.window.addEventListener("hashchange", this.whenHashChange.bind(this));
         this.whenHashChange({newURL: this.window.location.href});
-
-        singleton = this;
     }
 
     /**
@@ -57,6 +51,19 @@ export default class Router {
     }
 
     /**
+     * Returns a function that calls #currentRouteMatches().
+     * A new function is returned on each call, meaning that it can be assigned to a component's state.
+     * This allows that component to have a "pure" render method, rather than it calling #currentRouteMatches()
+     * directly and thus needing to force update on route changes.
+     * @returns {Function}
+     */
+    getCurrentRouteMatcher() {
+        return (path) => {
+            return this.currentRouteMatches(path);
+        };
+    }
+
+    /**
      * Check whether the provided path is a part of the current route.
      * This is useful for marking links that lead to the current route as active.
      *
@@ -75,6 +82,13 @@ export default class Router {
         return isDefault || (isSubpath && nextIsSlash);
     }
 
+    /**
+     * Register a route.
+     * @param {Function} listener
+     * @param {String} path
+     * @param {Boolean} [defaultPath]
+     * @returns {Function}
+     */
     register(listener, path, defaultPath=false) {
         this.listeners.push(listener);
 
@@ -88,7 +102,7 @@ export default class Router {
             this.defaultPath = path;
         }
 
-        if (this.notFound) {
+        if (this.currentHashNotMatched) {
             this.whenHashChange({newURL: this.window.location.href});
         }
 
@@ -107,7 +121,7 @@ export default class Router {
 
     whenHashChange(event) {
         this.hash = event.newURL.split("#")[1] || "";
-        this.notFound = false;
+        this.currentHashNotMatched = false;
 
         var parameters;
         _.find(this.extractors, (extractor) => {
@@ -128,12 +142,23 @@ export default class Router {
             return;
         }
 
-        this.notFound = true;
+        this.currentHashNotMatched = true;
     }
 
+    /**
+     * Create function that extracts parameters from a path, if they exist.
+     * @param {String} path The path specifier, e.g. "documents/:id".
+     * @returns {Function} Function that when called with a path, returns an object
+     * with the extracted parameters, or null if it does not match.
+     */
     static createExtractor(path) {
-        var parameterNames = Router.getMatches(/:(\w+)(?:\/|$)/g, path);
-        var matchAndExtract = new RegExp("^" + path.replace(/\\/g, "\\/").replace(/(:\w+)/g, "(\\w+)") + "$");
+        // :id or :id?, followed by / or the end of the string.
+        var parameterNames = Router.getMatches(/:(\w+)\??(?:\/|$)/g, path);
+        // Construct a regex string that will extract the parameters.
+        var extractParameters = path.replace(/\\/g, "\\/")
+            .replace(/\/(:\w+\?)/g, "(?:\\/(\\w*))?")
+            .replace(/(:\w+)/g, "(\\w+)");
+        var matchAndExtract = new RegExp("^" + extractParameters + "$");
 
         return (possiblePath) => {
             var match = possiblePath.match(matchAndExtract);
@@ -145,13 +170,21 @@ export default class Router {
             for (var i = 0; i < parameterNames.length; i++) {
                 var name = parameterNames[i];
                 var value = match[i + 1];
-                parameters[name] = value;
+                if (value !== "") {
+                    parameters[name] = value;
+                }
             }
 
             return parameters;
         };
     }
 
+    /**
+     * Find all the matches for a regex in the specified string.
+     * @param {RegExp} regex
+     * @param {String} text
+     * @returns {String[]}
+     */
     static getMatches(regex, text) {
         if (!regex.global) {
             throw new Error("Regex must have global flag set");
@@ -162,17 +195,5 @@ export default class Router {
             out.push(match[1]);
         }
         return out;
-    }
-
-    static register(...args) {
-        return singleton.register(...args);
-    }
-
-    static getParameters(...args) {
-        return singleton.getParameters(...args);
-    }
-
-    static currentRouteMatches(...args) {
-        return singleton.currentRouteMatches(...args);
     }
 }

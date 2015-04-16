@@ -4,12 +4,9 @@ import Router from "../../src/flux/Router";
 
 describe("Router", () => {
     var mockWindow;
-    var hashChangeHandler;
     beforeEach(() => {
         mockWindow = {
-            addEventListener: (event, handler) => {
-                hashChangeHandler = handler;
-            },
+            addEventListener: sinon.spy(),
             location: {
                 href: "",
                 hash: ""
@@ -19,6 +16,7 @@ describe("Router", () => {
     var changeHash = (newHash) => {
         mockWindow.location.href = "http://example.com/#" + newHash;
         mockWindow.location.hash = newHash;
+        var hashChangeHandler = mockWindow.addEventListener.getCall(0).args[1];
         hashChangeHandler({newURL: mockWindow.location.href});
     };
 
@@ -64,6 +62,32 @@ describe("Router", () => {
                 expect(result, "to be ok");
                 expect(result.id, "to be", "12345");
                 expect(result.type, "to be", "demo");
+            });
+        });
+
+        describe("for path with optional parameter", () => {
+            it("should extract parameter when it exists.", () => {
+                var extractor = Router.createExtractor("test/:id?");
+                var result = extractor("test/12345");
+
+                expect(result, "to be ok");
+                expect(result.id, "to be", "12345");
+            });
+
+            it("should return result without parameter when it does not.", () => {
+                var extractor = Router.createExtractor("test/:id?");
+                var result = extractor("test/");
+
+                expect(result, "to be ok");
+                expect(result.id, "to be undefined");
+            });
+
+            it("should also have the slash be optional.", () => {
+                var extractor = Router.createExtractor("test/:id?");
+                var result = extractor("test");
+
+                expect(result, "to be ok");
+                expect(result.id, "to be undefined");
             });
         });
     });
