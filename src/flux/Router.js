@@ -155,9 +155,10 @@ export default class Router {
         // :id or :id?, followed by / or the end of the string.
         var parameterNames = Router.getMatches(/:(\w+)\??(?:\/|$)/g, path);
         // Construct a regex string that will extract the parameters.
+        var parameterChar = "[\\w\\%\\-]";
         var extractParameters = path.replace(/\\/g, "\\/")
-            .replace(/\/(:\w+\?)/g, "(?:\\/(\\w*))?")
-            .replace(/(:\w+)/g, "(\\w+)");
+            .replace(/\/(:\w+\?)/g, "(?:\\/(" + parameterChar + "*))?")
+            .replace(/(:\w+)/g, "(" + parameterChar + "+)");
         var matchAndExtract = new RegExp("^" + extractParameters + "$");
 
         return (possiblePath) => {
@@ -170,8 +171,8 @@ export default class Router {
             for (var i = 0; i < parameterNames.length; i++) {
                 var name = parameterNames[i];
                 var value = match[i + 1];
-                if (value !== "") {
-                    parameters[name] = value;
+                if (value !== "" && value !== undefined) {
+                    parameters[name] = decodeURIComponent(value);
                 }
             }
 
