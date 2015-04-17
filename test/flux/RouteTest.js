@@ -6,14 +6,14 @@ import TestUtils from "../TestUtils";
 
 class HasId extends React.Component {
     render() {
-        return <div className="insideRoute"></div>;
+        return <div className="insideRoute">{this.props.id}</div>;
     }
 }
 
 describe("Route", () => {
-    var router, component, componentNode;
+    var component, componentNode;
     beforeEach(() => {
-        router = new Router();
+        Route.prototype.router = new Router();
     });
 
     describe("child component", () => {
@@ -33,7 +33,7 @@ describe("Route", () => {
         });
 
         it("should be rendered if route matches.", () => {
-            router.whenHashChange({newURL: "blah#test"});
+            Route.getRouter().whenHashChange({newURL: "blah#test"});
 
             expect(componentNode.querySelectorAll("#route").length, "to be", 1);
         });
@@ -44,7 +44,7 @@ describe("Route", () => {
         });
 
         it("should set route parameters as props on child.", () => {
-            router.whenHashChange({newURL: "blah#hasid/12345"});
+            Route.getRouter().whenHashChange({newURL: "blah#hasid/12345"});
 
             expect(componentNode.querySelectorAll(".insideRoute").length, "to be", 1);
             var hasId = TestUtils.React.findRenderedComponentWithType(component, HasId);
@@ -69,7 +69,7 @@ describe("Route", () => {
             expect(window.location.hash, "to be", "#test2");
 
             // jsdom doesn't seem to trigger the hashchange event, so do it manually.
-            router.whenHashChange({newURL: window.location.href});
+            Route.getRouter().whenHashChange({newURL: window.location.href});
 
             expect(componentNode.querySelectorAll("#test2").length, "to be", 1);
         });

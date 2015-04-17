@@ -17,7 +17,7 @@ export default class Store {
     setState(newState) {
         _.assign(this.state, newState);
         _.forEach(newState, (value, key) => {
-            this._trigger(key, value);
+            this._trigger(key);
         });
     }
 
@@ -35,7 +35,7 @@ export default class Store {
         this.listeners[name].push(listener);
 
         return () => {
-            _.remove(this.listeners, (el) => {
+            _.remove(this.listeners[name], (el) => {
                 return el === listener;
             });
         };

@@ -148,7 +148,7 @@ module.exports = function (grunt) {
                 "test/testSetup"
             ]
         },
-        test: {
+        dev: {
             src: testSrc
         },
         ci: {
@@ -163,7 +163,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("coverage", "Generate test coverage report.", function () {
         var istanbulOptions = ["cover", "--root", "./src", "--dir", "./target/coverage", "./node_modules/mocha/bin/_mocha"];
-        var mochaOptions = ["--require", "babel-core/register", /*"--require", "./src/app/Application",*/ "--recursive", "./test"];
+        var mochaOptions = ["--require", "babel-core/register", "--require", "test/testSetup", "--recursive", "./test"];
 
         var done = this.async();
         grunt.util.spawn({
@@ -189,7 +189,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("dev", ["webpack-dev-server:start"]);
-    grunt.registerTask("test", ["eslint:dev", "jscs:dev", "mochaTest:test"]);
+    grunt.registerTask("test", ["eslint:dev", "jscs:dev", "mochaTest:dev"]);
     grunt.registerTask("build", ["clean:dist", "webpack:build"]);
 
     grunt.registerTask("ci", ["eslint:ci", "jscs:ci", "mochaTest:ci", "build"]);

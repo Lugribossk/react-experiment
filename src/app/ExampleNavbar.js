@@ -11,11 +11,18 @@ import SubscribeMixin from "../flux/SubscribeMixin";
 export default class ExampleNavbar extends React.Component {
     constructor(props) {
         super(props);
-        this.subscribe(this.props.router.onRouteChange(this.forceUpdate.bind(this)));
+        this.state = {
+            routeMatcher: this.props.router.getCurrentRouteMatcher()
+        };
+        this.subscribe(this.props.router.onRouteChange(this.whenRouteChanged.bind(this)));
+    }
+
+    whenRouteChanged() {
+        this.setState({routeMatcher: this.props.router.getCurrentRouteMatcher()});
     }
 
     isActive(link) {
-        return this.props.router.currentRouteMatches(link);
+        return this.state.routeMatcher(link);
     }
 
     render () {

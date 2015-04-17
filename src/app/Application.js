@@ -7,7 +7,6 @@ import CurrentUserStore from "../auth/CurrentUserStore";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import ExampleApi from "./ExampleApi";
-import Router from "../flux/Router";
 import Route from "../flux/Route";
 import Test2Page from "./Test2Page";
 
@@ -19,24 +18,23 @@ export default class Application extends React.Component {
         super(props);
         var api = new ExampleApi();
         this.currentUserStore = new CurrentUserStore(api);
-        this.router = new Router();
 
         this.state = {
             user: this.currentUserStore.getUser()
         };
 
-        this.subscribe(this.currentUserStore.onUserChange(this.onUserChange.bind(this)));
+        this.subscribe(this.currentUserStore.onUserChange(this.whenUserChanged.bind(this)));
     }
 
-    onUserChange(user) {
-        this.setState({user: user});
+    whenUserChanged() {
+        this.setState({user: this.currentUserStore.getUser()});
     }
 
-    render () {
+    render() {
         if (this.state.user) {
             return (
                 <div>
-                    <ExampleNavbar {...this.state.user} router={this.router} />
+                    <ExampleNavbar {...this.state.user} router={Route.getRouter()} />
                     <div className="container">
                         <Route path="test1">
                             <h1>Test 1</h1>
