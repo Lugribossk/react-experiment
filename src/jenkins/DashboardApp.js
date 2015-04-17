@@ -12,7 +12,6 @@ import UnstableStats from "./stats/UnstableStats";
 import JobActions from "./job/JobActions";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
-import Router from "../flux/Router";
 import Route from "../flux/Route";
 import NodeStore from "./node/NodeStore";
 import Nodes from "./node/Nodes";
@@ -32,7 +31,6 @@ export default class DashboardApp extends React.Component {
         this.userStore = new UserStore();
         this.queueStore = new QueueStore("integration-test-generic-build");
         this.nodeStore = new NodeStore("it");
-        this.router = new Router();
 
         this.currentUser = this.userStore.getCurrentUser();
 
@@ -58,7 +56,7 @@ export default class DashboardApp extends React.Component {
         this.subscribe(this.userStore.onCurrentUserChanged(this.whenCurrentUserChanged.bind(this)));
         this.subscribe(this.queueStore.onQueueChanged(this.whenQueueChanged.bind(this)));
         this.subscribe(this.nodeStore.onNodeCountChanged(this.whenNodeCountChanged.bind(this)));
-        this.subscribe(this.router.onRouteChange(this.forceUpdate.bind(this)));
+        this.subscribe(Route.getRouter().onRouteChange(this.forceUpdate.bind(this)));
 
         new JobService();
         new BuildService();
@@ -143,7 +141,7 @@ export default class DashboardApp extends React.Component {
                 <Route path="lastnight">
                     <IntegrationTestList builds={this.state.overnightBuilds} {...data}/>
                 </Route>
-                <Route path="search/:query">
+                <Route path="search/:query?">
                     <SearchableIntegrationTestList builds={this.state.allBuilds} {...data}/>
                 </Route>
                 <Route path="stats">
@@ -167,7 +165,7 @@ export default class DashboardApp extends React.Component {
             success: this.state.successBuilds.length,
             mine: this.state.myBuilds.length,
             totalNodes: this.state.totalNodes,
-            router: this.router
+            router: Route.getRouter()
         };
         return (
             <div>
