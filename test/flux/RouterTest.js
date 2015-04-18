@@ -20,7 +20,7 @@ describe("Router", () => {
         hashChangeHandler({newURL: mockWindow.location.href});
     };
 
-    describe("extractors", () => {
+    describe("extractor", () => {
         describe("for simple path", () => {
             it("should accept same path.", () => {
                 var extractor = Router.createExtractor("test");
@@ -82,12 +82,30 @@ describe("Router", () => {
                 expect(result.id, "to be undefined");
             });
 
-            it("should also have the slash be optional.", () => {
+            it("should have the slash be optional.", () => {
                 var extractor = Router.createExtractor("test/:id?");
                 var result = extractor("test");
 
                 expect(result, "to be ok");
                 expect(result.id, "to be undefined");
+            });
+        });
+
+        describe("parameters", () => {
+            it("should be decoded.", () => {
+                var extractor = Router.createExtractor("test/:id");
+                var result = extractor("test/12%263%2045");
+
+                expect(result, "to be ok");
+                expect(result.id, "to be", "12&3 45");
+            });
+
+            it("should include dashes.", () => {
+                var extractor = Router.createExtractor("test/:id");
+                var result = extractor("test/123-45");
+
+                expect(result, "to be ok");
+                expect(result.id, "to be", "123-45");
             });
         });
     });
