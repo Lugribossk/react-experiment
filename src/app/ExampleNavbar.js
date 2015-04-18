@@ -1,5 +1,5 @@
 import React from "react";
-import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap"
+import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap";
 import Gravatar from "../ui/Gravatar";
 import AuthActions from "../auth/AuthActions";
 import Mixins from "../util/Mixins";

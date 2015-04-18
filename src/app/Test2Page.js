@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 
 export default class Test2Page extends React.Component {
     render() {
