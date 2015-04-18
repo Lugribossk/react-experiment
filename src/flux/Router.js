@@ -171,7 +171,7 @@ export default class Router {
             for (var i = 0; i < parameterNames.length; i++) {
                 var name = parameterNames[i];
                 var value = match[i + 1];
-                if (value !== "" && value !== undefined) {
+                if (value) {
                     parameters[name] = decodeURIComponent(value);
                 }
             }
