@@ -1,7 +1,6 @@
 import React from "react/addons";
 import _ from "lodash";
-import moment from "moment";
-import {Panel, Table} from "react-bootstrap"
+import {Panel, Table} from "react-bootstrap";
 import Mixins from "../../util/Mixins";
 import SubscribeMixin from "../../flux/SubscribeMixin";
 import FlakyTestDetector from "./FlakyTestDetector";
@@ -37,8 +36,8 @@ export default class UnstableStats extends React.Component {
                 }
             });
         });
-        var failList = _.map(count, (count, name) => {
-            return {name: name, count: count};
+        var failList = _.map(count, (number, name) => {
+            return {name: name, count: number};
         });
         var sorted = failList.sort((a, b) => {
             var x = b.count - a.count;
@@ -115,8 +114,8 @@ export default class UnstableStats extends React.Component {
                 }
             }
         });
-        var failList = _.map(count, (count, name) => {
-            return {name: name, count: count};
+        var failList = _.map(count, (number, name) => {
+            return {name: name, count: number};
         });
         var sorted = failList.sort((a, b) => {
             var x = b.count - a.count;

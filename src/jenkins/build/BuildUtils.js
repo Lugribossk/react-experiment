@@ -135,4 +135,4 @@ export default {
     PR_PARAM_REPOS: PR_PARAM_REPOS,
 
     REPOS: REPOS
-}
+};

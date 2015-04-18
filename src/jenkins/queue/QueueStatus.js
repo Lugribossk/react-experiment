@@ -1,6 +1,5 @@
 import React from "react/addons";
-import _ from "lodash";
-import {Panel, ProgressBar, ModalTrigger, Button, Alert, Glyphicon} from "react-bootstrap";
+import {Panel, Button} from "react-bootstrap";
 import ParameterDetails from "../ui/ParameterDetails";
 import QueueActions from "./QueueActions";
 import Mixins from "../../util/Mixins";

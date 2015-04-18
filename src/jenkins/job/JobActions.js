@@ -26,4 +26,4 @@ export default {
      * @param {moment} olderThan
      */
     unkeepBuilds: new Action("jobUnkeepBuilds")
-}
+};

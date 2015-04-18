@@ -1,5 +1,4 @@
 import React from "react/addons";
-import _ from "lodash";
 import Mixins from "../../util/Mixins";
 
 export default class GithubLink extends React.Component {

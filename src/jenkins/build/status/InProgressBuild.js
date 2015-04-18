@@ -1,6 +1,6 @@
 import React from "react/addons";
 import _ from "lodash";
-import {ProgressBar} from "react-bootstrap"
+import {ProgressBar} from "react-bootstrap";
 import BuildUtils from "../BuildUtils";
 import ParameterDetails from "../../ui/ParameterDetails";
 import AbortButton from "./AbortButton";

@@ -1,6 +1,6 @@
 import React from "react/addons";
 import _ from "lodash";
-import {Input} from "react-bootstrap"
+import {Input} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 import BuildUtils from "./build/BuildUtils";
 import IntegrationTestList from "./IntegrationTestList";

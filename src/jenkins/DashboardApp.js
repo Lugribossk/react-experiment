@@ -9,7 +9,6 @@ import NotificationService from "./NotificationService";
 import IntegrationTestList from "./IntegrationTestList";
 import "bootstrap/dist/css/bootstrap.css";
 import UnstableStats from "./stats/UnstableStats";
-import JobActions from "./job/JobActions";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import Route from "../flux/Route";

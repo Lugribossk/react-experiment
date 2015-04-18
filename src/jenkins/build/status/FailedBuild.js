@@ -1,5 +1,4 @@
 import React from "react/addons";
-import _ from "lodash";
 import ParameterDetails from "../../ui/ParameterDetails";
 import RebuildButton from "./RebuildButton";
 import Mixins from "../../../util/Mixins";

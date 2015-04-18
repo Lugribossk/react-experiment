@@ -1,6 +1,5 @@
 import React from "react/addons";
-import _ from "lodash";
-import {Button, ModalTrigger} from "react-bootstrap"
+import {Button, ModalTrigger} from "react-bootstrap";
 import TriggerIntegrationTest from "../../TriggerIntegrationTest";
 import BuildUtils from "../BuildUtils";
 import Mixins from "../../../util/Mixins";

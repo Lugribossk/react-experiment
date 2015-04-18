@@ -1,6 +1,5 @@
 import React from "react/addons";
-import _ from "lodash";
-import {Panel, Button, Modal, ModalTrigger} from "react-bootstrap"
+import {Panel, Button, Modal, ModalTrigger} from "react-bootstrap";
 import JobActions from "../job/JobActions";
 import Mixins from "../../util/Mixins";
 

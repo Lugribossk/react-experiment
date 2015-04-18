@@ -1,13 +1,10 @@
 import _ from "lodash";
-import Promise from "bluebird";
 import moment from "moment";
 import request from "superagent-bluebird-promise";
-import CachingStore from "../../flux/CachingStore"
+import CachingStore from "../../flux/CachingStore";
 import Build from "../build/Build";
 import TestReport from "../build/TestReport";
 import FailureData from "../build/FailureData";
-import JobActions from "./JobActions";
-import BuildActions from "../build/BuildActions";
 
 /**
  * Store for the data from a single Jenkins build job.

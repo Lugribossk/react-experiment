@@ -1,5 +1,5 @@
 import React from "react/addons";
-import {Modal, Button, Input} from "react-bootstrap"
+import {Modal, Button, Input} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 import JobActions from "./job/JobActions";
 import BuildUtils from "./build/BuildUtils";

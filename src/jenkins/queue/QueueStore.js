@@ -1,6 +1,5 @@
 import _ from "lodash";
 import request from "superagent-bluebird-promise";
-import Promise from "bluebird";
 import CachingStore from "../../flux/CachingStore";
 import QueueItem from "./QueueItem";
 import QueueActions from "./QueueActions";

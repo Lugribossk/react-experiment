@@ -5,4 +5,4 @@ export default {
      * @param {Build} build
      */
     abort: new Action("buildAbort")
-}
+};
