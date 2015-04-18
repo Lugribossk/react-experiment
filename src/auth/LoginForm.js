@@ -1,6 +1,5 @@
 import React from "react/addons";
-import _ from "lodash";
-import {Input, Button, Alert, Glyphicon} from "react-bootstrap"
+import {Input, Button, Alert, Glyphicon} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import AuthActions from "../auth/AuthActions";

@@ -1,5 +1,4 @@
 import React from "react/addons";
-import _ from "lodash";
 import Router from "./Router";
 
 /**

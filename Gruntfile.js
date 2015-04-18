@@ -1,9 +1,9 @@
 /*global module, require, process*/
-module.exports = function (grunt) {
-    var webpack = require("webpack");
-    var HtmlWebpackPlugin = require("html-webpack-plugin");
-    var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpack = require("webpack");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+module.exports = function (grunt) {
     grunt.initConfig({});
 
     grunt.loadNpmTasks("grunt-webpack");

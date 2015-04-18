@@ -12,4 +12,4 @@ export default {
      * Log out.
      */
     logout: new Action("logout")
-}
+};

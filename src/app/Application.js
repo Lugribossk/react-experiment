@@ -1,8 +1,7 @@
 import React from "react";
-import Promise from "bluebird";
 import "bootstrap/dist/css/bootstrap.css";
-import ExampleNavbar from "./ExampleNavbar"
-import LoginForm from "../auth/LoginForm"
+import ExampleNavbar from "./ExampleNavbar";
+import LoginForm from "../auth/LoginForm";
 import CurrentUserStore from "../auth/CurrentUserStore";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
