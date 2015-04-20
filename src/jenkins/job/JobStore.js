@@ -5,6 +5,7 @@ import CachingStore from "../../flux/CachingStore";
 import Build from "../build/Build";
 import TestReport from "../build/TestReport";
 import FailureData from "../build/FailureData";
+import RequestPool from "../../util/RequestPool";
 
 /**
  * Store for the data from a single Jenkins build job.
@@ -27,6 +28,7 @@ export default class JobStore extends CachingStore {
         };
         this.pendingReports = {};
         this.pendingFailureData = {};
+        this.requestPool = new RequestPool(1);
 
         window["clearReports_" + name.replace(/-/g, "_")] = () => {
             this.setState({reports: {}, failureData: {}});
@@ -158,8 +160,8 @@ export default class JobStore extends CachingStore {
         }
         this.pendingReports[id] = true;
 
-        request.get("/job/" + this.name + "/" + id + "/testReport/api/json")
-            .query("tree=failCount,passCount,skipCount,suites[name,cases[name,status,stdout]]")
+        this.requestPool.add(request.get("/job/" + this.name + "/" + id + "/testReport/api/json")
+            .query("tree=failCount,passCount,skipCount,suites[name,cases[name,status,stdout]]"))
             .then((result) => {
                 if (result.body && result.body.suites) {
                     var report = new TestReport(result.body);
@@ -175,7 +177,7 @@ export default class JobStore extends CachingStore {
         }
         this.pendingFailureData[id] = true;
 
-        request.get("/job/" + this.name + "/" + id + "/consoleText")
+        this.requestPool.add(request.get("/job/" + this.name + "/" + id + "/consoleText"))
             .then((result) => {
                 var data = FailureData.fromConsoleOutput(result.text);
                 this.setState({failureData: _.assign({[id]: data}, this.state.failureData)});
