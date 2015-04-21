@@ -1,6 +1,7 @@
 import _ from "lodash";
 import Piecon from "piecon";
 import BuildUtils from "./build/BuildUtils";
+import Notification from "../util/browser/Notification.js";
 
 /**
  * Show notifications of build progress in the favicon and title.
