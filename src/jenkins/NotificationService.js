@@ -48,7 +48,7 @@ export default class NotificationService {
         var build = this.jobStore.getBuild(id);
         if (build.getUserId() === this.userId) {
             if (build.isSuccess()) {
-                new Notification("Build succesful!", {
+                new Notification("Build successful!", {
                     icon: "/static/19bcd89f/images/32x32/blue.png"
                 });
             } else if (build.isUnstable()) {
