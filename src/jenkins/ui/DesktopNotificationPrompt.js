@@ -17,7 +17,9 @@ export default class DesktopNotificationPrompt extends React.Component {
         return (
             <Alert bsStyle="info">
                 <p>
-                    Please enable desktop notifications <Button bsStyle="info" bsSize="small" onClick={this.showNotificationPrompt.bind(this)}>Enable</Button>
+                    {this.props.children} <Button bsStyle="info" bsSize="small" onClick={this.showNotificationPrompt.bind(this)}>
+                        Enable desktop notifications
+                    </Button>
                 </p>
             </Alert>
         );

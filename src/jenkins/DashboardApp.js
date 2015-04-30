@@ -170,7 +170,9 @@ export default class DashboardApp extends React.Component {
             <div>
                 <BuildsNavbar {...navbarProps} />
                 <div className="container">
-                    <DesktopNotificationPrompt />
+                    <DesktopNotificationPrompt>
+                        Be notified when your builds finish:
+                    </DesktopNotificationPrompt>
                     {this.renderRoute()}
                 </div>
             </div>
