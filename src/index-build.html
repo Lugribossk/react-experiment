@@ -4,10 +4,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <title>ITs</title>
-        <link rel="stylesheet" href="{%=o.webpack.assetsByChunkName.main[1]%}">
+        <link href="{%=o.webpack.assetsByChunkName.main[1]%}" rel="stylesheet">
     </head>
     <body>
-    <div id="main"></div>
+        <div id="main"></div>
         <script src="{%=o.webpack.assetsByChunkName.vendor%}"></script>
         <script src="{%=o.webpack.assetsByChunkName.main[0]%}"></script>
     </body>

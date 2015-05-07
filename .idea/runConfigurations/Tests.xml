@@ -4,7 +4,7 @@
     <working-directory>$PROJECT_DIR$</working-directory>
     <pass-parent-env>true</pass-parent-env>
     <envs />
-    <ui>BDD</ui>
+    <ui>bdd</ui>
     <extra-mocha-options>--require babel-core/register --require ./test/testSetup</extra-mocha-options>
     <test-directory>$PROJECT_DIR$/test</test-directory>
     <recursive>true</recursive>

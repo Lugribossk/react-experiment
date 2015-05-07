@@ -6,41 +6,39 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = function (grunt) {
     grunt.initConfig({});
 
+    var staticPath = "static/";
     grunt.loadNpmTasks("grunt-webpack");
     grunt.config.set("webpack", {
         build: {
             context: "src",
             entry: {
                 main: "./main.js",
-                vendor: ["bluebird", "lodash", "md5", "react", "react-bootstrap", "superagent"]
+                vendor: ["bluebird", "lodash", "md5", "react", "react-bootstrap", "superagent-bluebird-promise"]
             },
             output: {
                 path: "target/dist",
-                filename: "main-[chunkhash].min.js"
+                filename: staticPath + "main-[chunkhash].min.js"
             },
             module: {
                 loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: "babel"},
+                    { test: /\.js$/, exclude: /node_modules/, loader: "babel?optional=runtime"},
                     { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
-                    { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
-                    { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
-                    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-                    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" },
-                    { test: /\.(png|jpg)$/, loader: "url?limit=10000" }
+                    { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=" + staticPath + "[name]-[hash].[ext]" }
                 ]
             },
             plugins: [
                 new webpack.optimize.OccurenceOrderPlugin(),
-                new webpack.optimize.CommonsChunkPlugin("vendor", "vendor-[chunkhash].min.js"),
+                new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
                 new HtmlWebpackPlugin({
-                    template: "src/index-build.html"
+                    template: "src/index-build.html",
+                    gitHash: "blah"
                 }),
                 new webpack.DefinePlugin({
                     "process.env": {
                         NODE_ENV: JSON.stringify("production")
                     }
                 }),
-                new ExtractTextPlugin("main-[chunkhash].css"),
+                new ExtractTextPlugin(staticPath + "main-[chunkhash].css"),
                 new webpack.optimize.UglifyJsPlugin({
                     minimize: true,
                     comments: /a^/g, // Remove all comments
@@ -51,7 +49,8 @@ module.exports = function (grunt) {
             ],
             node: {
                 __filename: true
-            }
+            },
+            progress: false
         }
     });
 
@@ -70,7 +69,7 @@ module.exports = function (grunt) {
                 },
                 module: {
                     loaders: [
-                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?sourceMap=true"]},
+                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory=true"]},
                         { test: /\.css$/, loader: "style!css"},
                         { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
                         { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
@@ -98,8 +97,8 @@ module.exports = function (grunt) {
         start: {
             keepAlive: true,
             webpack: {
-                devtool: "eval",
-                debug: true
+                devtool: "cheap-eval-source-map"
+                //debug: true
             }
         }
     });

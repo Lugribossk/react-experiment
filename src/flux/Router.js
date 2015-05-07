@@ -1,4 +1,5 @@
 import _ from "lodash";
+import RegExps from "../util/RegExps";
 
 /**
  * Hash fragment navigation router for the Route component.
@@ -153,7 +154,7 @@ export default class Router {
      */
     static createExtractor(path) {
         // :id or :id?, followed by / or the end of the string.
-        var parameterNames = Router.getMatches(/:(\w+)\??(?:\/|$)/g, path);
+        var parameterNames = RegExps.getAllMatches(/:(\w+)\??(?:\/|$)/g, path);
         // Construct a regex string that will extract the parameters.
         var parameterChar = "[\\w\\%\\-]";
         var extractParameters = path.replace(/\\/g, "\\/")
@@ -178,23 +179,5 @@ export default class Router {
 
             return parameters;
         };
-    }
-
-    /**
-     * Find all the matches for a regex in the specified string.
-     * @param {RegExp} regex
-     * @param {String} text
-     * @returns {String[]}
-     */
-    static getMatches(regex, text) {
-        if (!regex.global) {
-            throw new Error("Regex must have global flag set");
-        }
-        var match;
-        var out = [];
-        while ((match = regex.exec(text)) !== null) {
-            out.push(match[1]);
-        }
-        return out;
     }
 }
