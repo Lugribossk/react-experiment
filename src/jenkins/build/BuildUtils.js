@@ -19,7 +19,6 @@ var IT_PARAM_REPOS = {
     AUDITSERVER_GIT_REF: "Audit-Server",
     WORKFLOW_GIT_REF: "Workflow",
     FINANCINGDD_GIT_REF: "Financing-DD", // different
-    C8_GIT_REF: "Financing-C8",
     BUSINESSEVENTSERVICE_GIT_REF: "BusinessEventHandler",
     LOCKING_GIT_REF: "Locking",
     EMAILINCOMING_GIT_REF: "Email-Incoming-Service",
@@ -44,7 +43,6 @@ var PR_PARAM_REPOS = {
     APP_TOOL_GIT_REF: "App-Tool",
     AUDITSERVER_GIT_REF: "Audit-Server",
     BUSINESSEVENTSERVICE_GIT_REF: "BusinessEventHandler",
-    C8_GIT_REF: "Financing-C8",
     LOCKING_GIT_REF: "Locking",
     EMAILINCOMING_GIT_REF: "Email-Incoming-Service"
 };
