@@ -30,8 +30,7 @@ module.exports = function (grunt) {
                 new webpack.optimize.OccurenceOrderPlugin(),
                 new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
                 new HtmlWebpackPlugin({
-                    template: "src/index-build.html",
-                    gitHash: "blah"
+                    template: "src/index-build.html"
                 }),
                 new webpack.DefinePlugin({
                     "process.env": {
@@ -71,11 +70,7 @@ module.exports = function (grunt) {
                     loaders: [
                         { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory=true"]},
                         { test: /\.css$/, loader: "style!css"},
-                        { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
-                        { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/octet-stream" },
-                        { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-                        { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=image/svg+xml" },
-                        { test: /\.(png|jpg)$/, loader: "url?limit=10000" }
+                        { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file" }
                     ]
                 },
                 plugins: [
