@@ -2,6 +2,7 @@
 import _ from "lodash";
 
 var loggers = {};
+var defaultLogLevel = (process.env.NODE_ENV === "production") ? 4 : 2;
 
 function noop() {}
 
@@ -18,12 +19,16 @@ export default class Logger {
             return loggers[name];
         }
         this.name = name;
+        this.setLogLevel(defaultLogLevel);
         loggers[name] = this;
+    }
 
+    setLogLevel(level) {
         _.forEach(["error", "warn", "info", "debug", "trace"], (method) => {
             // Binding their context to console ensures that they work just like calling directly on console, including correct line number reference.
-            // The console methods are apparently not instanceof Function in Node (what are they then...?).
-            if (typeof console !== "undefined" && console[method] instanceof Function) {
+            // Node.js doesn't have debug() and trace().
+            var methodExists = typeof console !== "undefined" && console[method];
+            if (methodExists && Logger.LogLevel[method.toLocaleUpperCase()] >= level) {
                 this[method] = Function.prototype.bind.call(console[method], console, "[" + this.name + "]");
             } else {
                 this[method] = noop;
@@ -46,4 +51,20 @@ export default class Logger {
             return filename;
         }
     }
+
+    static setLogLevelAll(level) {
+        defaultLogLevel = level;
+        _.forEach(loggers, (logger) => {
+            logger.setLogLevel(level);
+        });
+    }
 }
+
+Logger.LogLevel = {
+    TRACE: 1,
+    DEBUG: 2,
+    INFO: 3,
+    WARN: 4,
+    ERROR: 5,
+    OFF: 6
+};
