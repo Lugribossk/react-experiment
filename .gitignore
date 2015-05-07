@@ -1,11 +1,5 @@
-.idea/workspace.xml
-.idea/dataSources.*
-.idea/shelf
+.idea
+*.iml
 target
-logs
-*-create.sql
-*-drop.sql
-dependency-reduced-pom.xml
 node_modules
-bower_components
 npm-debug.log

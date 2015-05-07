@@ -112,6 +112,12 @@ module.exports = function (grunt) {
         dev: {
             src: src
         },
+        fix: {
+            options: {
+                fix: true
+            },
+            src: src
+        },
         ci: {
             options: {
                 reporter: "junit",
