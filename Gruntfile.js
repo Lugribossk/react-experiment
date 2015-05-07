@@ -163,7 +163,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("coverage", "Generate test coverage report.", function () {
         var istanbulOptions = ["cover", "--root", "./src", "--dir", "./target/coverage", "./node_modules/mocha/bin/_mocha"];
-        var mochaOptions = ["--require", "babel-core/register", "--require", "test/testSetup", "--recursive", "./test"];
+        var mochaOptions = ["--require", "babel-core/register", "--require", "test/testSetup", "--require", "test/loadUntestedFiles", "--recursive", "./test"];
 
         var done = this.async();
         grunt.util.spawn({
