@@ -17,7 +17,9 @@ module.exports = function (grunt) {
             },
             output: {
                 path: "target/dist",
-                filename: staticPath + "main-[chunkhash].min.js"
+                filename: staticPath + "main-[chunkhash].min.js",
+                // This is needed for the css file to have the right path to the fonts.
+                publicPath: "../"
             },
             module: {
                 loaders: [
@@ -27,6 +29,7 @@ module.exports = function (grunt) {
                 ]
             },
             plugins: [
+                // Keep the same module order between builds so the output file stays the same if there are no changes.
                 new webpack.optimize.OccurenceOrderPlugin(),
                 new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
                 new HtmlWebpackPlugin({
@@ -34,13 +37,15 @@ module.exports = function (grunt) {
                 }),
                 new webpack.DefinePlugin({
                     "process.env": {
+                        // Disable React's development checks.
                         NODE_ENV: JSON.stringify("production")
                     }
                 }),
-                new ExtractTextPlugin(staticPath + "main-[chunkhash].css"),
+                new ExtractTextPlugin(staticPath + "main-[contenthash].css"),
                 new webpack.optimize.UglifyJsPlugin({
                     minimize: true,
-                    comments: /a^/g, // Remove all comments
+                    // Remove all comments.
+                    comments: /a^/g,
                     compress: {
                         warnings: false
                     }
@@ -77,8 +82,7 @@ module.exports = function (grunt) {
                     new HtmlWebpackPlugin({
                         template: "src/index.html"
                     }),
-                    new webpack.HotModuleReplacementPlugin(),
-                    new webpack.NoErrorsPlugin()
+                    new webpack.HotModuleReplacementPlugin()
                 ],
                 node: {
                     __filename: true
