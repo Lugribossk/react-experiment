@@ -8,6 +8,7 @@ import SubscribeMixin from "../flux/SubscribeMixin";
 import ExampleApi from "./ExampleApi";
 import Route from "../flux/Route";
 import Test2Page from "./Test2Page";
+import TableExample from "./TableExample";
 
 /**
  * The example application itself.
@@ -30,13 +31,17 @@ export default class Application extends React.Component {
     }
 
     render() {
+        var tableData = [{name: "Test", email: "test@example.com"}, {name: "Atest", email: "blah@example.com"}, {name: "Xtest", email: "btest@example.com"}];
         if (this.state.user) {
             return (
                 <div>
                     <ExampleNavbar {...this.state.user} router={Route.getRouter()} />
                     <div className="container">
                         <Route path="test1">
-                            <h1>Test 1</h1>
+                            <div>
+                                <h1>Test 1</h1>
+                                <TableExample data={tableData} />
+                            </div>
                         </Route>
                         <Route path="test2/:id">
                             <Test2Page />
