@@ -1,5 +1,4 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
 import ExampleNavbar from "./ExampleNavbar";
 import LoginForm from "../auth/LoginForm";
 import CurrentUserStore from "../auth/CurrentUserStore";

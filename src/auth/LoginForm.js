@@ -3,6 +3,7 @@ import {Input, Button, Alert, Glyphicon} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import AuthActions from "../auth/AuthActions";
+import LaddaButton from "react-ladda";
 
 /**
  * Form for logging in with username and password.
@@ -13,7 +14,8 @@ export default class LoginForm extends React.Component {
         this.state = {
             username: "",
             password: "",
-            invalidLogin: false
+            invalidLogin: false,
+            loading: false
         };
 
         this.subscribe(this.props.userStore.onInvalidLogin(this.onInvalidLogin.bind(this)));
@@ -24,7 +26,7 @@ export default class LoginForm extends React.Component {
     }
 
     onInvalidLogin() {
-        this.setState({invalidLogin: true});
+        this.setState({invalidLogin: true, loading: false});
     }
 
     onSubmit(e) {
@@ -32,7 +34,7 @@ export default class LoginForm extends React.Component {
         if (!this.isValidInput()) {
             return;
         }
-        this.setState({invalidLogin: false});
+        this.setState({invalidLogin: false, loading: true});
         AuthActions.login(this.state.username, this.state.password);
     }
 
@@ -47,9 +49,11 @@ export default class LoginForm extends React.Component {
                     </Alert>
                 }
                 <span style={{float: "right"}}><a href="#resetpassword">Forgot your password?</a></span>
-                <Button bsStyle="primary" type="submit" disabled={!this.isValidInput()}>
-                    Log in
-                </Button>
+                <LaddaButton active={this.state.loading} style="zoom-out">
+                    <Button bsStyle="primary" type="submit" >
+                        <span className="ladda-label">Log in</span>
+                    </Button>
+                </LaddaButton>
             </form>
         );
     }
