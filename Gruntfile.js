@@ -1,7 +1,8 @@
 /*global module, require, process*/
 var webpack = require("webpack");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+var HtmlPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = function (grunt) {
     grunt.initConfig({});
@@ -32,7 +33,7 @@ module.exports = function (grunt) {
                 // Keep the same module order between builds so the output file stays the same if there are no changes.
                 new webpack.optimize.OccurenceOrderPlugin(),
                 new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
-                new HtmlWebpackPlugin({
+                new HtmlPlugin({
                     template: "src/index-build.html"
                 }),
                 new webpack.DefinePlugin({
@@ -49,7 +50,8 @@ module.exports = function (grunt) {
                     compress: {
                         warnings: false
                     }
-                })
+                }),
+                new CompressionPlugin()
             ],
             node: {
                 __filename: true
@@ -79,7 +81,7 @@ module.exports = function (grunt) {
                     ]
                 },
                 plugins: [
-                    new HtmlWebpackPlugin({
+                    new HtmlPlugin({
                         template: "src/index.html"
                     }),
                     new webpack.HotModuleReplacementPlugin()
