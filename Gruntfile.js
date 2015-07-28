@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                     loaders: [
                         { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory=true"]},
                         { test: /\.css$/, loader: "style!css"},
-                        { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file" }
+                        { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=[name]-[hash].[ext]" }
                     ]
                 },
                 plugins: [
@@ -96,7 +96,7 @@ module.exports = function (grunt) {
         start: {
             keepAlive: true,
             webpack: {
-                devtool: "cheap-eval-source-map"
+                devtool: "cheap-module-source-map"
                 //debug: true
             }
         }
