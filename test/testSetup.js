@@ -2,7 +2,6 @@
 import jsdom from "jsdom";
 import expect from "unexpected";
 import unexpectedSinon from "unexpected-sinon";
-import unexpectedPromise from "unexpected-promise";
 import sinon from "sinon";
 
 // Set up expected browser globals.
@@ -14,7 +13,6 @@ global.navigator = {
 
 // Set up Unexpected plugins (on the actual unexpected instance, so they show up when it is imported by other modules).
 expect.installPlugin(unexpectedSinon);
-expect.installPlugin(unexpectedPromise);
 
 // Automatically restore Sinon stubs after tests end.
 var oldWrap = sinon.wrapMethod;

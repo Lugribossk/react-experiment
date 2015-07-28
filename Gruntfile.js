@@ -1,7 +1,8 @@
 /*global module, require, process*/
 var webpack = require("webpack");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+var HtmlPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = function (grunt) {
     grunt.initConfig({});
@@ -23,7 +24,7 @@ module.exports = function (grunt) {
             },
             module: {
                 loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: "babel?optional=runtime"},
+                    { test: /\.js$/, exclude: /node_modules/, loader: "babel?cacheDirectory&optional[]=runtime"},
                     { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
                     { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=" + staticPath + "[name]-[hash].[ext]" }
                 ]
@@ -32,7 +33,7 @@ module.exports = function (grunt) {
                 // Keep the same module order between builds so the output file stays the same if there are no changes.
                 new webpack.optimize.OccurenceOrderPlugin(),
                 new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
-                new HtmlWebpackPlugin({
+                new HtmlPlugin({
                     template: "src/index-build.html"
                 }),
                 new webpack.DefinePlugin({
@@ -49,7 +50,8 @@ module.exports = function (grunt) {
                     compress: {
                         warnings: false
                     }
-                })
+                }),
+                new CompressionPlugin()
             ],
             node: {
                 __filename: true
@@ -73,13 +75,13 @@ module.exports = function (grunt) {
                 },
                 module: {
                     loaders: [
-                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory=true"]},
+                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory&optional[]=true"]},
                         { test: /\.css$/, loader: "style!css"},
                         { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=[name]-[hash].[ext]" }
                     ]
                 },
                 plugins: [
-                    new HtmlWebpackPlugin({
+                    new HtmlPlugin({
                         template: "src/index.html"
                     }),
                     new webpack.HotModuleReplacementPlugin()
