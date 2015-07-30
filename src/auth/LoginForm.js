@@ -1,5 +1,5 @@
 import React from "react/addons";
-import {Input, Button, Alert, Glyphicon} from "react-bootstrap";
+import {Input, Alert, Glyphicon} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
 import AuthActions from "../auth/AuthActions";
@@ -49,10 +49,8 @@ export default class LoginForm extends React.Component {
                     </Alert>
                 }
                 <span style={{float: "right"}}><a href="#resetpassword">Forgot your password?</a></span>
-                <LaddaButton active={this.state.loading} buttonStyle="zoom-out">
-                    <Button bsStyle="primary" type="submit" >
-                        <span className="ladda-label">Log in</span>
-                    </Button>
+                <LaddaButton loading={this.state.loading} buttonStyle="zoom-out" className="btn btn-primary" type="submit">
+                    Log in
                 </LaddaButton>
             </form>
         );
