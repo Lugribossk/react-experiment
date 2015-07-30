@@ -24,7 +24,7 @@ export default class Logger {
     }
 
     setLogLevel(level) {
-        _.forEach(["error", "warn", "info", "debug", "trace"], (method) => {
+        _.forEach(["error", "warn", "info", "debug", "trace"], method => {
             // Binding their context to console ensures that they work just like calling directly on console, including correct line number reference.
             // Node.js doesn't have debug() and trace().
             var methodExists = typeof console !== "undefined" && console[method];
@@ -54,7 +54,7 @@ export default class Logger {
 
     static setLogLevelAll(level) {
         defaultLogLevel = level;
-        _.forEach(loggers, (logger) => {
+        _.forEach(loggers, logger => {
             logger.setLogLevel(level);
         });
     }

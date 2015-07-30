@@ -34,7 +34,7 @@ export default class Store {
         this.listeners[name].push(listener);
 
         return () => {
-            _.remove(this.listeners[name], (el) => {
+            _.remove(this.listeners[name], el => {
                 return el === listener;
             });
         };
@@ -48,7 +48,7 @@ export default class Store {
      */
     _trigger(name, ...data) {
         if (this.listeners[name]) {
-            _.forEach(this.listeners[name], (listener) => {
+            _.forEach(this.listeners[name], listener => {
                 listener.apply(null, data);
             });
         }

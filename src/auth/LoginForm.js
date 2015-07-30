@@ -49,7 +49,7 @@ export default class LoginForm extends React.Component {
                     </Alert>
                 }
                 <span style={{float: "right"}}><a href="#resetpassword">Forgot your password?</a></span>
-                <LaddaButton active={this.state.loading} style="zoom-out">
+                <LaddaButton active={this.state.loading} buttonStyle="zoom-out">
                     <Button bsStyle="primary" type="submit" >
                         <span className="ladda-label">Log in</span>
                     </Button>

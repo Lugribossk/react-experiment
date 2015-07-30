@@ -8,8 +8,8 @@ describe("Logger", () => {
         Logger.setLogLevelAll(Logger.LogLevel.DEBUG);
     });
 
-    describe("info()", function () {
-        it("should print name and arguments with console.info by default.", function () {
+    describe("info()", () => {
+        it("should print name and arguments with console.info by default.", () => {
             sinon.stub(console, "info");
             var log = new Logger("test1");
             var obj = {};
@@ -19,7 +19,7 @@ describe("Logger", () => {
             expect(console.info, "was called with", "[test1]", "blah", obj);
         });
 
-        it("should not print anything when level is WARN.", function () {
+        it("should not print anything when level is WARN.", () => {
             sinon.stub(console, "info");
             var log = new Logger("test2");
 
@@ -30,8 +30,8 @@ describe("Logger", () => {
         });
     });
 
-    describe("warn()", function () {
-        it("should print name and arguments with console.warn by default.", function () {
+    describe("warn()", () => {
+        it("should print name and arguments with console.warn by default.", () => {
             sinon.stub(console, "warn");
             var log = new Logger("test3");
             var obj = {};
@@ -41,7 +41,7 @@ describe("Logger", () => {
             expect(console.warn, "was called with", "[test3]", "blah", obj);
         });
 
-        it("should not print anything when level is ERROR.", function () {
+        it("should not print anything when level is ERROR.", () => {
             sinon.stub(console, "warn");
             var log = new Logger("test4");
 
@@ -52,8 +52,8 @@ describe("Logger", () => {
         });
     });
 
-    describe("error()", function () {
-        it("error should print name and arguments with console.error by default.", function () {
+    describe("error()", () => {
+        it("error should print name and arguments with console.error by default.", () => {
             sinon.stub(console, "error");
             var log = new Logger("test5");
             var obj = {};
@@ -63,7 +63,7 @@ describe("Logger", () => {
             expect(console.error, "was called with", "[test5]", "blah", obj);
         });
 
-        it("should not print anything when level is OFF.", function () {
+        it("should not print anything when level is OFF.", () => {
             sinon.stub(console, "error");
             var log = new Logger("test6");
 
@@ -74,7 +74,7 @@ describe("Logger", () => {
         });
     });
 
-    describe("debug()", function () {
+    describe("debug()", () => {
         beforeEach(() => {
             console.debug = sinon.spy();
         });
@@ -82,7 +82,7 @@ describe("Logger", () => {
             delete console.debug;
         });
 
-        it("debug should print name and arguments with console.debug by default.", function () {
+        it("debug should print name and arguments with console.debug by default.", () => {
             var log = new Logger("test7");
             var obj = {};
 
@@ -91,7 +91,7 @@ describe("Logger", () => {
             expect(console.debug, "was called with", "[test7]", "blah", obj);
         });
 
-        it("should not print anything when level is INFO.", function () {
+        it("should not print anything when level is INFO.", () => {
             var log = new Logger("test8");
 
             log.setLogLevel(Logger.LogLevel.INFO);
@@ -101,7 +101,7 @@ describe("Logger", () => {
         });
     });
 
-    describe("trace()", function () {
+    describe("trace()", () => {
         beforeEach(() => {
             console.trace = sinon.spy();
         });
@@ -109,7 +109,7 @@ describe("Logger", () => {
             delete console.trace;
         });
 
-        it("should not print anything by default.", function () {
+        it("should not print anything by default.", () => {
             var log = new Logger("test9");
 
             log.trace("blah");
@@ -117,7 +117,7 @@ describe("Logger", () => {
             expect(console.trace, "was not called");
         });
 
-        it("should print name and arguments with console.trace when level is TRACE.", function () {
+        it("should print name and arguments with console.trace when level is TRACE.", () => {
             var log = new Logger("test10");
             var obj = {};
 
@@ -164,7 +164,7 @@ describe("Logger", () => {
         });
     });
 
-    it("constructor should return previously created instance with same name.", function () {
+    it("constructor should return previously created instance with same name.", () => {
         var log1 = new Logger("test11");
         var log2 = new Logger("test11");
 

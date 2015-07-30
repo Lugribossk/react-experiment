@@ -24,7 +24,7 @@ sinon.wrapMethod = function (...args) {
     if (!afterSetup) {
         // Delay setting up afterEach since it is not yet defined when this module is run.
         afterEach(() => {
-            wrappeds.forEach((wrapped) => {
+            wrappeds.forEach(wrapped => {
                 wrapped.restore();
             });
             wrappeds = [];

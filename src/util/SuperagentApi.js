@@ -4,14 +4,14 @@ import request from "superagent-bluebird-promise";
 var Request = request.Request;
 
 Request.prototype.as = function (Klass) {
-    return this.then((data) => {
+    return this.then(data => {
         return new Klass(data.body);
     });
 };
 
 Request.prototype.asList = function (Klass) {
-    return this.then((data) => {
-        return _.map(data.body, (item) => {
+    return this.then(data => {
+        return _.map(data.body, item => {
             return new Klass(item);
         });
     });

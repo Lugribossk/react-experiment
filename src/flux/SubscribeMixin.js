@@ -12,7 +12,7 @@ export default {
     },
 
     componentWillUnmount() {
-        _.forEach(this.unsubscribers, (unsubscriber) => {
+        _.forEach(this.unsubscribers, unsubscriber => {
             unsubscriber();
         });
     }

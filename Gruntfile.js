@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                 },
                 module: {
                     loaders: [
-                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory&optional[]=true"]},
+                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory&optional[]=runtime"]},
                         { test: /\.css$/, loader: "style!css"},
                         { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=[name]-[hash].[ext]" }
                     ]
