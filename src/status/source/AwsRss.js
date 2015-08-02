@@ -1,9 +1,10 @@
 import _ from "lodash";
 import request from "superagent-bluebird-promise";
+import Source from "./Source";
 
 request.Request.prototype.jsonp = function (name = "callback") {
     this.callbackQueryName = name;
-    this.callbackFunctionName = "superagentCallback" + new Date().valueOf() + parseInt(Math.random() * 1000);
+    this.callbackFunctionName = "superagentCallback" + new Date().valueOf() + _.parseInt(Math.random() * 1000);
     window[this.callbackFunctionName] = data => {
         delete window[this.callbackFunctionName];
         document.getElementsByTagName("head")[0].removeChild(this.scriptElement);
@@ -32,10 +33,10 @@ request.Request.prototype.end = function (callback) {
     return this;
 };
 
-export default class AwsRss {
-    constructor(title, id) {
-        this.title = title;
-        this.id = id;
+export default class AwsRss extends Source {
+    constructor(data) {
+        super(data);
+        this.id = data.id;
     }
 
     getRequest() {
@@ -81,3 +82,5 @@ export default class AwsRss {
         });
     }
 }
+
+AwsRss.type = "aws";

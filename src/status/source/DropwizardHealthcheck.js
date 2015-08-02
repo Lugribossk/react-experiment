@@ -1,11 +1,12 @@
 import _ from "lodash";
 import request from "superagent-bluebird-promise";
+import Source from "./Source";
 
 // Cross-Origin-Resource-Sharing must be set up for the healthcheck endpoint
-export default class DropwizardHealthCheck {
-    constructor(title, hostname) {
-        this.title = title;
-        this.hostname = hostname;
+export default class DropwizardHealthCheck extends Source {
+    constructor(data) {
+        super(data);
+        this.hostname = data.hostname;
     }
 
     getRequest() {
@@ -47,3 +48,5 @@ export default class DropwizardHealthCheck {
         });
     }
 }
+
+DropwizardHealthCheck.type = "dropwizard";

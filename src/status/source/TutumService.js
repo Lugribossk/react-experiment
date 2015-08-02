@@ -1,12 +1,13 @@
 import request from "superagent-bluebird-promise";
+import Source from "./Source";
 
 // https://docs.tutum.co/v2/api/?http#service
-export default class TutumService {
-    constructor(title, id, username, apiKey) {
-        this.title = title;
-        this.id = id;
-        this.username = username;
-        this.apiKey = apiKey;
+export default class TutumService extends Source {
+    constructor(data) {
+        super(data);
+        this.id = data.id;
+        this.username = data.username;
+        this.apiKey = data.apiKey;
     }
 
     getRequest() {
@@ -62,3 +63,5 @@ export default class TutumService {
         });
     }
 }
+
+TutumService.type = "tutum-service";

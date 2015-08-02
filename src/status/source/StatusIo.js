@@ -1,11 +1,12 @@
 import _ from "lodash";
 import request from "superagent-bluebird-promise";
+import Source from "./Source";
 
-export default class StatusIo {
-    constructor(title, link, id) {
-        this.title = title;
-        this.link = link;
-        this.id = id;
+export default class StatusIo extends Source {
+    constructor(data) {
+        super(data);
+        this.link = data.link;
+        this.id = data.id;
     }
 
     getRequest() {
@@ -59,3 +60,5 @@ export default class StatusIo {
         });
     }
 }
+
+StatusIo.type = "statusio";

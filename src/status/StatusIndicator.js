@@ -2,7 +2,7 @@ import React from "react";
 import _ from "lodash";
 import {Alert} from "react-bootstrap";
 
-export default class Indicator extends React.Component {
+export default class StatusIndicator extends React.Component {
     renderMessage(message) {
         return (
             <div key={message.name + message.detailName}>

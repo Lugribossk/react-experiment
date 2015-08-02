@@ -1,0 +1,20 @@
+{
+    "sources": [{
+        "type": "statusio",
+        "title": "Tutum",
+        "link": "http://status.tutum.co",
+        "id": "536beeeafd254d60080002ae"
+    }, {
+        "type": "aws",
+        "title": "CloudFront",
+        "id": "cloudfront"
+    }, {
+        "type": "aws",
+        "title": "EC2 US East",
+        "id": "ec2-us-east-1"
+    }, {
+        "type": "dropwizard",
+        "title": "Production - Healthcheck",
+        "hostname": "http://localhost:9090"
+    }]
+}
