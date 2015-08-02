@@ -2,17 +2,10 @@ import _ from "lodash";
 import request from "superagent-bluebird-promise";
 import Store from "../flux/Store";
 import Logger from "../util/Logger";
+import Message from "./source/Message";
+import SOURCE_TYPES from "./source/SourceTypes";
 
 var log = new Logger(__filename);
-
-// Register all Source subclasses so they can be instantiated from the configuration.
-import AwsRss from "./source/AwsRss";
-import DropwizardHealthcheck from "./source/DropwizardHealthcheck";
-import Message from "./source/Message";
-import StatusCode from "./source/StatusCode";
-import StatusIo from "./source/StatusIo";
-import TutumService from "./source/TutumService";
-var sourceTypes = [AwsRss, DropwizardHealthcheck, Message, StatusCode, StatusIo, TutumService];
 
 export default class ConfigurationStore extends Store {
     constructor() {
@@ -33,7 +26,7 @@ export default class ConfigurationStore extends Store {
     }
 
     _createSource(config) {
-        var SourceType = _.find(sourceTypes, sourceType => sourceType.type === config.type);
+        var SourceType = _.findWhere(SOURCE_TYPES, {type: config.type});
         if (!SourceType) {
             var err = "Unknown source type '" + config.type + "' in configuration.";
             log.error(err);
