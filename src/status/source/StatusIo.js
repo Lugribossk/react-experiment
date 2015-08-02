@@ -11,7 +11,7 @@ export default class StatusIo {
     getRequest() {
         return request.get("https://api.status.io/1.0/status/" + this.id)
             .promise()
-            .catch(() => null);
+            .catch(e => e);
     }
 
     getStatus() {

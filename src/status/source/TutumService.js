@@ -1,6 +1,6 @@
-import _ from "lodash";
 import request from "superagent-bluebird-promise";
 
+// https://docs.tutum.co/v2/api/?http#service
 export default class TutumService {
     constructor(title, id, username, apiKey) {
         this.title = title;
@@ -25,17 +25,21 @@ export default class TutumService {
                 status = "danger";
                 message = "No response from API";
             } else {
-                var state = response.body.state;
+                var data = response.body;
+                var state = data.state;
+
                 if (state === "Redeploying") {
                     status = "info";
                     message = "Redeploying"; // TODO get tag info from image_tag endpoint
+
                 } else if (state === "Scaling") {
                     status = "info";
-                    var target = response.body.target_num_containers;
-                    var current = response.body.current_num_containers;
+                    var target = data.target_num_containers;
+                    var current = data.current_num_containers;
                     message = "Scaling from " + current + " containers to " + target + ".";
+
                 } else if (state === "Running") {
-                    if (!response.body.synchronized) {
+                    if (!data.synchronized) {
                         status = "warning";
                         message = "Service definition not synchronized with containers.";
                     } else {
