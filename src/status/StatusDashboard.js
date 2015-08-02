@@ -1,8 +1,9 @@
 import React from "react";
 import _ from "lodash";
+import Mixins from "../util/Mixins";
+import ConfigurationStore from "./ConfigurationStore";
 import StatusStore from "./StatusStore";
 import StatusIndicator from "./StatusIndicator";
-import ConfigurationStore from "./ConfigurationStore";
 
 export default class StatusDashboard extends React.Component {
     constructor(props) {
@@ -25,3 +26,5 @@ export default class StatusDashboard extends React.Component {
         );
     }
 }
+
+Mixins.add(StatusDashboard.prototype, [React.addons.PureRenderMixin]);

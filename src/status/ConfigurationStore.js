@@ -5,11 +5,14 @@ import Logger from "../util/Logger";
 
 var log = new Logger(__filename);
 
-import StatusIo from "./source/StatusIo";
+// Register all Source subclasses so they can be instantiated from the configuration.
 import AwsRss from "./source/AwsRss";
 import DropwizardHealthcheck from "./source/DropwizardHealthcheck";
+import Message from "./source/Message";
+import StatusCode from "./source/StatusCode";
+import StatusIo from "./source/StatusIo";
 import TutumService from "./source/TutumService";
-var sourceTypes = [AwsRss, DropwizardHealthcheck, StatusIo, TutumService];
+var sourceTypes = [AwsRss, DropwizardHealthcheck, Message, StatusCode, StatusIo, TutumService];
 
 export default class ConfigurationStore extends Store {
     constructor() {
@@ -30,23 +33,24 @@ export default class ConfigurationStore extends Store {
     }
 
     _createSource(config) {
-        var source = null;
-        _.forEach(sourceTypes, SourceType => {
-            if (SourceType.type === config.type) {
-                source = new SourceType(config);
-            }
-        });
-        if (!source) {
-            log.error("Unknown source type '" + config.type + "'");
+        var SourceType = _.find(sourceTypes, sourceType => sourceType.type === config.type);
+        if (!SourceType) {
+            var err = "Unknown source type '" + config.type + "' in configuration.";
+            log.error(err);
+            return new Message({
+                title: config.title,
+                status: "warning",
+                message: err
+            });
         }
-        return source;
+        return new SourceType(config);
     }
 
     _fetchConfig() {
         request.get("config.json")
             .promise()
             .catch(e => {
-                log.error("config.json not found, it must be located in the same folder as index.html");
+                log.error("config.json not found, it must be located in the same folder as index.html.", e);
                 throw e;
             })
             .then(response => {

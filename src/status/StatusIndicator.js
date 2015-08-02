@@ -1,5 +1,6 @@
-import React from "react";
+import React from "react/addons";
 import _ from "lodash";
+import Mixins from "../util/Mixins";
 import {Alert} from "react-bootstrap";
 
 export default class StatusIndicator extends React.Component {
@@ -27,3 +28,5 @@ export default class StatusIndicator extends React.Component {
         );
     }
 }
+
+Mixins.add(StatusIndicator.prototype, [React.addons.PureRenderMixin]);
