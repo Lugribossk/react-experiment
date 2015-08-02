@@ -6,11 +6,11 @@ import Source from "./Source";
 export default class DropwizardHealthCheck extends Source {
     constructor(data) {
         super(data);
-        this.hostname = data.hostname;
+        this.adminPath = data.adminPath;
     }
 
     getRequest() {
-        return request.get(this.hostname + "/admin/healthcheck")
+        return request.get(this.adminPath + "/healthcheck")
             .promise()
             .catch(e => e);
     }
@@ -41,7 +41,7 @@ export default class DropwizardHealthCheck extends Source {
 
             return {
                 title: this.title,
-                link: this.hostname + "/admin/healthcheck?pretty=true",
+                link: this.adminPath + "/healthcheck?pretty=true",
                 status: status,
                 messages: messages
             };

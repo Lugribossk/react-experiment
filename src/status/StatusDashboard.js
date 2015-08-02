@@ -26,11 +26,11 @@ export default class StatusDashboard extends React.Component {
 
     updateFavicon() {
         var color = "#5cb85c";
-        if (_.find(this.state.statuses, status => status.status === "danger")) {
+        if (_.findWhere(this.state.statuses, {status: "danger"})) {
             color = "#d9534f";
-        } else if (_.find(this.state.statuses, status => status.status === "warning")) {
+        } else if (_.findWhere(this.state.statuses, {status: "warning"})) {
             color = "#f0ad4e";
-        } else if (_.find(this.state.statuses, status => status.status === "info")) {
+        } else if (_.findWhere(this.state.statuses, {status: "info"})) {
             color = "#5bc0de";
         }
 

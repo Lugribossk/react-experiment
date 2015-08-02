@@ -30,7 +30,7 @@ export default class StatusCode extends Source {
                     link: this.link,
                     status: "danger",
                     messages: [{
-                        message: "Resposne had status code " + response.status
+                        message: "Response had status code " + response.status
                     }]
                 };
             });
