@@ -3,6 +3,11 @@ import Promise from "bluebird";
 export default class Source {
     constructor(data) {
         this.title = data.title;
+        this.interval = data.interval || 60;
+    }
+
+    getInterval() {
+        return this.interval;
     }
 
     getStatus() {

@@ -1,5 +1,4 @@
 import _ from "lodash";
-import Promise from "bluebird";
 import Store from "../flux/Store";
 
 export default class StatusStore extends Store {
@@ -18,6 +17,8 @@ export default class StatusStore extends Store {
             });
             this._fetchStatuses();
         });
+
+        this.intervals = [];
     }
 
     onStatusChanged(listener) {
@@ -41,13 +42,22 @@ export default class StatusStore extends Store {
     }
 
     _fetchStatuses() {
-        Promise.all(_.map(this.state.sources, (source, index) => {
-            return source.getStatus()
-                .then(status => {
-                    var statuses = _.slice(this.state.statuses);
-                    statuses[index] = status;
-                    this.setState({statuses: statuses});
-                });
-        }));
+        _.forEach(this.intervals, interval => window.clearInterval(interval));
+        this.intervals = [];
+
+        _.forEach(this.state.sources, (source, index) => {
+            var getSourceStatus = () => {
+                return source.getStatus()
+                    .then(status => {
+                        var statuses = _.slice(this.state.statuses);
+                        statuses[index] = status;
+                        this.setState({statuses: statuses});
+                    });
+            };
+
+            this.intervals.push(window.setInterval(getSourceStatus, source.getInterval() * 1000));
+
+            getSourceStatus();
+        });
     }
 }

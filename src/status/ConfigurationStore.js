@@ -8,11 +8,12 @@ import SOURCE_TYPES from "./source/SourceTypes";
 var log = new Logger(__filename);
 
 export default class ConfigurationStore extends Store {
-    constructor() {
+    constructor(configFile = "config.json") {
         super();
         this.state = {
             sources: []
         };
+        this.configFile = configFile;
 
         this._fetchConfig();
     }
@@ -40,10 +41,10 @@ export default class ConfigurationStore extends Store {
     }
 
     _fetchConfig() {
-        request.get("config.json")
+        request.get(this.configFile)
             .promise()
             .catch(e => {
-                log.error("config.json not found, it must be located in the same folder as index.html.", e);
+                log.error("Configuration file '" + this.configFile + "' not found.", e);
                 throw e;
             })
             .then(response => {

@@ -1,15 +1,16 @@
 import React from "react";
 import _ from "lodash";
+import Piecon from "piecon";
 import Mixins from "../util/Mixins";
 import ConfigurationStore from "./ConfigurationStore";
 import StatusStore from "./StatusStore";
 import StatusIndicator from "./StatusIndicator";
-import Piecon from "piecon";
+import UrlParameters from "../util/UrlParameters";
 
 export default class StatusDashboard extends React.Component {
     constructor(props) {
         super(props);
-        this.configStore = new ConfigurationStore();
+        this.configStore = new ConfigurationStore(UrlParameters.fromQuery().config);
         this.statusStore = new StatusStore(this.configStore);
 
         this.state = {
@@ -41,10 +42,16 @@ export default class StatusDashboard extends React.Component {
         });
     }
 
+    renderStatus(status) {
+        return (
+            <StatusIndicator key={status.title} {...status} />
+        );
+    }
+
     render() {
         return (
             <div className="container-fluid">
-                {_.map(this.state.statuses, status => <StatusIndicator key={status.title} {...status} />)}
+                {_.map(this.state.statuses, status => this.renderStatus(status))}
             </div>
         );
     }

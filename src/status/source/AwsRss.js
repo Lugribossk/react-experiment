@@ -37,6 +37,7 @@ export default class AwsRss extends Source {
     constructor(data) {
         super(data);
         this.id = data.id;
+        this.interval = data.interval || 600;
     }
 
     getRequest() {
