@@ -26,6 +26,7 @@ module.exports = function (grunt) {
                 loaders: [
                     { test: /\.js$/, exclude: /node_modules/, loader: "babel?cacheDirectory&optional[]=runtime"},
                     { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
+                    { test: /\.less$/, loader: ExtractTextPlugin.extract("style", "css", "less")},
                     { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=" + staticPath + "[name]-[hash].[ext]" }
                 ]
             },
@@ -77,6 +78,7 @@ module.exports = function (grunt) {
                     loaders: [
                         { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory&optional[]=runtime"]},
                         { test: /\.css$/, loader: "style!css"},
+                        { test: /\.less$/, loader: "style!css!less"},
                         { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=[name]-[hash].[ext]" }
                     ]
                 },

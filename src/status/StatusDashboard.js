@@ -6,6 +6,8 @@ import ConfigurationStore from "./ConfigurationStore";
 import StatusStore from "./StatusStore";
 import StatusIndicator from "./StatusIndicator";
 import UrlParameters from "../util/UrlParameters";
+import AppVersion from "../util/AppVersion";
+import PasswordPrompt from "./PasswordPrompt";
 
 export default class StatusDashboard extends React.Component {
     constructor(props) {
@@ -23,6 +25,7 @@ export default class StatusDashboard extends React.Component {
         });
 
         this.updateFavicon();
+        AppVersion.reloadImmediatelyOnChange();
     }
 
     updateFavicon() {
@@ -42,16 +45,12 @@ export default class StatusDashboard extends React.Component {
         });
     }
 
-    renderStatus(status) {
-        return (
-            <StatusIndicator key={status.title} {...status} />
-        );
-    }
-
     render() {
         return (
-            <div className="container-fluid">
-                {_.map(this.state.statuses, status => this.renderStatus(status))}
+            <div className="flex-container">
+                {_.map(this.state.statuses, status => <StatusIndicator key={status.title} {...status} />)}
+
+                <PasswordPrompt configStore={this.configStore} />
             </div>
         );
     }

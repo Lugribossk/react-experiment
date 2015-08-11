@@ -1,13 +1,14 @@
+import Promise from "bluebird";
 import request from "superagent-bluebird-promise";
 import Source from "./Source";
 
 // https://docs.tutum.co/v2/api/?http#service
 export default class TutumService extends Source {
-    constructor(data) {
+    constructor(data, util) {
         super(data);
         this.id = data.id;
         this.username = data.username;
-        this.apiKey = data.apiKey;
+        this.apiKey = util.decrypt(data.apiKey);
     }
 
     getRequest() {
@@ -18,6 +19,16 @@ export default class TutumService extends Source {
     }
 
     getStatus() {
+        if (!this.apiKey) {
+            return Promise.resolve({
+                title: this.title,
+                status: "warning",
+                messages: [{
+                    message: "API key not configured."
+                }]
+            });
+        }
+
         return this.getRequest().then(response => {
             var status = null;
             var message = "";
@@ -54,7 +65,7 @@ export default class TutumService extends Source {
 
             return {
                 title: this.title,
-                link: "https://dashboard.tutum.co/container/service/show/" + this.is + "/",
+                link: "https://dashboard.tutum.co/container/service/show/" + this.id + "/",
                 status: status,
                 messages: [{
                     message: message

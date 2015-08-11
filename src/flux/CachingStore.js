@@ -14,7 +14,7 @@ export default class CachingStore extends Store {
         this.storageKey = storageKey;
         this.window = win || window;
 
-        this.window.addEventListener("unload", this.saveToLocalStorage.bind(this));
+        this.window.addEventListener("unload", () => this.saveToLocalStorage());
     }
 
     saveToLocalStorage() {

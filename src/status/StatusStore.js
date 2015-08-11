@@ -10,7 +10,7 @@ export default class StatusStore extends Store {
             statuses: []
         };
 
-        this.configStore.onSourcesChanged(() => {
+        this.configStore.onChanged(() => {
             this.setState({
                 sources: this.configStore.getSources(),
                 statuses: this._createInitialStatuses(this.configStore.getSources())
