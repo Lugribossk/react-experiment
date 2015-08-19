@@ -14,7 +14,7 @@ export default class TableExample extends React.Component {
         var data = [{name: "Test", email: "test@example.com"}, {name: "Atest", email: "blah@example.com"}, {name: "Xtest", email: "btest@example.com"}, {name: "abc", email: "sdfsdfs"}];
 
         return (
-            <SortableTable headers={headers} data={data} />
+            <SortableTable headers={headers} data={data} csvName="example" />
         );
     }
 }

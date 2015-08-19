@@ -9,7 +9,9 @@ export default class CsvGenerator {
 
     fromTableData(headers, data) {
         this.lines = _.map(data, item => {
-            return _.map(headers, header => item[header.key]);
+            return _.map(headers, header => {
+                return header.getValue ? header.getValue(item) : item[header.key];
+            });
         });
 
         this.lines.unshift(_.map(headers, header => header.label));
