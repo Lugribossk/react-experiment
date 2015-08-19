@@ -43,25 +43,25 @@ describe("AppVersion", () => {
     });
 
     describe("checkVersion() should get potential new version from AJAX loading the page again,", () => {
-        it("and resolve with true if it is different.", (done) => {
+        it("and resolve with true if it is different.", done => {
             mockRequestGet("NEW");
 
             var version = new AppVersion(mockWindow);
 
             version.checkVersion()
-                .then((changed) => {
+                .then(changed => {
                     expect(changed, "to be true");
                     done();
                 });
         });
 
-        it("and resolve with false if it is the same.", (done) => {
+        it("and resolve with false if it is the same.", done => {
             mockRequestGet("12345");
 
             var version = new AppVersion(mockWindow);
 
             version.checkVersion()
-                .then((changed) => {
+                .then(changed => {
                     expect(changed, "to be false");
                     done();
                 });
@@ -69,7 +69,7 @@ describe("AppVersion", () => {
     });
 
     describe("reloadRoutedOnChange()", () => {
-        it("should reload on route change after version change.", (done) => {
+        it("should reload on route change after version change.", done => {
             mockRequestGet("NEW");
             var mockRouter = {
                 onRouteChange: sinon.spy()

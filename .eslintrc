@@ -21,6 +21,11 @@
         "camelcase": 0,
         "no-new": 0,
 
+        "no-throw-literal": 2,
+        "constructor-super": 2,
+        "no-this-before-super": 2,
+        "object-shorthand": [2, "methods"],
+
         "react/jsx-quotes": [2, "double"],
         "react/jsx-no-undef": 2,
         "react/jsx-uses-react": 2,

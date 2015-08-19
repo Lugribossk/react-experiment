@@ -29,7 +29,7 @@ export default class Router {
     onRouteChange(listener) {
         this.listeners.push(listener);
         return () => {
-            _.remove(this.listeners, (el) => {
+            _.remove(this.listeners, el => {
                 return el === listener;
             });
         };
@@ -59,7 +59,7 @@ export default class Router {
      * @returns {Function}
      */
     getCurrentRouteMatcher() {
-        return (path) => {
+        return path => {
             return this.currentRouteMatches(path);
         };
     }
@@ -108,10 +108,10 @@ export default class Router {
         }
 
         return () => {
-            _.remove(this.listeners, (el) => {
+            _.remove(this.listeners, el => {
                 return el === listener;
             });
-            _.remove(this.extractors, (el) => {
+            _.remove(this.extractors, el => {
                 return el === extractor;
             });
             if (defaultPath) {
@@ -125,14 +125,14 @@ export default class Router {
         this.currentHashNotMatched = false;
 
         var parameters;
-        _.find(this.extractors, (extractor) => {
+        _.find(this.extractors, extractor => {
             parameters = extractor(this.hash);
             return !!parameters;
         });
 
         if (parameters) {
             this.parameters = parameters;
-            _.forEach(this.listeners, (listener) => {
+            _.forEach(this.listeners, listener => {
                 listener();
             });
             return;
@@ -162,7 +162,7 @@ export default class Router {
             .replace(/(:\w+)/g, "(" + parameterChar + "+)");
         var matchAndExtract = new RegExp("^" + extractParameters + "$");
 
-        return (possiblePath) => {
+        return possiblePath => {
             var match = possiblePath.match(matchAndExtract);
             if (!match) {
                 return null;

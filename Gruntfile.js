@@ -1,7 +1,8 @@
 /*global module, require, process*/
 var webpack = require("webpack");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+var HtmlPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = function (grunt) {
     grunt.initConfig({});
@@ -17,34 +18,40 @@ module.exports = function (grunt) {
             },
             output: {
                 path: "target/dist",
-                filename: staticPath + "main-[chunkhash].min.js"
+                filename: staticPath + "main-[chunkhash].min.js",
+                // This is needed for the css file to have the right path to the fonts.
+                publicPath: "../"
             },
             module: {
                 loaders: [
-                    { test: /\.js$/, exclude: /node_modules/, loader: "babel?optional=runtime"},
+                    { test: /\.js$/, exclude: /node_modules/, loader: "babel?cacheDirectory&optional[]=runtime"},
                     { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css")},
                     { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=" + staticPath + "[name]-[hash].[ext]" }
                 ]
             },
             plugins: [
+                // Keep the same module order between builds so the output file stays the same if there are no changes.
                 new webpack.optimize.OccurenceOrderPlugin(),
                 new webpack.optimize.CommonsChunkPlugin("vendor", staticPath + "vendor-[chunkhash].min.js"),
-                new HtmlWebpackPlugin({
+                new HtmlPlugin({
                     template: "src/index-build.html"
                 }),
                 new webpack.DefinePlugin({
                     "process.env": {
+                        // Disable React's development checks.
                         NODE_ENV: JSON.stringify("production")
                     }
                 }),
-                new ExtractTextPlugin(staticPath + "main-[chunkhash].css"),
+                new ExtractTextPlugin(staticPath + "main-[contenthash].css"),
                 new webpack.optimize.UglifyJsPlugin({
                     minimize: true,
-                    comments: /a^/g, // Remove all comments
+                    // Remove all comments.
+                    comments: /a^/g,
                     compress: {
                         warnings: false
                     }
-                })
+                }),
+                new CompressionPlugin()
             ],
             node: {
                 __filename: true
@@ -68,17 +75,16 @@ module.exports = function (grunt) {
                 },
                 module: {
                     loaders: [
-                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory=true"]},
+                        { test: /\.js$/, exclude: /node_modules/, loaders: ["react-hot", "babel?cacheDirectory&optional[]=runtime"]},
                         { test: /\.css$/, loader: "style!css"},
-                        { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file" }
+                        { test: /\.(png|jpg|woff2?|ttf|eot|svg)$/, loader: "file?name=[name]-[hash].[ext]" }
                     ]
                 },
                 plugins: [
-                    new HtmlWebpackPlugin({
+                    new HtmlPlugin({
                         template: "src/index.html"
                     }),
-                    new webpack.HotModuleReplacementPlugin(),
-                    new webpack.NoErrorsPlugin()
+                    new webpack.HotModuleReplacementPlugin()
                 ],
                 node: {
                     __filename: true
@@ -92,7 +98,7 @@ module.exports = function (grunt) {
         start: {
             keepAlive: true,
             webpack: {
-                devtool: "cheap-eval-source-map"
+                devtool: "cheap-module-source-map"
                 //debug: true
             }
         }

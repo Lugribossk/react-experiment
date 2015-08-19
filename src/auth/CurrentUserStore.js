@@ -118,7 +118,7 @@ export default class CurrentUserStore extends CachingStore {
                 //console.info("Login failed with username", username, err);
                 this._trigger("invalidLogin");
             })
-            .then((accessToken) => {
+            .then(accessToken => {
                 this.setState({accessToken: accessToken});
                 return accessToken;
             });
@@ -127,11 +127,11 @@ export default class CurrentUserStore extends CachingStore {
     _fetchCurrentUser() {
         return this.api.get("/users/current")
             .as(User)
-            .then((user) => {
+            .then(user => {
                 log.info("Logged in as", user.username);
                 this.setState({user: user});
             })
-            .catch((err) => {
+            .catch(err => {
                 log.error("Unable to get current user:", err);
                 this.setState({
                     user: null,

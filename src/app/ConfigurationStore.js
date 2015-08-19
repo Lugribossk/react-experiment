@@ -21,7 +21,7 @@ export default class ConfigurationStore extends Store {
 
     update() {
         this.api.get("/configurations/client")
-            .then((config) => {
+            .then(config => {
                 this.setState({config: config});
             });
     }

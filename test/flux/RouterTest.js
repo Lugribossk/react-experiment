@@ -13,7 +13,7 @@ describe("Router", () => {
             }
         };
     });
-    var changeHash = (newHash) => {
+    var changeHash = newHash => {
         mockWindow.location.href = "http://example.com/#" + newHash;
         mockWindow.location.hash = newHash;
         var hashChangeHandler = mockWindow.addEventListener.getCall(0).args[1];

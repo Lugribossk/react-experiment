@@ -19,7 +19,7 @@ export default class Action {
 
         var me = this;
         function triggerAction(...args) {
-            _.forEach(me.listeners, (listener) => {
+            _.forEach(me.listeners, listener => {
                 listener.apply(null, args);
             });
         }
@@ -40,7 +40,7 @@ export default class Action {
     onDispatch(listener) {
         this.listeners.push(listener);
         return () => {
-            _.remove(this.listeners, (el) => {
+            _.remove(this.listeners, el => {
                 return el === listener;
             });
         };

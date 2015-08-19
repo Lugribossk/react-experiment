@@ -5,7 +5,7 @@ import Mixins from "../../src/util/Mixins";
 describe("Mixins", () => {
     it("should copy methods from mixin to context.", () => {
         var mixin = {
-            test: function () {}
+            test() {}
         };
         var context = {};
 

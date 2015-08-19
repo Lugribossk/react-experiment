@@ -16,12 +16,12 @@ export default class AppVersion {
         this.linkSrcs = [];
         this.scriptSrcs = [];
 
-        _.forEach(this.window.document.querySelectorAll("link"), (link) => {
+        _.forEach(this.window.document.querySelectorAll("link"), link => {
             if (link.href) {
                 this.linkSrcs.push(link.href.substr(link.href.lastIndexOf("/") + 1));
             }
         });
-        _.forEach(this.window.document.querySelectorAll("script"), (script) => {
+        _.forEach(this.window.document.querySelectorAll("script"), script => {
             if (script.src) {
                 this.scriptSrcs.push(script.src.substr(script.src.lastIndexOf("/") + 1));
             }
@@ -40,15 +40,15 @@ export default class AppVersion {
 
     checkVersion() {
         return request.get("")
-            .then((data) => {
+            .then(data => {
                 var changed = false;
 
-                _.forEach(RegExps.getAllMatches(/<link href=".*?\/(.*?)"/g, data.text), (name) => {
+                _.forEach(RegExps.getAllMatches(/<link href=".*?\/(.*?)"/g, data.text), name => {
                     if (!_.contains(this.linkSrcs, name)) {
                         changed = true;
                     }
                 });
-                _.forEach(RegExps.getAllMatches(/<script src=".*?\/(.*?)"/g, data.text), (name) => {
+                _.forEach(RegExps.getAllMatches(/<script src=".*?\/(.*?)"/g, data.text), name => {
                     if (!_.contains(this.scriptSrcs, name)) {
                         changed = true;
                     }
@@ -56,7 +56,7 @@ export default class AppVersion {
 
                 if (changed) {
                     log.info("Version change detected.");
-                    _.forEach(this.listeners, (listener) => {
+                    _.forEach(this.listeners, listener => {
                         listener();
                     });
                 }

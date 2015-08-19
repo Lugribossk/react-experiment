@@ -55,7 +55,7 @@ export default class CachingStore extends Store {
         if (!list) {
             return [];
         }
-        return _.map(list, (item) => {
+        return _.map(list, item => {
             return new Klass(item);
         });
     }
