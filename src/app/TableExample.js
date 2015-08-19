@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 import SortableTable from "../ui/SortableTable";
 
 export default class TableExample extends React.Component {
