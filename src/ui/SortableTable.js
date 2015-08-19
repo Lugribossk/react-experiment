@@ -1,72 +1,79 @@
 import React from "react/addons";
 import _ from "lodash";
-import {Table, Glyphicon, Input} from "react-bootstrap";
+import {Table, Glyphicon} from "react-bootstrap";
 import Mixins from "../util/Mixins";
-import SubscribeMixin from "../flux/SubscribeMixin";
 
 export default class SortableTable extends React.Component {
-    constructor(props, initialSortKey, searchEnabled) {
+    constructor(props) {
         super(props);
-        this.state = {
-            sortKey: initialSortKey,
-            sortAscending: true,
-            searchEnabled: !!searchEnabled,
-            searchQuery: ""
-        };
-    }
-
-    getRows() {
-        var data = this.props.data;
-        return _.sortByOrder(data, [this.state.sortKey], [this.state.sortAscending]);
-    }
-
-    renderHeader(label, key, type = "attributes") {
-        var changeSorting = () => {
-            if (this.state.sortKey === key) {
-                this.setState({sortAscending: !this.state.sortAscending});
-            } else {
-                this.setState({sortKey: key});
-            }
-        };
-
-        var sortIcon = null;
-        if (this.state.sortKey === key) {
-            sortIcon = (
-                <Glyphicon style={{float: "right"}}
-                           glyph={"sort-by-" + type + (this.state.sortAscending ? "" : "-alt")} />
-            );
+        var sortKey = this.props.initialSortKey;
+        if (!sortKey) {
+            sortKey = this.props.headers[0].key;
         }
 
-        return (
-            <th key={label}
-                style={{"-webkitUserSelect": "none", cursor: "pointer"}}
-                onClick={changeSorting}>
-                {label}
-                {sortIcon}
-            </th>
-        );
+        this.state = {
+            sortKey: sortKey,
+            sortAscending: true
+        };
     }
 
-    renderRow() {}
+    renderHeaders() {
+        return _.map(this.props.headers, header => {
+            var changeSorting = () => {
+                if (this.state.sortKey === header.key) {
+                    this.setState({sortAscending: !this.state.sortAscending});
+                } else {
+                    this.setState({sortKey: header.key});
+                }
+            };
 
-    renderHeaders() {}
+            var sortIcon = null;
+            var sortType = header.type || "attributes";
+            if (this.state.sortKey === header.key) {
+                sortIcon = (
+                    <Glyphicon glyph={"sort-by-" + sortType + (this.state.sortAscending ? "" : "-alt")} />
+                );
+            } else {
+                sortIcon = <Glyphicon glyph="cog" style={{visibility: "hidden"}} />;
+            }
+
+            return (
+                <th key={header.key}>
+                    <span onClick={changeSorting} style={{WebkitUserSelect: "none", cursor: "pointer"}}>
+                        {header.label} {sortIcon}
+                    </span>
+                </th>
+            );
+        });
+    }
+
+    renderRows() {
+        var sortedRows = _.sortByOrder(this.props.data, [this.state.sortKey], [this.state.sortAscending]);
+
+        return _.map(sortedRows, row => {
+            return (
+                <tr key={row.id || row[this.props.headers[0].key]}>
+                    {_.map(this.props.headers, header => {
+                        return (
+                            <td key={header.key}>
+                                {row[header.key]}
+                            </td>
+                        );
+                    })}
+                </tr>
+            );
+        });
+    }
 
     render() {
         return (
             <div>
-                {this.state.searchEnabled &&
-                    <Input type="text"
-                           placeholder="Search"
-                           addonBefore={<Glyphicon glyph="search" />}
-                           valueLink={this.linkState("searchQuery")} />}
-                <Table striped bordered {...this.props}>
+                <Table striped hover>
                     <thead>
                         {this.renderHeaders()}
                     </thead>
                     <tbody>
-                        {_.map(this.getRows(), (row) => {
-                            return this.renderRow(row, this.state.searchQuery);
-                        })}
+                        {this.renderRows()}
                     </tbody>
                 </Table>
             </div>
@@ -74,8 +81,9 @@ export default class SortableTable extends React.Component {
     }
 }
 
-Mixins.add(SortableTable.prototype, [React.addons.LinkedStateMixin, SubscribeMixin]);
+Mixins.add(SortableTable.prototype, [React.addons.PureRenderMixin]);
 
 SortableTable.propTypes = {
-    data: React.PropTypes.any.isRequired
+    data: React.PropTypes.array.isRequired,
+    headers: React.PropTypes.array.isRequired
 };
