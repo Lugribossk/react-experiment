@@ -9,14 +9,14 @@ export default class StatusIo extends Source {
         this.id = data.id;
     }
 
-    getRequest() {
+    fetchData() {
         return request.get("https://api.status.io/1.0/status/" + this.id)
             .promise()
             .catch(e => e);
     }
 
     getStatus() {
-        return this.getRequest().then(response => {
+        return this.fetchData().then(response => {
             var status = "success";
             var messages = [];
 

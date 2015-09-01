@@ -8,14 +8,14 @@ export default class StatusCode extends Source {
         this.link = data.link || data.url;
     }
 
-    getRequest() {
+    fetchData() {
         return request.get(this.url)
             .promise()
             .catch(e => e);
     }
 
     getStatus() {
-        return this.getRequest()
+        return this.fetchData()
             .then(() => {
                 return {
                     title: this.title,

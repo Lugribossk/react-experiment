@@ -45,7 +45,7 @@ export default class StatusIndicator extends React.Component {
         return (
             <Alert bsStyle={this.props.status} className="flex-item">
                 <h1 className="text-center">
-                    <a href={this.props.link} target="_blank" style={{color: "inherit"}}>
+                    <a href={this.props.link} target="_blank">
                         {this.props.title}
                     </a>
                 </h1>

@@ -1,13 +1,15 @@
 import _ from "lodash";
+import {OrderedMap} from "immutable";
 import Store from "../flux/Store";
 
 export default class StatusStore extends Store {
     constructor(configStore) {
         super();
         this.configStore = configStore;
+        this.intervals = [];
         this.state = {
             sources: this.configStore.getSources(),
-            statuses: []
+            statuses: new OrderedMap()
         };
 
         this.configStore.onChanged(() => {
@@ -15,10 +17,8 @@ export default class StatusStore extends Store {
                 sources: this.configStore.getSources(),
                 statuses: this._createInitialStatuses(this.configStore.getSources())
             });
-            this._fetchStatuses();
+            this._setupStatusFetching();
         });
-
-        this.intervals = [];
     }
 
     onStatusChanged(listener) {
@@ -26,38 +26,45 @@ export default class StatusStore extends Store {
     }
 
     getStatuses() {
-        return this.state.statuses;
+        return _.flatten(this.state.statuses.toArray());
     }
 
     _createInitialStatuses(sources) {
-        return _.map(sources, source => {
-            return {
-                title: source.title,
-                status: "info",
-                messages: [{
-                    message: "Waiting for first status..."
-                }]
-            };
+        return new OrderedMap().withMutations(map => {
+            _.forEach(sources, source => {
+                map.set(source, [{
+                    title: source.title,
+                    status: "info",
+                    messages: [{
+                        message: "Waiting for first status..."
+                    }]
+                }]);
+            });
         });
     }
 
-    _fetchStatuses() {
+    _setupStatusFetching() {
         _.forEach(this.intervals, interval => window.clearInterval(interval));
         this.intervals = [];
 
-        _.forEach(this.state.sources, (source, index) => {
-            var getSourceStatus = () => {
+        _.forEach(this.state.sources, source => {
+            var fetchStatus = () => {
                 return source.getStatus()
                     .then(status => {
-                        var statuses = _.slice(this.state.statuses);
-                        statuses[index] = status;
-                        this.setState({statuses: statuses});
+                        if (!this.state.statuses.get(source)) {
+                            // This must have been in progress when the source was removed.
+                            return;
+                        }
+                        if (!_.isArray(status)) {
+                            status = [status];
+                        }
+
+                        this.setState({statuses: this.state.statuses.set(source, status)});
                     });
             };
 
-            this.intervals.push(window.setInterval(getSourceStatus, source.getInterval() * 1000));
-
-            getSourceStatus();
+            this.intervals.push(window.setInterval(fetchStatus, source.getInterval() * 1000));
+            fetchStatus();
         });
     }
 }

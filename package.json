@@ -6,6 +6,7 @@
     "bluebird": "2.9.34",
     "bootstrap": "3.3.5",
     "bootswatch": "3.3.5",
+    "immutable": "3.7.4",
     "ladda": "0.9.8",
     "lodash": "3.10.0",
     "md5": "1.0.0",

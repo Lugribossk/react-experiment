@@ -9,14 +9,14 @@ export default class DropwizardHealthCheck extends Source {
         this.adminPath = data.adminPath;
     }
 
-    getRequest() {
+    fetchData() {
         return request.get(this.adminPath + "/healthcheck")
             .promise()
             .catch(e => e);
     }
 
     getStatus() {
-        return this.getRequest().then(response => {
+        return this.fetchData().then(response => {
             var status = "success";
             var messages = [];
 

@@ -11,7 +11,7 @@ export default class TutumService extends Source {
         this.apiKey = util.decrypt(data.apiKey);
     }
 
-    getRequest() {
+    fetchData() {
         return request.get("https://dashboard.tutum.co/api/v1/service/" + this.id + "/")
             .set("Authorization", "ApiKey " + this.username + ":" + this.apiKey)
             .promise()
@@ -29,7 +29,7 @@ export default class TutumService extends Source {
             });
         }
 
-        return this.getRequest().then(response => {
+        return this.fetchData().then(response => {
             var status = null;
             var message = "";
 
