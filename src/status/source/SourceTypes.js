@@ -1,5 +1,6 @@
 import AwsRss from "./AwsRss";
 import DropwizardHealthcheck from "./DropwizardHealthcheck";
+import GithubBranches from "./GithubBranches";
 import Message from "./Message";
 import StatusCode from "./StatusCode";
 import StatusIo from "./StatusIo";
@@ -11,6 +12,7 @@ import VsoBuild from "./VsoBuild";
 export default [
     AwsRss,
     DropwizardHealthcheck,
+    GithubBranches,
     Message,
     StatusCode,
     StatusIo,

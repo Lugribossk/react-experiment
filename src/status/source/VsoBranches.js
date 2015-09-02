@@ -51,7 +51,7 @@ export default class VsoBranches extends VsoBase {
                     link: this.getBaseUrl() + this.project + "/_build",
                     status: "danger",
                     messages: [{
-                        message: "No response from API"
+                        message: "Unable to determine status"
                     }]
                 };
             });

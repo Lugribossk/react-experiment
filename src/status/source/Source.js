@@ -1,4 +1,5 @@
 import Promise from "bluebird";
+import moment from "moment";
 
 export default class Source {
     constructor(data) {
@@ -19,7 +20,11 @@ export default class Source {
                 name: "Example",
                 detailName: "Example",
                 message: "Example"
-            }]
+            }],
+            progress: {
+                percent: () => 50,
+                remaining: () => moment.duration(5, "minutes")
+            }
         });
     }
 }
