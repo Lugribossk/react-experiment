@@ -18,7 +18,7 @@ export default class CachingStore extends Store {
     }
 
     saveToLocalStorage() {
-        this.window.localStorage.setItem(this.storageKey, JSON.stringify(this.state));
+        this.window.localStorage.setItem(this.storageKey, JSON.stringify(this.marshalState()));
     }
 
     /**
@@ -34,6 +34,10 @@ export default class CachingStore extends Store {
         } else {
             return null;
         }
+    }
+
+    marshalState() {
+        return this.state;
     }
 
     /**
