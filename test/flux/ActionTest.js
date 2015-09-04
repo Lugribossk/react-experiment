@@ -35,6 +35,6 @@ describe("Action", () => {
 
         action2("test");
 
-        expect(listener, "was called with", "test");
+        expect(listener, "was called with", "blah");
     });
 });
