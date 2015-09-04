@@ -2,6 +2,7 @@ import _ from "lodash";
 import moment from "moment";
 import request from "superagent-bluebird-promise";
 import Source from "./Source";
+import BuildUtils from "../BuildUtils";
 
 export default class VsoBase extends Source {
     constructor(data, util) {
@@ -53,9 +54,11 @@ export default class VsoBase extends Source {
                 status = "info";
                 message = "Build in progress";
 
+                var start = moment(build.startTime);
+                var avg = BuildUtils.getAverageDuration(this.getDurations(builds, branchName));
                 progress = {
-                    percent: now => this.getEstimatedPercentComplete(now, build, builds, branchName),
-                    remaining: now => this.getEstimatedTimeRemaining(now, build, builds, branchName)
+                    percent: now => BuildUtils.getEstimatedPercentComplete(now, start, avg),
+                    remaining: now => BuildUtils.getEstimatedTimeRemaining(now, start, avg)
                 };
             } else {
                 if (build.result === "partiallySucceeded") {
@@ -85,57 +88,21 @@ export default class VsoBase extends Source {
         };
     }
 
-    getEstimatedTimeRemaining(now, build, builds, branchName) {
-        var average = this.getAverageBuildDuration(builds, branchName);
-        if (!average) {
-            return null;
-        }
-
-        return average.subtract(now.diff(moment(build.startTime)));
-    }
-
-    getEstimatedPercentComplete(now, build, builds, branchName) {
-        var average = this.getAverageBuildDuration(builds, branchName);
-        if (!average) {
-            return 0;
-        }
-
-        var start = moment(build.startTime);
-        var timeSpent = moment.duration(now.diff(start));
-        return Math.min(Math.ceil(timeSpent.asSeconds() / average.asSeconds() * 100), 100);
-    }
-
-    getAverageBuildDuration(builds, branchName) {
+    getDurations(builds, branchName) {
         // If there are any builds with the target branch then only use those.
         var branchBuilds = _.filter(builds, {sourceBranch: "refs/heads/" + branchName});
         if (branchBuilds.length === 0) {
             branchBuilds = builds;
         }
 
-        var count = 0;
-        var sum = 0;
-        _.forEach(branchBuilds, build => {
-            var duration = this.getBuildDuration(build);
-            if (duration && duration.asSeconds() > 5) {
-                count++;
-                sum += duration.asSeconds();
+        return _.filter(_.map(branchBuilds, build => {
+            if (!build.startTime || !build.finishTime) {
+                return null;
             }
-        });
 
-        if (count === 0) {
-            return null;
-        } else {
-            return moment.duration(Math.round(sum / count), "seconds");
-        }
-    }
-
-    getBuildDuration(build) {
-        if (!build.startTime || !build.finishTime) {
-            return null;
-        }
-
-        var start = moment(build.startTime);
-        var finish = moment(build.finishTime);
-        return moment.duration(finish.diff(start));
+            var start = moment(build.startTime);
+            var finish = moment(build.finishTime);
+            return moment.duration(finish.diff(start));
+        }));
     }
 }

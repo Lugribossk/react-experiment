@@ -1,4 +1,3 @@
-import React from "react";
 import _ from "lodash";
 import moment from "moment";
 import Promise from "bluebird";
@@ -35,9 +34,9 @@ export default class VsoBranches extends VsoBase {
 
                     var branchPr = _.find(prs, {sourceRefName: "refs/heads/" + branch});
                     if (branchPr) {
-                        var link = this.getBaseUrl() + "_git/" + this.project + "/pullrequest/" + branchPr.pullRequestId;
                         status.messages.push({
-                            name: <a href={link} target="_blank">Pull request: {branchPr.title}</a>,
+                            name: "Pull request: " + branchPr.title,
+                            link: this.getBaseUrl() + "_git/" + this.project + "/pullrequest/" + branchPr.pullRequestId,
                             message: "Created by " + branchPr.createdBy.displayName + " " + moment(branchPr.creationDate).fromNow()
                         });
                     }

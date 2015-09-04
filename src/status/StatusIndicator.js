@@ -11,7 +11,7 @@ export default class StatusIndicator extends React.Component {
             now: moment()
         };
 
-        this.interval = setInterval(() => this.setState({now: moment()}), 10000);
+        this.interval = setInterval(() => this.setState({now: moment()}), 5000);
     }
 
     componentWillUnmount() {
@@ -19,10 +19,16 @@ export default class StatusIndicator extends React.Component {
     }
 
     renderMessage(message) {
+        var name = message.name;
+        if (message.link) {
+            name = (
+                <a href={message.link} target="_blank">{message.name}</a>
+            );
+        }
         return (
             <div key={message.name + message.detailName} className="text-center">
                 {message.name &&
-                    <h4>{message.name} <small>{message.detailName}</small></h4>}
+                    <h4>{name} <small>{message.detailName}</small></h4>}
                 <p>{message.message}</p>
             </div>
         );
@@ -34,7 +40,7 @@ export default class StatusIndicator extends React.Component {
         }
 
         var percent = this.props.progress.percent(this.state.now);
-        var remaining = Math.ceil(this.props.progress.remaining(this.state.now).asMinutes());
+        var remaining = Math.max(Math.ceil(this.props.progress.remaining(this.state.now).asMinutes()), 0);
         var label = remaining + " minute" + (remaining === 1 ? "" : "s") + " remaining";
         return (
             <ProgressBar now={percent} label={label} />
