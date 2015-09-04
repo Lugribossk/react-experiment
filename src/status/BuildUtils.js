@@ -34,4 +34,4 @@ export default {
         }
         return moment.duration(Math.round(sum / count), "seconds");
     }
-}
+};

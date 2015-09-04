@@ -1,5 +1,6 @@
 import _ from "lodash";
-import {OrderedMap} from "immutable";
+import moment from "moment";
+import {OrderedMap, Set} from "immutable";
 import Store from "../flux/Store";
 import Logger from "../util/Logger";
 
@@ -9,10 +10,11 @@ export default class StatusStore extends Store {
     constructor(configStore) {
         super();
         this.configStore = configStore;
-        this.intervals = [];
+        this.timeoutIds = [];
         this.state = {
             sources: this.configStore.getSources(),
-            statuses: new OrderedMap()
+            statuses: new OrderedMap(),
+            timeoutIds: new Set()
         };
 
         this.configStore.onChanged(() => {
@@ -47,10 +49,10 @@ export default class StatusStore extends Store {
     }
 
     _setupStatusFetching() {
-        _.forEach(this.intervals, interval => window.clearInterval(interval));
-        this.intervals = [];
+        _.forEach(this.state.timeoutIds.toArray(), timeoutId => window.clearTimeout(timeoutId));
 
         _.forEach(this.state.sources, source => {
+            var lastTimeoutId;
             var fetchStatus = () => {
                 return source.getStatus()
                     .timeout(10000)
@@ -73,11 +75,16 @@ export default class StatusStore extends Store {
                             status = [status];
                         }
 
-                        this.setState({statuses: this.state.statuses.set(source, status)});
+                        var timeoutId = window.setTimeout(fetchStatus, source.getInterval(moment()) * 1000);
+
+                        this.setState({
+                            statuses: this.state.statuses.set(source, status),
+                            timeoutIds: this.state.timeoutIds.delete(lastTimeoutId).add(timeoutId)
+                        });
+                        lastTimeoutId = timeoutId;
                     });
             };
 
-            this.intervals.push(window.setInterval(fetchStatus, source.getInterval() * 1000));
             fetchStatus();
         });
     }
