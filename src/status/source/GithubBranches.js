@@ -17,25 +17,28 @@ export default class GithubBranches extends Source {
     }
 
     fetchData(path) {
-        return request("https://api.github.com/repos" + this.owner + "/" + this.repo + path)
-            .header("Authorization", this.token + " OAUTH-TOKEN");
+        return request("https://api.github.com/repos/" + this.owner + "/" + this.repo + path)
+            .set("Authorization", "token " + this.token);
     }
 
     fetchBranches() {
         return this.fetchData("/git/refs/heads")
-            .promise();
+            .promise()
+            .then(response => response.body);
     }
 
     fetchPullRequests() {
         return this.fetchData("/pulls")
             .query("state", "open")
             .query("base", "master")
-            .promise();
+            .promise()
+            .then(response => response.body);
     }
 
     fetchStatus(ref) {
         return this.fetchData("/commits/" + ref + "/status")
-            .promise();
+            .promise()
+            .then(response => response.body);
     }
 
     createStatus(branch) {
@@ -72,7 +75,7 @@ export default class GithubBranches extends Source {
     }
 
     getStatus() {
-        return Promise.all(this.fetchBranches(), this.fetchPullRequests())
+        return Promise.all([this.fetchBranches(), this.fetchPullRequests()])
             .spread((branches, prs) => {
                 return Promise.all(_.map(branches, branch => {
                     return this.createStatus(branch)
