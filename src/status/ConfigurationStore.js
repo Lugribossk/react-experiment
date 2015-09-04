@@ -69,12 +69,15 @@ export default class ConfigurationStore extends CachingStore {
         }
     }
 
+    marshalState() {
+        return {
+            password: this.state.password
+        };
+    }
+
     unmarshalState(data) {
         return {
-            config: data.config,
-            sources: _.map(data.config.sources, source => this._createSource(source, data.password)),
-            password: data.password,
-            passwordNeeded: data.passwordNeeded
+            password: data.password
         };
     }
 
@@ -105,8 +108,7 @@ export default class ConfigurationStore extends CachingStore {
                 var config = JSON.parse(response.text);
                 var sources = _.map(config.sources, source => this._createSource(source, this.state.password));
                 this.setState({
-                    sources: sources,
-                    config: config
+                    sources: sources
                 });
             })
             .catch(e => log.error("Unable to load configuration", e));
