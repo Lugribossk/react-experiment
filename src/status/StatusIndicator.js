@@ -40,10 +40,15 @@ export default class StatusIndicator extends React.Component {
         }
 
         var percent = this.props.progress.percent(this.state.now);
-        var remaining = Math.max(Math.ceil(this.props.progress.remaining(this.state.now).asMinutes()), 0);
-        var label = remaining + " minute" + (remaining === 1 ? "" : "s") + " remaining";
+        var label = "";
+
+        var remaining = this.props.progress.remaining(this.state.now);
+        if (remaining) {
+            var positiveRemaining = Math.max(remaining.asMinutes(), 0);
+            label = positiveRemaining + " minute" + (positiveRemaining === 1 ? "" : "s") + " remaining";
+        }
         return (
-            <ProgressBar now={percent} label={label} />
+            <ProgressBar now={percent} label={label} striped={!remaining}/>
         );
     }
 

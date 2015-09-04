@@ -12,7 +12,7 @@ export default {
 
     getEstimatedPercentComplete(now, startTime, average) {
         if (!average) {
-            return 0;
+            return 100;
         }
 
         var timeSpent = moment.duration(now.diff(startTime));
