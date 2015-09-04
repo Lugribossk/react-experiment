@@ -18,6 +18,7 @@ export default class Source {
             status: "success",
             messages: [{
                 name: "Example",
+                link: "http://example.com",
                 detailName: "Example",
                 message: "Example"
             }],

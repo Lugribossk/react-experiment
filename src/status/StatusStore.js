@@ -1,6 +1,9 @@
 import _ from "lodash";
 import {OrderedMap} from "immutable";
 import Store from "../flux/Store";
+import Logger from "../util/Logger";
+
+var log = new Logger(__filename);
 
 export default class StatusStore extends Store {
     constructor(configStore) {
@@ -50,6 +53,17 @@ export default class StatusStore extends Store {
         _.forEach(this.state.sources, source => {
             var fetchStatus = () => {
                 return source.getStatus()
+                    .timeout(10000)
+                    .catch(e => {
+                        log.error("Error while getting status:", e);
+                        return {
+                            title: source.title,
+                            status: "danger",
+                            messages: [{
+                                message: "Unable to determine status"
+                            }]
+                        };
+                    })
                     .then(status => {
                         if (!this.state.statuses.get(source)) {
                             // This must have been in progress when the source was removed.

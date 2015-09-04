@@ -46,12 +46,13 @@ export default class AwsRss extends Source {
                 v: "1.0",
                 q: "http://status.aws.amazon.com/rss/" + this.id + ".rss"
             })
-            .jsonp("callback");
+            .jsonp("callback")
+            .promise();
     }
 
     getStatus() {
         return this.getRequest().then(response => {
-            var status = "success";
+            var status;
             var message = "";
 
             if (!response || !response.body) {
@@ -60,9 +61,10 @@ export default class AwsRss extends Source {
             } else {
                 var latestEntry = response.body.responseData.feed.entries[0];
 
-                if (!_.contains(latestEntry.title, "Service is operating normally") &&
-                    !_.contains(latestEntry.content, "service is operating normally")) {
-
+                if (_.contains(latestEntry.title, "Service is operating normally") ||
+                    _.contains(latestEntry.content, "service is operating normally")) {
+                    status = "success";
+                } else {
                     if (_.contains(latestEntry.title, "Informational message")) {
                         status = "warning";
                     } else {

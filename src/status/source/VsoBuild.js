@@ -8,7 +8,6 @@ export default class VsoBuild extends VsoBase {
 
     getStatus() {
         return this.fetchBuilds()
-            .then(builds => this.createStatus(builds, this.branch))
             .catch(() => {
                 return {
                     title: this.title,
@@ -18,7 +17,8 @@ export default class VsoBuild extends VsoBase {
                         message: "No response from API"
                     }]
                 };
-            });
+            })
+            .then(builds => this.createStatus(builds, this.branch));
     }
 }
 

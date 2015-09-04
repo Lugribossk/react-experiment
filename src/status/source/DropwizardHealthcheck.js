@@ -12,40 +12,41 @@ export default class DropwizardHealthCheck extends Source {
     fetchData() {
         return request.get(this.adminPath + "/healthcheck")
             .promise()
-            .catch(e => e);
+            .catch(e => e); // The healthcheck returns an error status code if anything is unhealthy.
     }
 
     getStatus() {
-        return this.fetchData().then(response => {
-            var status = "success";
-            var messages = [];
+        return this.fetchData()
+            .then(response => {
+                var status = "success";
+                var messages = [];
 
-            if (!response || !response.body) {
-                status = "danger";
-                messages.push({
-                    message: "No response from healthcheck"
-                });
-            } else {
-                _.forEach(response.body, (data, name) => {
-                    if (_.isBoolean(data.healthy) && data.healthy) {
-                        return;
-                    }
-
+                if (!response || !response.body) {
                     status = "danger";
                     messages.push({
-                        name: name,
-                        message: data.message || (data.error && data.error.stack && data.error.stack[0])
+                        message: "No response from healthcheck"
                     });
-                });
-            }
+                } else {
+                    _.forEach(response.body, (data, name) => {
+                        if (_.isBoolean(data.healthy) && data.healthy) {
+                            return;
+                        }
 
-            return {
-                title: this.title,
-                link: this.adminPath + "/healthcheck?pretty=true",
-                status: status,
-                messages: messages
-            };
-        });
+                        status = "danger";
+                        messages.push({
+                            name: name,
+                            message: data.message || (data.error && data.error.stack && data.error.stack[0])
+                        });
+                    });
+                }
+
+                return {
+                    title: this.title,
+                    link: this.adminPath + "/healthcheck?pretty=true",
+                    status: status,
+                    messages: messages
+                };
+            });
     }
 }
 

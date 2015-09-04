@@ -111,6 +111,16 @@ export default class GithubBranches extends Source {
 
     getStatus() {
         return Promise.all([this.fetchBranches(), this.fetchPullRequests()])
+            .catch(() => {
+                return {
+                    title: this.title,
+                    link: "https://github.com/" + this.owner + "/" + this.repo,
+                    status: "danger",
+                    messages: [{
+                        message: "No response from API"
+                    }]
+                };
+            })
             .spread((branches, prs) => {
                 return Promise.all(_.map(branches, branch => {
                     return this.createStatus(branch)
@@ -128,16 +138,6 @@ export default class GithubBranches extends Source {
                             return status;
                         });
                 }));
-            })
-            .catch(() => {
-                return {
-                    title: this.title,
-                    link: "https://github.com/" + this.owner + "/" + this.repo,
-                    status: "danger",
-                    messages: [{
-                        message: "Unable to determine status"
-                    }]
-                };
             });
     }
 }
