@@ -19,6 +19,10 @@ export default class StatusIndicator extends React.Component {
     }
 
     renderMessage(message) {
+        if (!message.message) {
+            return null;
+        }
+
         var name = message.name;
         if (message.link) {
             name = (
@@ -54,12 +58,14 @@ export default class StatusIndicator extends React.Component {
 
     render() {
         return (
-            <Alert bsStyle={this.props.status} className="status-item">
-                <h1 className="text-center">
-                    <a href={this.props.link} target="_blank">
-                        {this.props.title}
-                    </a>
-                </h1>
+            <Alert bsStyle={this.props.status} className="status-item" >
+                <div>
+                    <h1 className="text-center">
+                        <a href={this.props.link} target="_blank">
+                            {this.props.title}
+                        </a>
+                    </h1>
+                </div>
 
                 {_.map(this.props.messages, message => this.renderMessage(message))}
                 {this.renderProgress()}
