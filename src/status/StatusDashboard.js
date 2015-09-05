@@ -53,8 +53,13 @@ export default class StatusDashboard extends React.Component {
     renderPanels() {
         return _.map(this.state.panels, (panel, index) => {
             return (
-                <Col key={index} md={12 / this.state.panels.length} className="flex-container">
-                    {_.map(panel.statuses, status => <StatusIndicator key={status.title} {...status} />)}
+                <Col key={index} md={12 / this.state.panels.length} className="panel-container">
+                    <div className="panel-item">
+                        <h1>{panel.title}</h1>
+                    </div>
+                    <div className="panel-item status-container">
+                        {_.map(panel.statuses, status => <StatusIndicator key={status.title} {...status} />)}
+                    </div>
                 </Col>
             );
         });

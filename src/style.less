@@ -10,25 +10,34 @@ body,
     width: 100%;
 }
 
-.flex-container {
+.panel-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     height: 100%;
-    padding: 5px 0 5px 5px;
-    align-items: stretch;
+    padding: 0 0 5px 5px;
 
     &:last-of-type {
         padding-right: 5px;
-
-        .flex-item {
-            margin-right: 5px;
-        }
     }
 }
 
-.flex-item {
+.panel-item {
+    h1 {
+        margin-left: 20px;
+    }
+}
+
+.status-container {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    align-items: stretch;
+
+}
+
+.status-item {
     flex: 1 1 400px;
-    margin: 5px 0 5px 5px;
+    margin: 5px 5px 5px 5px;
 }
 
 .progress {
