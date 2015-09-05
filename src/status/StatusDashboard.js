@@ -52,8 +52,9 @@ export default class StatusDashboard extends React.Component {
 
     renderPanels() {
         return _.map(this.state.panels, (panel, index) => {
+            var columns = panel.columns || 12 / this.state.panels.length;
             return (
-                <Col key={index} md={12 / this.state.panels.length} className="panel-container">
+                <Col key={index} sm={columns} className="panel-container">
                     <div className="panel-item">
                         <h1>{panel.title}</h1>
                     </div>
