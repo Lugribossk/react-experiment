@@ -4,7 +4,8 @@
 
 html,
 body,
-#main {
+#main,
+.full-size {
     height: 100%;
     width: 100%;
 }
@@ -13,14 +14,21 @@ body,
     display: flex;
     flex-wrap: wrap;
     height: 100%;
-    padding: 5px;
+    padding: 5px 0 5px 5px;
+    align-items: stretch;
+
+    &:last-of-type {
+        padding-right: 5px;
+
+        .flex-item {
+            margin-right: 5px;
+        }
+    }
 }
 
 .flex-item {
-    flex: 1;
-    flex-basis: 400px;
-    align-items: stretch;
-    margin: 5px;
+    flex: 1 1 400px;
+    margin: 5px 0 5px 5px;
 }
 
 .progress {

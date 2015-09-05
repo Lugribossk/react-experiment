@@ -13,13 +13,15 @@ export default class StatusStore extends Store {
         this.timeoutIds = [];
         this.state = {
             sources: this.configStore.getSources(),
-            statuses: new OrderedMap(),
+            panels: this.configStore.getPanels(), // Maps panel index to obj with sources
+            statuses: new OrderedMap(), // Maps source to statuses
             timeoutIds: new Set()
         };
 
         this.configStore.onChanged(() => {
             this.setState({
                 sources: this.configStore.getSources(),
+                panels: this.configStore.getPanels(),
                 statuses: this._createInitialStatuses(this.configStore.getSources())
             });
             this._setupStatusFetching();
@@ -32,6 +34,18 @@ export default class StatusStore extends Store {
 
     getStatuses() {
         return _.flatten(this.state.statuses.toArray());
+    }
+
+    getPanelsWithStatuses() {
+        var withStatuses = [];
+        _.forEach(this.state.panels, panel => {
+            var withStatus = {
+                title: panel.title,
+                statuses: _.flatten(_.map(panel.sources, source => this.state.statuses.get(source)))
+            };
+            withStatuses.push(withStatus);
+        });
+        return withStatuses;
     }
 
     _createInitialStatuses(sources) {
@@ -66,19 +80,19 @@ export default class StatusStore extends Store {
                             }]
                         };
                     })
-                    .then(status => {
+                    .then(statuses => {
                         if (!this.state.statuses.get(source)) {
                             // This must have been in progress when the source was removed.
                             return;
                         }
-                        if (!_.isArray(status)) {
-                            status = [status];
+                        if (!_.isArray(statuses)) {
+                            statuses = [statuses];
                         }
 
                         var timeoutId = window.setTimeout(fetchStatus, source.getInterval(moment()) * 1000);
 
                         this.setState({
-                            statuses: this.state.statuses.set(source, status),
+                            statuses: this.state.statuses.set(source, statuses),
                             timeoutIds: this.state.timeoutIds.delete(lastTimeoutId).add(timeoutId)
                         });
                         lastTimeoutId = timeoutId;

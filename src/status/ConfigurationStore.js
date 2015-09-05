@@ -15,11 +15,12 @@ window.encrypt = (password, data) => {
 export default class ConfigurationStore extends CachingStore {
     constructor(configFileName = "config.json") {
         super(__filename);
-        this.state = this.getCachedState() || {
+        this.state = _.defaults(this.getCachedState(), {
             sources: [],
+            panels: {},
             password: null,
             passwordNeeded: false
-        };
+        });
         this.configFileName = configFileName;
 
         this._fetchConfig();
@@ -31,6 +32,10 @@ export default class ConfigurationStore extends CachingStore {
 
     getSources() {
         return this.state.sources;
+    }
+
+    getPanels() {
+        return this.state.panels;
     }
 
     getPassword() {
@@ -97,8 +102,44 @@ export default class ConfigurationStore extends CachingStore {
         });
     }
 
+    _parseConfig(config) {
+        var panels = {};
+        var sources = [];
+
+        var createPanel = (panel, index) => {
+            if (!panels[index]) {
+                panels[index] = {
+                    title: panel.title,
+                    sources: []
+                };
+            }
+
+            _.forEach(panel.sources, sourceConfig => {
+                var source = this._createSource(sourceConfig, this.state.password);
+                sources.push(source);
+
+                panels[index].sources.push(source);
+            });
+        };
+
+        if (config.panels) {
+            _.forEach(config.panels, createPanel);
+
+            if (config.sources) {
+                log.warn("Both 'panels' and 'sources' were specified at top levle in configuration, ignoring 'sources'.");
+            }
+        } else {
+            createPanel(config, 0);
+        }
+
+        this.setState({
+            sources: sources,
+            panels: panels
+        });
+    }
+
     _fetchConfig() {
-        request.get(this.configFileName)
+        return request.get(this.configFileName)
             .promise()
             .catch(e => {
                 log.error("Configuration file '" + this.configFileName + "' not found.", e);
@@ -106,10 +147,7 @@ export default class ConfigurationStore extends CachingStore {
             })
             .then(response => {
                 var config = JSON.parse(response.text);
-                var sources = _.map(config.sources, source => this._createSource(source, this.state.password));
-                this.setState({
-                    sources: sources
-                });
+                this._parseConfig(config);
             })
             .catch(e => log.error("Unable to load configuration", e));
     }

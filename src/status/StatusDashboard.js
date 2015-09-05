@@ -1,5 +1,6 @@
 import React from "react";
 import _ from "lodash";
+import {Col} from "react-bootstrap";
 import Piecon from "piecon";
 import Mixins from "../util/Mixins";
 import ConfigurationStore from "./ConfigurationStore";
@@ -16,11 +17,11 @@ export default class StatusDashboard extends React.Component {
         this.statusStore = new StatusStore(this.configStore);
 
         this.state = {
-            statuses: []
+            panels: []
         };
 
         this.statusStore.onStatusChanged(() => {
-            this.setState({statuses: this.statusStore.getStatuses()});
+            this.setState({panels: this.statusStore.getPanelsWithStatuses()});
             this.updateFavicon();
         });
 
@@ -45,10 +46,20 @@ export default class StatusDashboard extends React.Component {
         });
     }
 
+    renderPanels() {
+        return _.map(this.state.panels, (panel, index) => {
+            return (
+                <Col key={index} md={12 / this.state.panels.length} className="flex-container">
+                    {_.map(panel.statuses, status => <StatusIndicator key={status.title} {...status} />)}
+                </Col>
+            );
+        });
+    }
+
     render() {
         return (
-            <div className="flex-container">
-                {_.map(this.state.statuses, status => <StatusIndicator key={status.title} {...status} />)}
+            <div className="full-size">
+                {this.renderPanels()}
 
                 <PasswordPrompt configStore={this.configStore} />
             </div>
