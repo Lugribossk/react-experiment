@@ -123,7 +123,7 @@ export default class ConfigurationStore extends CachingStore {
             }
 
             _.forEach(panel.sources, sourceConfig => {
-                var source = this._createSource(sourceConfig, panel.defaults, config.defaults);
+                var source = this._createSource(sourceConfig, panel.defaults || {}, config.defaults || {});
                 sources.push(source);
 
                 panels[index].sources.push(source);

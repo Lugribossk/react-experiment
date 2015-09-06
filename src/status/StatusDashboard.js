@@ -55,9 +55,10 @@ export default class StatusDashboard extends React.Component {
             var columns = panel.columns || 12 / this.state.panels.length;
             return (
                 <Col key={index} sm={columns} className="panel-container">
-                    <div className="panel-item">
-                        <h1>{panel.title}</h1>
-                    </div>
+                    {panel.title &&
+                        <div className="panel-item">
+                            <h1>{panel.title}</h1>
+                        </div>}
                     <div className="panel-item status-container">
                         {_.map(panel.statuses, status => <StatusIndicator key={status.title} {...status} />)}
                     </div>
