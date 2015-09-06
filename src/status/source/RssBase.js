@@ -33,57 +33,26 @@ request.Request.prototype.end = function (callback) {
     return this;
 };
 
-export default class AwsRss extends Source {
+export default class RssBase extends Source {
     constructor(data) {
         super(data);
-        this.id = data.id;
         this.interval = data.interval || 600;
     }
 
-    getRequest() {
+    fetchFeed(url) {
         return request.get("http://ajax.googleapis.com/ajax/services/feed/load")
             .query({
                 v: "1.0",
-                q: "http://status.aws.amazon.com/rss/" + this.id + ".rss"
+                q: url
             })
             .jsonp("callback")
-            .promise();
-    }
-
-    getStatus() {
-        return this.getRequest().then(response => {
-            var status;
-            var message = "";
-
-            if (!response || !response.body) {
-                status = "danger";
-                message = "No response from status feed";
-            } else {
-                var latestEntry = response.body.responseData.feed.entries[0];
-
-                if (_.contains(latestEntry.title, "Service is operating normally") ||
-                    _.contains(latestEntry.content, "service is operating normally")) {
-                    status = "success";
-                } else {
-                    if (_.contains(latestEntry.title, "Informational message")) {
-                        status = "warning";
-                    } else {
-                        status = "danger";
-                    }
-                    message = latestEntry.content;
+            .promise()
+            .then(response => {
+                if (!response || !response.body) {
+                    throw new Error("Empty response.");
                 }
-            }
 
-            return {
-                title: this.title,
-                link: "http://status.aws.amazon.com/",
-                status: status,
-                messages: [{
-                    message: message
-                }]
-            };
-        });
+                return response.body;
+            });
     }
 }
-
-AwsRss.type = "aws";

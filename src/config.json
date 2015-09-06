@@ -5,11 +5,11 @@
         "link": "http://status.tutum.co",
         "id": "536beeeafd254d60080002ae"
     }, {
-        "type": "aws",
+        "type": "rss-aws",
         "title": "CloudFront",
         "id": "cloudfront"
     }, {
-        "type": "aws",
+        "type": "rss-aws",
         "title": "EC2 US East",
         "id": "ec2-us-east-1"
     }, {
