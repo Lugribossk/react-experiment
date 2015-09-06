@@ -86,19 +86,27 @@ export default class ConfigurationStore extends CachingStore {
         };
     }
 
-    _createSource(config, password) {
-        var SourceType = _.findWhere(SOURCE_TYPES, {type: config.type});
+    _createSource(sourceConfig, def1, def2) {
+        var type = sourceConfig.type;
+        var SourceType = _.find(SOURCE_TYPES, {type: type});
         if (!SourceType) {
-            var err = "Unknown source type '" + config.type + "' in configuration.";
+            var err = "Unknown source type '" + type + "' in configuration.";
             log.error(err);
             return new Message({
-                title: config.title,
+                title: sourceConfig.title,
                 status: "warning",
                 message: err
             });
         }
-        return new SourceType(config, {
-            decrypt: blah => this.decrypt(blah, password)
+        var defaults = _.defaults(
+            def1[type] || {},
+            def1.all || {},
+            def2[type] || {},
+            def2.all || {}
+        );
+
+        return new SourceType(_.defaults(sourceConfig, defaults), {
+            decrypt: encrypted => this.decrypt(encrypted, this.state.password)
         });
     }
 
@@ -115,7 +123,7 @@ export default class ConfigurationStore extends CachingStore {
             }
 
             _.forEach(panel.sources, sourceConfig => {
-                var source = this._createSource(sourceConfig, this.state.password);
+                var source = this._createSource(sourceConfig, panel.defaults, config.defaults);
                 sources.push(source);
 
                 panels[index].sources.push(source);
@@ -126,7 +134,7 @@ export default class ConfigurationStore extends CachingStore {
             _.forEach(config.panels, createPanel);
 
             if (config.sources) {
-                log.warn("Both 'panels' and 'sources' were specified at top levle in configuration, ignoring 'sources'.");
+                log.warn("Both 'panels' and 'sources' were specified at top level in configuration, ignoring 'sources'.");
             }
         } else {
             createPanel(config, 0);
