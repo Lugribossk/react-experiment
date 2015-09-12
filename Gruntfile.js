@@ -1,4 +1,5 @@
 /*global module, require, process*/
+/*eslint prefer-arrow-callback: 0*/
 var webpack = require("webpack");
 var HtmlPlugin = require("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");

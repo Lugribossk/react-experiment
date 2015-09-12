@@ -19,9 +19,7 @@ export default class Action {
 
         var me = this;
         function triggerAction(...args) {
-            _.forEach(me.listeners, listener => {
-                listener.apply(null, args);
-            });
+            _.forEach(me.listeners, listener => listener(...args));
         }
 
         _.assign(triggerAction, this);
@@ -40,9 +38,7 @@ export default class Action {
     onDispatch(listener) {
         this.listeners.push(listener);
         return () => {
-            _.remove(this.listeners, el => {
-                return el === listener;
-            });
+            _.remove(this.listeners, el => el === listener);
         };
     }
 }
