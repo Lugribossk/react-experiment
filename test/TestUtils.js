@@ -1,5 +1,5 @@
-import React from "react/addons";
+import ReactTestUtils from "react-addons-test-utils";
 
 export default {
-    React: React.addons.TestUtils
+    React: ReactTestUtils
 };

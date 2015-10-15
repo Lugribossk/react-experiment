@@ -1,4 +1,4 @@
-import React from "react/addons";
+import React from "react";
 import Router from "./Router";
 
 /**
@@ -50,7 +50,7 @@ export default class Route extends React.Component {
         if (this.state.matched) {
             var child = React.Children.only(this.props.children);
             var properties = this.router.getParameters();
-            return React.addons.cloneWithProps(child, properties);
+            return React.cloneElement(child, properties);
         } else {
             return false;
         }

@@ -12,7 +12,7 @@ global.navigator = {
 };
 
 // Set up Unexpected plugins (on the actual unexpected instance, so they show up when it is imported by other modules).
-expect.installPlugin(unexpectedSinon);
+expect.use(unexpectedSinon);
 
 // Automatically restore Sinon stubs after tests end.
 var oldWrap = sinon.wrapMethod;

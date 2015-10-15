@@ -1,4 +1,5 @@
-import React from "react/addons";
+import React from "react";
+import LinkedStateMixin from "react-addons-linked-state-mixin";
 import {Input, Alert, Glyphicon} from "react-bootstrap";
 import Mixins from "../util/Mixins";
 import SubscribeMixin from "../flux/SubscribeMixin";
@@ -57,7 +58,7 @@ export default class LoginForm extends React.Component {
     }
 }
 
-Mixins.add(LoginForm.prototype, [React.addons.LinkedStateMixin, SubscribeMixin]);
+Mixins.add(LoginForm.prototype, [LinkedStateMixin, SubscribeMixin]);
 
 LoginForm.propTypes = {
     userStore: React.PropTypes.any.isRequired

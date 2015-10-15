@@ -1,5 +1,5 @@
 import React from "react";
-import {Navbar, Nav, NavItem, DropdownButton, MenuItem} from "react-bootstrap";
+import {Navbar, Nav, NavItem, DropdownButton, MenuItem, NavBrand} from "react-bootstrap";
 import Gravatar from "../ui/Gravatar";
 import AuthActions from "../auth/AuthActions";
 import Mixins from "../util/Mixins";
@@ -34,14 +34,17 @@ export default class ExampleNavbar extends React.Component {
         );
 
         return (
-            <Navbar brand="Example" fluid>
+            <Navbar fluid>
+                <NavBrand>
+                    Example
+                </NavBrand>
                 <Nav>
                     <NavItem href="#" active={this.isActive("")}>Dashboard</NavItem>
                     <NavItem href="#test1" active={this.isActive("test1")}>Test 1</NavItem>
                     <NavItem href="#test2/12345" active={this.isActive("test2")}>Test 2</NavItem>
                 </Nav>
                 <Nav right={true}>
-                    <DropdownButton title={currentUser}>
+                    <DropdownButton title={currentUser} id="1">
                         <MenuItem href="#profile">Profile</MenuItem>
                         <MenuItem divider />
                         <MenuItem onSelect={AuthActions.logout}>Log out</MenuItem>
