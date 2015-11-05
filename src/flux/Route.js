@@ -46,6 +46,10 @@ export default class Route extends React.Component {
         this.setState({matched: matched});
     }
 
+    static getRouter() {
+        return Route.prototype.router;
+    }
+
     render() {
         if (this.state.matched) {
             var child = React.Children.only(this.props.children);
@@ -54,10 +58,6 @@ export default class Route extends React.Component {
         } else {
             return false;
         }
-    }
-
-    static getRouter() {
-        return Route.prototype.router;
     }
 }
 
