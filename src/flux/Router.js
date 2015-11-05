@@ -90,7 +90,7 @@ export default class Router {
      * @param {Boolean} [defaultPath]
      * @returns {Function}
      */
-    register(listener, path, defaultPath=false) {
+    register(listener, path, defaultPath = false) {
         this.listeners.push(listener);
 
         var extractor = Router.createExtractor(path);
