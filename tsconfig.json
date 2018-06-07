@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "jsx": "react",
+        "lib": ["es2017", "dom", "dom.iterable"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "outDir": "./target/ts",
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2017"
+    },
+    "include": [
+        "src/**/*.ts*",
+        "node_modules/@types/**/*.ts"
+    ]
+}

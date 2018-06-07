@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>React stuff</title>
-        <link rel="icon" href="{%=o.webpack.assets.filter(function (a) { return /favicon-.*?\.png/.test(a.name); })[0].name%}" type="image/png">
-        <link rel="apple-touch-icon" sizes="180x180" href="{%=o.webpack.assets.filter(function (a) { return /touch-icon-.*?\.png/.test(a.name); })[0].name%}">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="mobile-web-app-capable" content="yes">
+        <title>Title</title>
     </head>
     <body>
-        <div id="main"></div>
-        <script src="main.js"></script>
+        <div id="root"></div>
+        <script src="./index.tsx"></script>
     </body>
 </html>
