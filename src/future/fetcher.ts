@@ -1,39 +1,58 @@
 import * as Promise from "bluebird";
 
-interface PromiseFactory<ArgType, ValueType> {
-    (arg: ArgType): Promise<ValueType>
-}
+const withoutReactErrorLogging = <T>(promise: Promise<T>) => {
+    // Hidden React feature to not log the usual componentDidCatch() error message.
+    (promise as any).suppressReactErrorLogging = true;
+    return promise;
+};
 
-interface Fetcher<ArgType, ValueType> {
-    /**
-     * @throws Promise
-     */
-    read(arg: ArgType): ValueType
+interface PromiseFactory<Arg, Val> {
+    (arg: Arg): Promise<Val>
 }
 
 const factoryCache: Map<PromiseFactory<any, any>, Map<any, Promise<any>>> = new Map();
 
-export const createFetcher = <ArgType, ValueType>(factory: PromiseFactory<ArgType, ValueType>): Fetcher<ArgType, ValueType> => {
-    if (factoryCache.has(factory)) {
-        throw new Error("Already created");
-    }
-    factoryCache.set(factory, new Map());
-    return {
-        read(arg) {
-            const argCache = factoryCache.get(factory)!;
-            if (!argCache.has(arg)) {
-                const promise = factory(arg);
-                // Hidden React feature to not log the usual componentDidCatch() error message.
-                (promise as any).suppressReactErrorLogging = true;
-                argCache.set(arg, promise);
-            }
-            const promise = argCache.get(arg)!;
+export class Fetcher<Arg, Val> {
+    private readonly factory: PromiseFactory<Arg, Val>;
 
-            if (promise.isFulfilled()) {
-                return promise.value();
-            }
-            throw promise;
+    constructor(factory: PromiseFactory<Arg, Val>) {
+        if (factoryCache.has(factory)) {
+            throw new Error("Already created");
         }
+        factoryCache.set(factory, new Map());
+        this.factory = factory;
     }
+
+    /**
+     * @throws Promise
+     */
+    read(arg: Arg): Val {
+        const promise = this.promise(arg);
+
+        if (promise.isFulfilled()) {
+            return promise.value();
+        }
+        throw promise;
+    }
+
+    promise(arg: Arg): Promise<Val> {
+        const argCache = factoryCache.get(this.factory)!;
+        if (argCache.has(arg)) {
+            return argCache.get(arg)!;
+        }
+
+        const promise = withoutReactErrorLogging(this.factory(arg));
+        argCache.set(arg, promise);
+        return promise;
+    }
+}
+
+export const createFetcher = <ArgType, ValueType>(factory: PromiseFactory<ArgType, ValueType>): Fetcher<ArgType, ValueType> => {
+    return new Fetcher(factory);
 };
 
+export const waitFor = (...promises: Promise<any>[]) => {
+    if (promises.some(p => p.isPending())) {
+        throw withoutReactErrorLogging(Promise.all(promises));
+    }
+};

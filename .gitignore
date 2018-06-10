@@ -4,3 +4,4 @@ target
 node_modules
 npm-debug.log
 .cache
+yarn-error.log

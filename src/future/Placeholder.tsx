@@ -1,65 +1,84 @@
 import * as React from "react";
 import * as Promise from "bluebird";
 
+
 interface Props {
     delayMs?: number;
-    fallback: React.ReactNode;
+    fallback: React.ReactNode | ((progress: number) => React.ReactNode);
 }
 
 interface State {
-    loading: boolean;
-    timeoutExpired: boolean;
+    loading: number;
+    maxLoading: number;
+    showFallback: boolean;
 }
 
 export default class Placeholder extends React.Component<Props, State> {
     private unmounted: boolean;
-    private timer: number | undefined;
+    private fallbackTimer: number | undefined;
 
     constructor(props: Props) {
         super(props);
         this.unmounted = false;
         this.state = {
-            loading: false,
-            timeoutExpired: false
+            loading: 0,
+            maxLoading: 0,
+            showFallback: false
         }
     }
 
-    componentDidMount() {
-        const {delayMs = 0} = this.props;
-        this.timer = window.setTimeout(() => {
-            this.setState({timeoutExpired: true});
-        }, delayMs);
-    }
-
-    componentDidCatch(error: any, errorInfo: React.ErrorInfo) {
-        if (error instanceof Promise) {
-            this.setState({loading: true});
-            error.then(() => {
-                if (this.unmounted) {
-                    return;
-                }
-                this.setState({loading: false});
-            })
-        } else {
+    componentDidCatch(error: Error | Promise<any>, errorInfo: React.ErrorInfo) {
+        if (!(error instanceof Promise)) {
             throw error;
         }
+        this.setState(({loading, maxLoading, showFallback}) => {
+            if (loading === 0) {
+                clearTimeout(this.fallbackTimer);
+                this.fallbackTimer = window.setTimeout(() => {
+                    this.setState({showFallback: true});
+                }, this.props.delayMs);
+                maxLoading = 0;
+                showFallback = false;
+            }
+
+            return {
+                loading: loading + 1,
+                maxLoading: Math.max(maxLoading, loading + 1),
+                showFallback: showFallback
+            };
+        });
+
+        error.then(() => {
+            if (this.unmounted) {
+                return;
+            }
+            this.setState(({loading}) => {
+                if (loading === 1) {
+                    clearTimeout(this.fallbackTimer);
+                }
+                return {loading: loading - 1}
+            });
+        });
     }
 
     componentWillUnmount() {
         this.unmounted = true;
-        clearTimeout(this.timer);
+        clearTimeout(this.fallbackTimer);
     }
 
     render() {
         const {fallback, children} = this.props;
-        const {loading, timeoutExpired} = this.state;
+        const {loading, maxLoading, showFallback} = this.state;
 
-        if (!loading) {
+        if (loading === 0) {
             return children;
         }
-        if (!timeoutExpired) {
-            return null;
+        if (showFallback) {
+            if (fallback instanceof Function) {
+                return fallback((maxLoading - loading) / maxLoading);
+            }
+            return fallback;
         }
-        return fallback;
+        return null;
     }
 }
