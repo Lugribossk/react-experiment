@@ -1,0 +1,9 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.4-browsers
+    steps:
+      - checkout
+      - run: yarn run build

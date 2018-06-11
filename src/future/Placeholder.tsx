@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as Promise from "bluebird";
 
-
 interface Props {
     delayMs?: number;
     fallback: React.ReactNode | ((progress: number) => React.ReactNode);
@@ -13,6 +12,11 @@ interface State {
     showFallback: boolean;
 }
 
+/**
+ * An experimental implementation of the upcoming "suspense" React feature that catches loading events from deeper in
+ * the component tree and displays a placeholder instead.
+ * See https://youtu.be/v6iR3Zk4oDY?t=14m15s
+ */
 export default class Placeholder extends React.Component<Props, State> {
     private unmounted: boolean;
     private fallbackTimer: number | undefined;
