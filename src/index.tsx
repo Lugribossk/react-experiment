@@ -2,9 +2,10 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 const render = () => {
+    // tslint:disable-next-line:no-require-imports
     const {default: App} = require("./App");
     ReactDOM.render(
-        <App/>,
+        <App />,
         document.getElementById("root")
     );
 };

@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as Promise from "bluebird";
-import {createFetcher, waitFor} from "./future/fetcher";
+import {createFetcher} from "./future/fetcher";
 
 const nameFetcher = createFetcher((name: string) => Promise.delay(5000, name));
 
-const Blah: React.StatelessComponent<{name: string}> = ({name}) => <>{nameFetcher.read(name)}</>;
+// const Blah: React.StatelessComponent<{name: string}> = ({name}) => <>{nameFetcher.read(name)}</>;
 
 const Value: React.StatelessComponent<{val(): string}> = ({val}) => <>{val()}</>;
 

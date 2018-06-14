@@ -17,6 +17,6 @@ export default class Img extends React.Component<Props> {
         const {src, ...rest} = this.props;
         return (
             <img {...rest} src={imageFetcher.read(src)} />
-        )
+        );
     }
 }

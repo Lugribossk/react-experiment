@@ -28,21 +28,26 @@ export default class Placeholder extends React.Component<Props, State> {
             loading: 0,
             maxLoading: 0,
             showFallback: false
-        }
+        };
     }
 
     componentDidCatch(error: Error | Promise<any>, errorInfo: React.ErrorInfo) {
         if (!(error instanceof Promise)) {
             throw error;
         }
+        const {delayMs = 0} = this.props;
         this.setState(({loading, maxLoading, showFallback}) => {
             if (loading === 0) {
                 clearTimeout(this.fallbackTimer);
-                this.fallbackTimer = window.setTimeout(() => {
-                    this.setState({showFallback: true});
-                }, this.props.delayMs);
+                if (delayMs > 0) {
+                    showFallback = false;
+                    this.fallbackTimer = window.setTimeout(() => {
+                        this.setState({showFallback: true});
+                    }, delayMs);
+                } else {
+                    showFallback = true;
+                }
                 maxLoading = 0;
-                showFallback = false;
             }
 
             return {
@@ -60,7 +65,7 @@ export default class Placeholder extends React.Component<Props, State> {
                 if (loading === 1) {
                     clearTimeout(this.fallbackTimer);
                 }
-                return {loading: loading - 1}
+                return {loading: loading - 1};
             });
         });
     }
@@ -83,6 +88,6 @@ export default class Placeholder extends React.Component<Props, State> {
             }
             return fallback;
         }
-        return null;
+        return undefined;
     }
 }

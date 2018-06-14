@@ -18,7 +18,7 @@ export default abstract class Store<T> {
         this.listeners.push(listener);
         return () => {
             this.listeners = this.listeners.filter(lst => lst !== listener);
-        }
+        };
     }
 
     /**
