@@ -21,7 +21,10 @@ export default class MultiName extends React.Component<{name: string}> {
         // );
 
         return (
-            <p><Value val={() => nameFetcher.read("Hello")} /> <Value val={() => nameFetcher.read(this.props.name)} />!</p>
+            <p>
+                <Value val={() => nameFetcher.read("Hello")} />{" "}
+                <Value val={() => nameFetcher.read(this.props.name)} />!
+            </p>
         );
     }
 }

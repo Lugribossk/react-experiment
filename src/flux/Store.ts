@@ -26,8 +26,8 @@ export default abstract class Store<T> {
      */
     protected setState(newState: Partial<T>) {
         this.state = {
-            ...this.state as any,
-            ...newState as any
+            ...(this.state as any),
+            ...(newState as any)
         };
         this.listeners.slice().forEach(lst => lst());
     }

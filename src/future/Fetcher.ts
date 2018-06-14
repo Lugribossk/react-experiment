@@ -35,4 +35,3 @@ export default class Fetcher<Arg, Val> {
 export const createFetcher = <Arg, Val>(factory: PromiseFactory<Arg, Val>): Fetcher<Arg, Val> => {
     return new Fetcher(factory);
 };
-

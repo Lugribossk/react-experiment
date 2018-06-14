@@ -6,8 +6,6 @@ const nameFetcher = createFetcher((name: string) => Promise.delay(name.length * 
 
 export default class Name extends React.Component<{name: string}> {
     render() {
-        return (
-            <p>Hello {nameFetcher.read(this.props.name)}!</p>
-        );
+        return <p>Hello {nameFetcher.read(this.props.name)}!</p>;
     }
 }

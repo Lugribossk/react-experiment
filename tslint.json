@@ -17,24 +17,10 @@
         "no-var-requires": true,
         "only-arrow-functions": true,
         "promise-function-async": true,
-        "typedef-whitespace": [true, {
-            "call-signature": "nospace",
-            "index-signature": "nospace",
-            "parameter": "nospace",
-            "property-declaration": "nospace",
-            "variable-declaration": "nospace"
-        }, {
-            "call-signature": "onespace",
-            "index-signature": "onespace",
-            "parameter": "onespace",
-            "property-declaration": "onespace",
-            "variable-declaration": "onespace"
-        }],
         "unified-signatures": true,
 
         "await-promise": true,
         "ban-comma-operator": true,
-        "curly": true,
         "label-position": true,
         "no-arg": true,
         "no-conditional-assignment": true,
@@ -72,19 +58,14 @@
         "use-isnan": true,
 
         "deprecation": true,
-        "eofline": true,
-        "indent": [true, "spaces"],
         "no-require-imports": true,
         "prefer-const": true,
         "prefer-readonly": true,
 
-        "align": [true, "statements", "members", "elements"],
         "array-type": [true, "array"],
-        "arrow-parens": [true, "ban-single-arg-parens"],
         "arrow-return-shorthand": true,
         "class-name": true,
         "encoding": true,
-        "import-spacing": true,
         "interface-name": [true, "never-prefix"],
         "interface-over-type-literal": true,
         "jsdoc-format": true,
@@ -92,11 +73,8 @@
         "new-parens": true,
         "no-angle-bracket-type-assertion": true,
         "no-boolean-literal-compare": true,
-        "no-consecutive-blank-lines": [true, 2],
-        "no-irregular-whitespace": true,
         "no-redundant-jsdoc": true,
         "no-reference-import": true,
-        "no-trailing-whitespace": true,
         "no-unnecessary-callback-wrapper": true,
         "number-literal-format": true,
         "object-literal-key-quotes": [true, "as-needed"],
@@ -104,30 +82,11 @@
         "prefer-method-signature": true,
         "prefer-template": true,
         "quotemark": [true, "double", "jsx-double"],
-        "semicolon": [true, "always"],
-        "space-before-function-paren": [true, "never"],
-        "space-within-parens": [true, 0],
         "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
-        "whitespace": [true,
-            "check-branch",
-            "check-decl",
-            "check-operator",
-            "check-rest-spread",
-            "check-separator",
-            "check-type",
-            "check-typecast",
-            "check-type-operator",
-            "check-preblock"
-        ],
 
-        "jsx-alignment": true,
         "jsx-boolean-value": [true, "never"],
-        "jsx-curly-spacing": [true, "never"],
-        "jsx-equals-spacing": [true, "never"],
         "jsx-key": true,
         "jsx-no-string-ref": true,
-        "jsx-self-close": true,
-        "jsx-space-before-trailing-slash": true,
-        "jsx-wrap-multiline": true
+        "jsx-self-close": true
     }
 }
