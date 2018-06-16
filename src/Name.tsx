@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Promise from "bluebird";
-import {createFetcher} from "./future/fetcher";
+import {createFetcher} from "./future/Fetcher";
 
 const nameFetcher = createFetcher((name: string) => Promise.delay(name.length * 1000, name));
 

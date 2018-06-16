@@ -6,7 +6,27 @@ jobs:
       - image: circleci/node:10.4-browsers
     steps:
       - checkout
-      - run: yarn install
-      - run: yarn run build
-      - run: yarn run lint
-      - run: yarn run prettier-check
+      - restore_cache:
+          name: Restore Yarn package cache
+          keys:
+            - yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Branch }}
+            - yarn-packages-master
+            - yarn-packages
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - save_cache:
+          name: Save Yarn package cache
+          key: yarn-packages-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
+      - run:
+          name: Build
+          command: yarn run build
+      - run:
+          name: TSLint
+          command: yarn run lint
+      - run:
+          name: Prettier
+          command: yarn run prettier-check

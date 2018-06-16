@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as Promise from "bluebird";
+import {Promise} from "bluebird";
 
 interface Props {
     delayMs?: number;
@@ -35,8 +35,8 @@ export default class Placeholder extends React.Component<Props, State> {
         if (!(error instanceof Promise)) {
             throw error;
         }
-        const {delayMs = 0} = this.props;
         this.setState(({loading, maxLoading, showFallback}) => {
+            const {delayMs = 0} = this.props;
             if (loading === 0) {
                 clearTimeout(this.fallbackTimer);
                 if (delayMs > 0) {
@@ -88,6 +88,6 @@ export default class Placeholder extends React.Component<Props, State> {
             }
             return fallback;
         }
-        return undefined;
+        return null;
     }
 }
