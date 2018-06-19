@@ -35,3 +35,25 @@ export default class Fetcher<Arg, Val> {
 export const createFetcher = <Arg, Val>(factory: PromiseFactory<Arg, Val>): Fetcher<Arg, Val> => {
     return new Fetcher(factory);
 };
+
+export class ImportFetcher<Module> {
+    private readonly factory: () => PromiseLike<Module>;
+    private cache: Promise<any> | undefined;
+
+    constructor(importFactory: () => PromiseLike<Module>) {
+        this.factory = importFactory;
+    }
+
+    read(): Module {
+        return valueOrThrow(this.promise());
+    }
+
+    promise() {
+        if (this.cache) {
+            return this.cache;
+        }
+        const promise = Promise.resolve(this.factory());
+        this.cache = promise;
+        return promise;
+    }
+}

@@ -2,6 +2,14 @@ import {hot} from "./hot-loader";
 import * as React from "react";
 import Name from "./Name";
 import Placeholder from "./future/Placeholder";
+import {ImportFetcher} from "./future/Fetcher";
+
+const blahFetcher = new ImportFetcher(() => import("./Blah"))
+
+const BlahLoader = (props: import("./Blah").Props) => {
+    const {default: Blah} = blahFetcher.read();
+    return <Blah {...props} />;
+};
 
 class App extends React.Component<{}, {blah: boolean}> {
     constructor(props: {}) {
@@ -27,8 +35,7 @@ class App extends React.Component<{}, {blah: boolean}> {
                         </>
                     ) : (
                         <>
-                            <Name name="test3" />
-                            <Name name="test4" />
+                            <BlahLoader name="test" />
                         </>
                     )}
                 </Placeholder>
