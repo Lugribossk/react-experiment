@@ -16,7 +16,6 @@
         "no-unnecessary-type-assertion": true,
         "no-var-requires": true,
         "only-arrow-functions": true,
-        "promise-function-async": true,
         "unified-signatures": true,
 
         "await-promise": true,

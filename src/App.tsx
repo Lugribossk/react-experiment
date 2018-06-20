@@ -4,7 +4,7 @@ import Name from "./Name";
 import Placeholder from "./future/Placeholder";
 import {ImportFetcher} from "./future/Fetcher";
 
-const blahFetcher = new ImportFetcher(() => import("./Blah"))
+const blahFetcher = new ImportFetcher(() => import("./Blah"));
 
 const BlahLoader = (props: import("./Blah").Props) => {
     const {default: Blah} = blahFetcher.read();
