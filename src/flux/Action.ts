@@ -20,7 +20,7 @@ interface Listen<T extends Dispatch> {
      * Listen for the action being dispatched.
      * In Redux terms this lets us attach the "reducer" that handles this specific action (but without needing the giant
      * switch statement for all possible actions).
-     * @returns A function that can be called to stop listening again.
+     * @returns A function that can be called to stop listening.
      */
     onDispatch(listener: T): Unsubscriber;
 }
