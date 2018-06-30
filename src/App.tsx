@@ -1,12 +1,15 @@
 import {hot} from "./hot-loader";
 import * as React from "react";
-import {HashRouter, Route, Link, Switch} from "react-router-dom";
+import {HashRouter, Switch} from "react-router-dom";
 import Name from "./Name";
-import Placeholder from "./future/Placeholder";
 import {ImportFetcher} from "./future/Fetcher";
 import User from "./auth/User";
-import {login} from "./auth/AuthActions";
-import PrivateRoute from "./auth/PrivateRoute";
+import {login, logout} from "./auth/AuthActions";
+import {PrivateRoute} from "./app/Route";
+import ErrorBoundary from "./app/ErrorBoundary";
+import "semantic-ui-css/semantic.min.css";
+import Placeholder from "./future/Placeholder";
+import {Loader} from "semantic-ui-react";
 
 const blahFetcher = new ImportFetcher(() => import("./Blah"));
 
@@ -32,46 +35,52 @@ class App extends React.Component<{}, State> {
 
     componentDidMount() {
         this.unsubscribers.push(login.onDispatch((username, password) => this.setState({user: new User()})));
+        this.unsubscribers.push(logout.onDispatch(() => this.setState({user: undefined})));
     }
 
     componentWillUnmount() {
         this.unsubscribers.forEach(unsub => unsub());
     }
 
-    render() {
+    renderRoutes() {
         const {user} = this.state;
         return (
-            <HashRouter>
-                <div>
-                    <h1>Suspend test</h1>
-                    {user && (
-                        <p>
-                            <button onClick={() => this.setState({user: undefined})}>Log out</button>
-                        </p>
+            <Switch>
+                <PrivateRoute path="/private" user={user} render={() => <p>Private</p>} />
+                <PrivateRoute
+                    path="/multiple"
+                    user={user}
+                    render={() => (
+                        <>
+                            <Name name="1" />
+                            <Name name="22" />
+                            <Name name="333" />
+                            <Name name="4444" />
+                        </>
                     )}
-                    <Link to="/multiple">Multiple</Link>
-                    <Link to="/dynamic">Dynamic load</Link>
-                    <br />
-                    <Placeholder delayMs={500} fallback={<p>Loading...</p>} key={window.location.href}>
-                        <Switch>
-                            <PrivateRoute path="/private" user={user} render={() => <p>Private</p>} />
-                            <Route
-                                path="/multiple"
-                                render={() => (
-                                    <>
-                                        <Name name="1" />
-                                        <Name name="22" />
-                                        <Name name="333" />
-                                        <Name name="4444" />
-                                    </>
-                                )}
-                            />
-                            <Route path="/dynamic" render={() => <BlahDynamic name="test" />} />
-                            <Route path="/" exact render={() => <p>Welcome</p>} />
-                            <Route render={() => <p>Not found</p>} />
-                        </Switch>
+                />
+                <PrivateRoute path="/dynamic" user={user} render={() => <BlahDynamic name="test" />} />
+                <PrivateRoute path="/" exact user={user} render={() => <h1>React experiments</h1>} />
+                <PrivateRoute user={user} render={() => <p>Not found</p>} />
+            </Switch>
+        );
+    }
+
+    render() {
+        return (
+            <HashRouter>
+                <ErrorBoundary>
+                    <Placeholder
+                        delayMs={500}
+                        fallback={
+                            <Loader active size="huge">
+                                Loading...
+                            </Loader>
+                        }
+                    >
+                        {this.renderRoutes()}
                     </Placeholder>
-                </div>
+                </ErrorBoundary>
             </HashRouter>
         );
     }
