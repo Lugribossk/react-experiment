@@ -1,41 +1,42 @@
 import * as React from "react";
 import {Route, RouteProps, RouteComponentProps} from "react-router-dom";
-import User from "../auth/User";
 import LoginPage from "../auth/LoginPage";
 import Layout from "../app/Layout";
 
-interface PublicRouteProps extends RouteProps {
+import CurrentUserStore from "../auth/CurrentUserStore";
+interface Props extends RouteProps {
     render(props: RouteComponentProps<any>): React.ReactNode;
 }
 
-export class PublicRoute extends React.Component<PublicRouteProps> {
+export class PublicRoute extends React.Component<Props> {
     render() {
         const {render, ...rest} = this.props;
         return <Route {...rest} render={rp => <Layout>{render(rp)}</Layout>} />;
     }
 }
 
-interface PrivateRouteProps extends RouteProps {
-    user: User | undefined;
-    render(props: RouteComponentProps<any>): React.ReactNode;
-}
-
-export class PrivateRoute extends React.Component<PrivateRouteProps> {
+export class PrivateRoute extends React.Component<Props> {
     render() {
-        const {user, render, ...rest} = this.props;
+        const {render, path, ...rest} = this.props;
         return (
             <Route
                 {...rest}
-                render={rp => {
-                    if (!user) {
-                        return (
-                            <Layout fullWindow>
-                                <LoginPage />
-                            </Layout>
-                        );
-                    }
-                    return <Layout user={user}>{render(rp)}</Layout>;
-                }}
+                path={path}
+                render={rp => (
+                    <CurrentUserStore.Context.Consumer>
+                        {store => {
+                            const user = store.getUser();
+                            if (!user) {
+                                return (
+                                    <Layout fullWindow>
+                                        <LoginPage loginAttempt={store.getLoginAttempt()} />
+                                    </Layout>
+                                );
+                            }
+                            return <Layout user={user}>{render(rp)}</Layout>;
+                        }}
+                    </CurrentUserStore.Context.Consumer>
+                )}
             />
         );
     }

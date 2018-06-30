@@ -18,7 +18,6 @@
         "only-arrow-functions": true,
         "unified-signatures": true,
 
-        "await-promise": true,
         "ban-comma-operator": true,
         "label-position": true,
         "no-arg": true,

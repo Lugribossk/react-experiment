@@ -25,7 +25,6 @@ export default class Layout extends React.Component<Props> {
                                 Loading...
                             </Loader>
                         }
-                        key={window.location.href}
                     >
                         <ContainerComponent>{children}</ContainerComponent>
                     </Placeholder>

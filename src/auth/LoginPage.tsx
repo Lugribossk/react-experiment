@@ -1,14 +1,19 @@
 import * as React from "react";
 import {login} from "./AuthActions";
-import {Grid, Segment, Form, Button} from "semantic-ui-react";
+import {Grid, Segment, Form, Button, Message} from "semantic-ui-react";
+import {LoginAttempt} from "./CurrentUserStore";
+
+interface Props {
+    loginAttempt: LoginAttempt;
+}
 
 interface State {
     username: string;
     password: string;
 }
 
-export default class LoginPage extends React.Component<{}, State> {
-    constructor(props: {}) {
+export default class LoginPage extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             username: "",
@@ -23,7 +28,11 @@ export default class LoginPage extends React.Component<{}, State> {
     }
 
     render() {
+        const {loginAttempt} = this.props;
         const {username, password} = this.state;
+        const loading = loginAttempt === "loading";
+        const failed = loginAttempt === "failed";
+
         return (
             <Grid textAlign="center" style={{height: "100%"}} verticalAlign="middle">
                 <Grid.Column style={{maxWidth: 450}}>
@@ -52,11 +61,12 @@ export default class LoginPage extends React.Component<{}, State> {
                                 autoComplete="current-password"
                             />
 
-                            <Button primary fluid size="large">
+                            <Button primary fluid size="large" loading={loading} disabled={loading}>
                                 Login
                             </Button>
                         </Segment>
                     </Form>
+                    {failed && <Message warning>Username or password incorrect. Please try again.</Message>}
                 </Grid.Column>
             </Grid>
         );

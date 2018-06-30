@@ -7,6 +7,7 @@ type Unsubscriber = () => void;
 export default abstract class Store<T> {
     private listeners: Listener[];
     private unsubscribers: Unsubscriber[];
+    private notify?: number;
     protected state!: Readonly<T>;
 
     protected constructor() {
@@ -22,14 +23,17 @@ export default abstract class Store<T> {
     }
 
     /**
-     * Synchronously change the stored state.
+     * Synchronously change the stored state. Notify listeners on the next turn of the event loop.
      */
     protected setState(newState: Partial<T>) {
         this.state = {
             ...(this.state as any),
             ...(newState as any)
         };
-        this.listeners.slice().forEach(lst => lst());
+        window.clearTimeout(this.notify);
+        this.notify = window.setTimeout(() => {
+            this.listeners.slice().forEach(lst => lst());
+        }, 0);
     }
 
     protected subscribe(unsubscriber: Unsubscriber) {

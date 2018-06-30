@@ -25,7 +25,7 @@ export default class ErrorBoundary extends React.Component<{}, State> {
         const {hasError} = this.state;
         if (hasError) {
             return (
-                <Message icon="exclamation" negative>
+                <Message negative>
                     <Message.Content>
                         <Message.Header>Something went wrong</Message.Header>
                     </Message.Content>
