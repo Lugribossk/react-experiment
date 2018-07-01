@@ -4,16 +4,21 @@ import {HashRouter, Switch} from "react-router-dom";
 import Name from "./Name";
 import {ImportFetcher} from "./future/Fetcher";
 import {PrivateRoute} from "./app/Route";
-import "semantic-ui-css/semantic.min.css";
 import Placeholder from "./future/Placeholder";
 import {Loader} from "semantic-ui-react";
 import CurrentUserStore from "./auth/CurrentUserStore";
+import ErrorBoundary from "./app/ErrorBoundary";
+import ErrorPage from "./ErrorPage";
 
-const blahFetcher = new ImportFetcher(() => import("./Blah"));
+const dynamicPageFetcher = new ImportFetcher(() => import("./DynamicPage"));
 
-const BlahDynamic = (props: import("./Blah").Props) => {
-    const {default: Blah} = blahFetcher.read();
-    return <Blah {...props} />;
+// The non-dynamic import in the type definition doesn't actually import the file, it just references the type so we
+// can validate the props.
+// Moving the fetcher read into the route render prop causes the thrown promise to originate from this component
+// causing it to trigger the overall error boundary, rather than the per-route error boundary.
+const DynamicPage: React.StatelessComponent<import("./DynamicPage").Props> = props => {
+    const {default: Component} = dynamicPageFetcher.read();
+    return <Component {...props} />;
 };
 
 class App extends React.Component<{}> {
@@ -27,7 +32,6 @@ class App extends React.Component<{}> {
     renderRoutes() {
         return (
             <Switch>
-                <PrivateRoute path="/private" render={() => <p>Private</p>} />
                 <PrivateRoute
                     path="/multiple"
                     render={() => (
@@ -39,7 +43,8 @@ class App extends React.Component<{}> {
                         </>
                     )}
                 />
-                <PrivateRoute path="/dynamic" render={() => <BlahDynamic name="test" />} />
+                <PrivateRoute path="/dynamic" render={() => <DynamicPage name="test" />} />
+                <PrivateRoute path="/error" render={() => <ErrorPage />} />
                 <PrivateRoute path="/" exact render={() => <h1>React experiments</h1>} />
                 <PrivateRoute render={() => <p>Not found</p>} />
             </Switch>
@@ -49,18 +54,20 @@ class App extends React.Component<{}> {
     render() {
         return (
             <HashRouter>
-                <CurrentUserStore.Context.Provider value={this.currentUserStore}>
-                    <Placeholder
-                        delayMs={0}
-                        fallback={
-                            <Loader active size="huge">
-                                Loading...
-                            </Loader>
-                        }
-                    >
-                        {this.renderRoutes()}
-                    </Placeholder>
-                </CurrentUserStore.Context.Provider>
+                <ErrorBoundary>
+                    <CurrentUserStore.Context.Provider value={this.currentUserStore}>
+                        <Placeholder
+                            delayMs={0}
+                            fallback={
+                                <Loader active size="huge">
+                                    Loading...
+                                </Loader>
+                            }
+                        >
+                            {this.renderRoutes()}
+                        </Placeholder>
+                    </CurrentUserStore.Context.Provider>
+                </ErrorBoundary>
             </HashRouter>
         );
     }

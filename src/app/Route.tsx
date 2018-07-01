@@ -11,7 +11,7 @@ interface Props extends RouteProps {
 export class PublicRoute extends React.Component<Props> {
     render() {
         const {render, ...rest} = this.props;
-        return <Route {...rest} render={rp => <Layout>{render(rp)}</Layout>} />;
+        return <Route {...rest} render={rp => <Layout pathname={rp.location.pathname}>{render(rp)}</Layout>} />;
     }
 }
 
@@ -28,12 +28,16 @@ export class PrivateRoute extends React.Component<Props> {
                             const user = store.getUser();
                             if (!user) {
                                 return (
-                                    <Layout fullWindow>
+                                    <Layout pathname={rp.location.pathname} fullWindow>
                                         <LoginPage loginAttempt={store.getLoginAttempt()} />
                                     </Layout>
                                 );
                             }
-                            return <Layout user={user}>{render(rp)}</Layout>;
+                            return (
+                                <Layout pathname={rp.location.pathname} user={user}>
+                                    {render(rp)}
+                                </Layout>
+                            );
                         }}
                     </CurrentUserStore.Context.Consumer>
                 )}

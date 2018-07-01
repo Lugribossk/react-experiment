@@ -2,6 +2,10 @@ import * as React from "react";
 import {ConsumerProps, Context} from "react";
 import Store from "./Store";
 
+/**
+ * Create a React context where the value is a store.
+ * When the store content changes, consumer children are automatically re-rendered.
+ */
 export const createContext = <T extends Store<any>>(): Context<T> => {
     const context = React.createContext((undefined as any) as T);
 
@@ -14,13 +18,13 @@ export const createContext = <T extends Store<any>>(): Context<T> => {
             componentDidMount() {
                 // We need to make sure that we subscribe only once, and that if we do, we also unsubscribe.
                 // ComponentDidMount + componentWillUnmount works well for that, but componentDidMount does not have
-                // access to the store since it arrives as a callback parameter inside render rather than a prop.
-                // Therefore we need to save a reference in render so that we can use here. Fortunately we know that
+                // access to the store since it arrives as a callback parameter inside render rather than as a prop.
+                // Therefore we need to save a reference in render so that we can use it here. Fortunately we know that
                 // the store will always be the same (that is why we're doing this trick in the first place) so we
                 // don't need to handle that.
                 // Subscribing inside render is not a good idea, since the rendering can fail (e.g. if rendering
                 // children throws an error) which causes the instance to be discarded without calling
-                // componentWillUnmount, which results in a zombie subscription.
+                // componentWillUnmount, which would then result in a subscription that is never unsubscribed.
                 if (!this.store) {
                     throw new Error("Store from context was not set after mounting.");
                 }
@@ -42,9 +46,12 @@ export const createContext = <T extends Store<any>>(): Context<T> => {
                     <Consumer>
                         {store => {
                             if (!store) {
-                                // react-hot-loader seems to clear the context value when updating some files.
-                                // Perhaps the provider component ends up being for a new context while the consumer keeps the old one?
-                                throw new Error("Missing context provider.");
+                                // When hot reloading files involved with contexts, new contexts are created but
+                                // for unknown reasons the old consumer components are kept.
+                                // Since values are only transferred between the provider/consumer pair that was
+                                // created together, the old consumers then start getting the default value.
+                                // This also seems to happen with the default React context consumer component.
+                                throw new Error("Missing context value.");
                             }
                             if (!this.store) {
                                 this.store = store;

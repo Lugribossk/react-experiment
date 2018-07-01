@@ -22,8 +22,8 @@ export default class Toolbar extends React.Component<Props> {
                 <Menu.Item to="/dynamic" as={NavLink}>
                     Dynamic
                 </Menu.Item>
-                <Menu.Item to="/private" as={NavLink}>
-                    Private
+                <Menu.Item to="/error" as={NavLink}>
+                    Error
                 </Menu.Item>
                 <Menu.Menu position="right">
                     <Dropdown item simple text={user.fullName}>

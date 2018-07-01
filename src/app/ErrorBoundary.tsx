@@ -2,32 +2,33 @@ import * as React from "react";
 import {Message} from "semantic-ui-react";
 
 interface State {
-    hasError: boolean;
+    error?: Error;
 }
 
 export default class ErrorBoundary extends React.Component<{}, State> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            hasError: false
+            error: undefined
         };
     }
 
-    componentDidCatch(error: any, errorInfo: React.ErrorInfo) {
+    componentDidCatch(error: Error | any, errorInfo: React.ErrorInfo) {
         if (!(error instanceof Error)) {
             throw error;
         }
-        this.setState({hasError: true});
+        this.setState({error: error});
     }
 
     render() {
         const {children} = this.props;
-        const {hasError} = this.state;
-        if (hasError) {
+        const {error} = this.state;
+        if (error) {
             return (
                 <Message negative>
                     <Message.Content>
                         <Message.Header>Something went wrong</Message.Header>
+                        <p>{error.message}</p>
                     </Message.Content>
                 </Message>
             );
