@@ -1,7 +1,6 @@
 import {hot} from "./util/hot-loader";
 import * as React from "react";
 import {HashRouter, Switch} from "react-router-dom";
-import Name from "./Name";
 import {ImportFetcher} from "./suspense/Fetcher";
 import {PrivateRoute} from "./app/Route";
 import Placeholder from "./suspense/Placeholder";
@@ -9,6 +8,7 @@ import {Loader} from "semantic-ui-react";
 import CurrentUserStore from "./auth/CurrentUserStore";
 import ErrorBoundary from "./app/ErrorBoundary";
 import ErrorPage from "./ErrorPage";
+import MultiplePage from "./MultiplePage";
 
 const dynamicPageFetcher = new ImportFetcher(() => import("./DynamicPage"));
 
@@ -32,17 +32,7 @@ class App extends React.Component<{}> {
     renderRoutes() {
         return (
             <Switch>
-                <PrivateRoute
-                    path="/multiple"
-                    render={() => (
-                        <>
-                            <Name name="1" />
-                            <Name name="22" />
-                            <Name name="333" />
-                            <Name name="4444" />
-                        </>
-                    )}
-                />
+                <PrivateRoute path="/multiple" render={() => <MultiplePage />} />
                 <PrivateRoute path="/dynamic" render={() => <DynamicPage name="test" />} />
                 <PrivateRoute path="/error" render={() => <ErrorPage />} />
                 <PrivateRoute path="/" exact render={() => <h1>React experiments</h1>} />
