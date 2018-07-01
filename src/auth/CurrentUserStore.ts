@@ -2,7 +2,7 @@ import User from "../auth/User";
 import * as Promise from "bluebird";
 import Store from "../flux/Store";
 import {createContext} from "../flux/StoreContext";
-import {valueOrThrow} from "../future/suspense";
+import {valueOrThrow} from "../suspense/suspense";
 import {login, logout} from "./AuthActions";
 
 let cookieWithToken = false;

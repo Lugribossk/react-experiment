@@ -1,10 +1,10 @@
-import {hot} from "./hot-loader";
+import {hot} from "./util/hot-loader";
 import * as React from "react";
 import {HashRouter, Switch} from "react-router-dom";
 import Name from "./Name";
-import {ImportFetcher} from "./future/Fetcher";
+import {ImportFetcher} from "./suspense/Fetcher";
 import {PrivateRoute} from "./app/Route";
-import Placeholder from "./future/Placeholder";
+import Placeholder from "./suspense/Placeholder";
 import {Loader} from "semantic-ui-react";
 import CurrentUserStore from "./auth/CurrentUserStore";
 import ErrorBoundary from "./app/ErrorBoundary";
@@ -52,6 +52,7 @@ class App extends React.Component<{}> {
     }
 
     render() {
+        // The fallback loader should be identical to the loader markup inside the React root in index.html.
         return (
             <HashRouter>
                 <ErrorBoundary>

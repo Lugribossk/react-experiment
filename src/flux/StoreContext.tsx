@@ -51,7 +51,12 @@ export const createContext = <T extends Store<any>>(): Context<T> => {
                                 // Since values are only transferred between the provider/consumer pair that was
                                 // created together, the old consumers then start getting the default value.
                                 // This also seems to happen with the default React context consumer component.
-                                throw new Error("Missing context value.");
+                                const message = `Missing context value.${
+                                    process.env.NODE_ENV !== "production"
+                                        ? " This is probably due to react-hot-loader, please manually reload the page"
+                                        : ""
+                                }`;
+                                throw new Error(message);
                             }
                             if (!this.store) {
                                 this.store = store;

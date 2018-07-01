@@ -3,7 +3,7 @@ import User from "../auth/User";
 import Toolbar from "./Toolbar";
 import {Container, Loader, Segment} from "semantic-ui-react";
 import ErrorBoundary from "./ErrorBoundary";
-import Placeholder from "../future/Placeholder";
+import Placeholder from "../suspense/Placeholder";
 
 interface Props {
     pathname: string;
