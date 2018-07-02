@@ -7,7 +7,10 @@ export const withoutReactErrorLogging = <T>(promise: Promise<T>) => {
 };
 
 export const valueOrThrow = <T>(promise: Promise<T>) => {
-    if (promise.isFulfilled()) {
+    if (promise.isRejected()) {
+        throw promise.reason();
+    }
+    if (promise.isResolved()) {
         return promise.value();
     }
     throw withoutReactErrorLogging(promise);

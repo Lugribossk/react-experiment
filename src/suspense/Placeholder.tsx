@@ -3,12 +3,11 @@ import {Promise} from "bluebird";
 
 interface Props {
     delayMs?: number;
-    fallback: React.ReactNode | ((progress: number) => React.ReactNode);
+    fallback: React.ReactNode | (() => React.ReactNode);
 }
 
 interface State {
     loading: number;
-    maxLoading: number;
     showFallback: boolean;
 }
 
@@ -26,7 +25,6 @@ export default class Placeholder extends React.Component<Props, State> {
         this.unmounted = false;
         this.state = {
             loading: 0,
-            maxLoading: 0,
             showFallback: false
         };
     }
@@ -35,7 +33,7 @@ export default class Placeholder extends React.Component<Props, State> {
         if (!(error instanceof Promise)) {
             throw error;
         }
-        this.setState(({loading, maxLoading, showFallback}) => {
+        this.setState(({loading, showFallback}) => {
             const {delayMs = 0} = this.props;
             if (loading === 0) {
                 clearTimeout(this.fallbackTimer);
@@ -47,17 +45,15 @@ export default class Placeholder extends React.Component<Props, State> {
                 } else {
                     showFallback = true;
                 }
-                maxLoading = 0;
             }
 
             return {
                 loading: loading + 1,
-                maxLoading: Math.max(maxLoading, loading + 1),
                 showFallback: showFallback
             };
         });
 
-        error.then(() => {
+        error.finally(() => {
             if (this.unmounted) {
                 return;
             }
@@ -77,14 +73,14 @@ export default class Placeholder extends React.Component<Props, State> {
 
     render() {
         const {fallback, children} = this.props;
-        const {loading, maxLoading, showFallback} = this.state;
+        const {loading, showFallback} = this.state;
 
         if (loading === 0) {
             return children;
         }
         if (showFallback) {
             if (fallback instanceof Function) {
-                return fallback((maxLoading - loading) / maxLoading);
+                return fallback();
             }
             return fallback;
         }

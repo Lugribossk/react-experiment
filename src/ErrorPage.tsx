@@ -1,8 +1,12 @@
 import * as React from "react";
+import * as Promise from "bluebird";
+import {createFetcher} from "./suspense/Fetcher";
+
+const fetcher = createFetcher(() => Promise.delay(2000).throw(new Error("Error while loading data.")));
 
 export default class ErrorPage extends React.Component<{}> {
     render() {
-        throw new Error("Rendering error");
+        fetcher.read("");
         return null;
     }
 }

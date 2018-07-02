@@ -4,9 +4,10 @@ import {createFetcher} from "./Fetcher";
 
 const imageFetcher = createFetcher<string, string>(
     src =>
-        new Promise(resolve => {
+        new Promise((resolve, reject) => {
             const image = new Image();
             image.onload = () => resolve(src);
+            image.onerror = reject;
             image.src = src;
         })
 );
