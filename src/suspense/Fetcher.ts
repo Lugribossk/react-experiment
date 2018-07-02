@@ -57,3 +57,17 @@ export class ImportFetcher<Module> {
         return promise;
     }
 }
+
+const importFetcherCache = new Map<() => PromiseLike<any>, ImportFetcher<any>>();
+
+export const createImportFetcher = <Module>(importFactory: () => PromiseLike<Module>): ImportFetcher<Module> => {
+    // Why does this work? The callback with the import() statement should be a new object on each call (even if it
+    // imports the same file), so the cache will never be hit. And yet it does work and hit the cache, while a straight
+    // new ImportFetcher() does not...
+    if (importFetcherCache.has(importFactory)) {
+        return importFetcherCache.get(importFactory)!;
+    }
+    const fetcher = new ImportFetcher(importFactory);
+    importFetcherCache.set(importFactory, fetcher);
+    return fetcher;
+};

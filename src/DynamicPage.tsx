@@ -1,10 +1,6 @@
 import * as React from "react";
 
-export interface Props {
-    name: string;
-}
-
-export default class DynamicPage extends React.Component<Props> {
+export default class DynamicPage extends React.Component<{}> {
     render() {
         return <p>This component was dynamically loaded.</p>;
     }

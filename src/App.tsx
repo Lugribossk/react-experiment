@@ -1,7 +1,6 @@
 import {hot} from "./util/hot-loader";
 import * as React from "react";
 import {HashRouter, Switch} from "react-router-dom";
-import {ImportFetcher} from "./suspense/Fetcher";
 import {PrivateRoute} from "./app/Route";
 import Placeholder from "./suspense/Placeholder";
 import {Loader} from "semantic-ui-react";
@@ -9,17 +8,6 @@ import CurrentUserStore from "./auth/CurrentUserStore";
 import ErrorBoundary from "./app/ErrorBoundary";
 import ErrorPage from "./ErrorPage";
 import MultiplePage from "./MultiplePage";
-
-const dynamicPageFetcher = new ImportFetcher(() => import("./DynamicPage"));
-
-// The non-dynamic import in the type definition doesn't actually import the file, it just references the type so we
-// can validate the props.
-// Moving the fetcher read into the route render prop causes the thrown promise to originate from this component
-// causing it to trigger the overall error boundary, rather than the per-route error boundary.
-const DynamicPage: React.StatelessComponent<import("./DynamicPage").Props> = props => {
-    const {default: Component} = dynamicPageFetcher.read();
-    return <Component {...props} />;
-};
 
 class App extends React.Component<{}> {
     private readonly currentUserStore: CurrentUserStore;
@@ -32,9 +20,9 @@ class App extends React.Component<{}> {
     renderRoutes() {
         return (
             <Switch>
-                <PrivateRoute path="/multiple" render={() => <MultiplePage />} />
-                <PrivateRoute path="/dynamic" render={() => <DynamicPage name="test" />} />
-                <PrivateRoute path="/error" render={() => <ErrorPage />} />
+                <PrivateRoute path="/multiple" component={MultiplePage} />
+                <PrivateRoute path="/dynamic" dynamic={() => import("./DynamicPage")} />
+                <PrivateRoute path="/error" component={ErrorPage} />
                 <PrivateRoute path="/" exact render={() => <h1>React experiments</h1>} />
                 <PrivateRoute render={() => <p>Not found</p>} />
             </Switch>
@@ -48,7 +36,6 @@ class App extends React.Component<{}> {
                 <ErrorBoundary>
                     <CurrentUserStore.Context.Provider value={this.currentUserStore}>
                         <Placeholder
-                            delayMs={0}
                             fallback={
                                 <Loader active size="huge">
                                     Loading...

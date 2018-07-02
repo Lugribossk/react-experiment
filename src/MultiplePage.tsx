@@ -33,9 +33,9 @@ export default class MultiplePage extends React.Component<{}> {
     render() {
         return (
             <Card.Group>
-                {[1, 2, 3, 4, 4, 10].map(n => (
-                    <Placeholder fallback={() => <LoadingCard />}>
-                        <ProductCard key={n} n={n} />
+                {[1, 2, 3, 4, 4, 10].map((n, i) => (
+                    <Placeholder key={i} fallback={() => <LoadingCard />}>
+                        <ProductCard n={n} />
                     </Placeholder>
                 ))}
             </Card.Group>
