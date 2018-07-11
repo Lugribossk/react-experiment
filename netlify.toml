@@ -1,7 +1,12 @@
+[build]
+  command = "yarn run build"
+  publish = "target/dist"
+
 [[headers]]
   for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
+[[headers]]
   for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000"
