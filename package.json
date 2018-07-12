@@ -12,8 +12,13 @@
   ],
   "scripts": {
     "start": "parcel src/index.html --out-dir target/serve --no-cache",
-    "clean": "rimraf target/dist/*.*",
-    "build": "parcel build src/index.html --out-dir target/dist --public-url ./ --no-cache --no-source-maps",
+
+    "build": "yarn run build:ui && yarn run build:lambdas",
+    "build:ui": "parcel build src/index.html --out-dir target/dist --public-url ./ --no-cache --no-source-maps",
+    "build:lambdas": "parcel build src/lambdas/*.ts --out-dir target/lambdas --target node --no-cache --no-source-maps",
+    "clean": "rimraf target/dist/*.* target/lambdas/*.*",
+
+    "test": "yarn run lint && yarn run prettier-check",
     "lint": "tslint -p . \"{src,test}/**/*.{ts,tsx}\"",
     "prettier": "prettier --write \"{src,test}/**/*.{ts,tsx,json}\"",
     "prettier-check": "prettier --list-different \"{src,test}/**/*.{ts,tsx,json}\""
@@ -28,6 +33,7 @@
     "tslib": "1.9.2"
   },
   "devDependencies": {
+    "@types/aws-lambda": "8.10.7",
     "@types/bluebird": "3.5.20",
     "@types/react": "16.3.16",
     "@types/react-dom": "16.0.6",
