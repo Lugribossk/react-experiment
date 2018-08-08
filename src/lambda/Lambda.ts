@@ -32,14 +32,13 @@ export const withCors = (handler: LambdaHandler): LambdaHandler => {
             console.log("cors options response");
             return {
                 statusCode: 204,
-                // headers: {
-                //     ...allRequests,
-                //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
-                //     "Access-Control-Allow-Headers":
-                //         "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,If-None-Match",
-                //     "Access-Control-Max-Age": "172800",
-                //     "Content-Length": 0
-                // },
+                headers: {
+                    ...allRequests,
+                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+                    "Access-Control-Allow-Headers":
+                        "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,If-None-Match",
+                    "Access-Control-Max-Age": "172800"
+                },
                 body: ""
             };
         }
