@@ -59,11 +59,11 @@ export const withErrorHandling = (handler: LambdaHandler): LambdaHandler => {
         try {
             return handler(event, context);
         } catch (error) {
-            console.error("Error while handling request:", error);
+            console.log("Error while handling request:", error);
             return jsonResponse(
                 {
                     status: 500,
-                    message: "Internal server error."
+                    message: `Internal server error: ${error.message}`
                 },
                 500
             );
