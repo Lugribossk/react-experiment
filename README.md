@@ -12,4 +12,4 @@ React experiments
 ## Getting started
 
 - `yarn install`
-- `yarn start`
+- `yarn start:ui`

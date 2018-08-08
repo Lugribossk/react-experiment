@@ -8,13 +8,16 @@ import CurrentUserStore from "./auth/CurrentUserStore";
 import ErrorBoundary from "./app/ErrorBoundary";
 import ErrorPage from "./ErrorPage";
 import MultiplePage from "./MultiplePage";
+import Api from "./Api";
 
 class App extends React.Component<{}> {
+    private readonly api: Api;
     private readonly currentUserStore: CurrentUserStore;
 
     constructor(props: {}) {
         super(props);
-        this.currentUserStore = new CurrentUserStore();
+        this.api = new Api();
+        this.currentUserStore = new CurrentUserStore(this.api);
     }
 
     renderRoutes() {

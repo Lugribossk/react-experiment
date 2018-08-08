@@ -29,4 +29,4 @@ jobs:
           command: yarn run lint
       - run:
           name: Prettier
-          command: yarn run prettier-check
+          command: yarn run prettier:check

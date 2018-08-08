@@ -2,8 +2,8 @@ export default class User {
     readonly fullName: string;
     readonly email: string;
 
-    constructor() {
-        this.fullName = "Test";
-        this.email = "test";
+    constructor(data: any) {
+        this.fullName = data.fullName;
+        this.email = data.email;
     }
 }
