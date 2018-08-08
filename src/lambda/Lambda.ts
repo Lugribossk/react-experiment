@@ -29,7 +29,7 @@ export const withCors = (handler: LambdaHandler): LambdaHandler => {
             "Access-Control-Expose-Headers": "Content-Length,ETag"
         };
         if (event.httpMethod.toUpperCase() === "OPTIONS") {
-            console.log("cors options response");
+            console.info(event.httpMethod);
             return {
                 statusCode: 204,
                 headers: {
