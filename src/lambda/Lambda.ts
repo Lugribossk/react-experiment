@@ -1,4 +1,4 @@
-//tslint:disable:no-console
+//tslint:disable:no-console no-implicit-dependencies
 import User from "../auth/User";
 
 // We don't want to install or depend on the actual aws-lamda package, but we do want the types.

@@ -7,7 +7,7 @@ import * as bodyParser from "body-parser";
 import {LambdaContext, LambdaHandler, LambdaRequest} from "./Lambda";
 
 // Serve lambda functions with Express for development.
-// Run with node -r ts-node/register and working directory set to this dir.
+// Run with node -r ts-node/register/transpile-only and working directory set to this dir.
 // Inspired by https://github.com/netlify/netlify-lambda/blob/master/lib/serve.js
 
 const FUNCTIONS_DIR = path.join(__dirname, "functions");
