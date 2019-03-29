@@ -6,7 +6,7 @@ import Placeholder from "./suspense/Placeholder";
 
 const productFetcher = createFetcher((n: number) => Promise.delay(n * 1000, `Test ${n}`));
 
-const ProductCard: React.StatelessComponent<{n: number}> = ({n}) => {
+const ProductCard: React.FunctionComponent<{n: number}> = ({n}) => {
     const name = productFetcher.read(n);
     return (
         <Card>

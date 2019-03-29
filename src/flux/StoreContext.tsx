@@ -66,6 +66,6 @@ export const createContext = <T extends Store<any>>(): Context<T> => {
                     </Consumer>
                 );
             }
-        }
+        } as any
     };
 };

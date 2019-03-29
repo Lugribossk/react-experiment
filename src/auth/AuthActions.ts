@@ -1,5 +1,9 @@
 import {defineAction} from "../flux/Action";
 
-export const login = defineAction<(username: string, password: string) => void>();
+/**
+ * @param username Username
+ * @param password Password
+ */
+export const login = defineAction<[string, string]>();
 
-export const logout = defineAction<() => void>();
+export const logout = defineAction<[]>();

@@ -1,53 +1,41 @@
-type Listener = (...args: any[]) => void;
+type Listener<T extends any[]> = (...args: T) => void;
 type Unsubscriber = () => void;
-
-/**
- * Dispatching (i.e. calling) an action.
- */
-interface Dispatch {
-    /**
-     * Dispatch the action with the specified arguments.
-     * Individual actions should override the call signature with their exact argument types.
-     */
-    (...args: any[]): void;
-}
-
-/**
- * Listening (i.e. getting a callback when it is dispatched) to an action.
- */
-interface Listen<T extends Dispatch> {
-    /**
-     * Listen for the action being dispatched.
-     * In Redux terms this lets us attach the "reducer" that handles this specific action (but without needing the giant
-     * switch statement for all possible actions).
-     * @returns A function that can be called to stop listening.
-     */
-    onDispatch(listener: T): Unsubscriber;
-}
 
 /**
  * A Flux "action" that components can call to change state in the stores.
  * In Redux terms this is more of a "bound action creator", i.e. a function that you can call with action-specific
  * arguments which end up causing a change in application state.
  */
-export type Action<T extends Dispatch> = T & Listen<T>;
+export interface Action<T extends any[]> {
+    /**
+     * Dispatch (i.e. call) the action with the specified arguments.
+     */
+    (...args: T): void;
+    /**
+     * Listen (i.e. get a callback when it is dispatched) for the action being dispatched.
+     * In Redux terms this lets us attach the "reducer" that handles this specific action (but without needing the giant
+     * switch statement for all possible actions).
+     * @returns A function that can be called to stop listening.
+     */
+    onDispatch(listener: Listener<T>): Unsubscriber;
+}
 
 /**
  * Define a specific Flux action.
  * Saving the return value of this is comparable to defining Redux "action type constants", i.e. a singleton that
  * defines a particular kind of action.
  */
-export const defineAction = <T extends Dispatch>(): Action<T> => {
-    let listeners: Listener[] = [];
+export const defineAction = <T extends any[]>(): Action<T> => {
+    const listeners = new Set<Listener<T>>();
 
-    const dispatchAction: any = (...args: any[]) => {
-        listeners.forEach(lst => lst(...args));
+    const dispatchAction = (...args: T) => {
+        listeners.forEach(listener => listener(...args));
     };
 
-    dispatchAction.onDispatch = (listener: Listener) => {
-        listeners.push(listener);
+    dispatchAction.onDispatch = (listener: Listener<T>): Unsubscriber => {
+        listeners.add(listener);
         return () => {
-            listeners = listeners.filter(lst => lst !== listener);
+            listeners.delete(listener);
         };
     };
 

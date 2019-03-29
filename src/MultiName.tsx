@@ -6,7 +6,7 @@ const nameFetcher = createFetcher((name: string) => Promise.delay(5000, name));
 
 // const Blah: React.StatelessComponent<{name: string}> = ({name}) => <>{nameFetcher.read(name)}</>;
 
-const Value: React.StatelessComponent<{val(): string}> = ({val}) => <>{val()}</>;
+const Value: React.FunctionComponent<{val(): string}> = ({val}) => <>{val()}</>;
 
 export default class MultiName extends React.Component<{name: string}> {
     render() {
