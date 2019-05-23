@@ -1,6 +1,6 @@
-import * as React from "react";
+import React from "react";
 import {ComponentClass, RefObject} from "react";
-import * as ReactDom from "react-dom";
+import ReactDom from "react-dom";
 
 interface SimplePortal {
     Source: ComponentClass<{}>;

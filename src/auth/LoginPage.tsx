@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {login} from "./AuthActions";
 import {Grid, Segment, Form, Button, Message} from "semantic-ui-react";
 import {LoginAttempt} from "./CurrentUserStore";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {Dropdown, Menu} from "semantic-ui-react";
 import {Link, NavLink} from "react-router-dom";
 import User from "../auth/User";
@@ -26,7 +26,7 @@ export default class Toolbar extends React.Component<Props> {
                     Error
                 </Menu.Item>
                 <Menu.Menu position="right">
-                    <Dropdown item simple text={user.fullName}>
+                    <Dropdown item simple text={user.name}>
                         <Dropdown.Menu>
                             <Dropdown.Item onClick={logout}>Log out</Dropdown.Item>
                         </Dropdown.Menu>

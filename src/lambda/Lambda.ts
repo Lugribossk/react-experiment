@@ -1,5 +1,4 @@
 //tslint:disable:no-console no-implicit-dependencies
-import User from "../auth/User";
 
 // We don't want to install or depend on the actual aws-lamda package, but we do want the types.
 export type LambdaRequest = import("aws-lambda").APIGatewayProxyEvent;
@@ -12,11 +11,14 @@ export type LambdaHandler<Request = LambdaRequest, Response = LambdaResponse> = 
     context: LambdaContext
 ) => Promise<Response>;
 
-export const jsonResponse = (data: any, status = 200): LambdaResponse => {
+export const FUNCTIONS_URL = "/.netlify/functions";
+
+export const jsonResponse = (data: any, status = 200, headers: any = {}): LambdaResponse => {
     return {
         statusCode: status,
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            ...headers
         },
         body: JSON.stringify(data)
     };
@@ -25,8 +27,9 @@ export const jsonResponse = (data: any, status = 200): LambdaResponse => {
 export const withCors = (handler: LambdaHandler): LambdaHandler => {
     return async (event, context) => {
         const allRequests = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Expose-Headers": "Content-Length,ETag"
+            "Access-Control-Allow-Origin": event.headers.origin,
+            "Access-Control-Expose-Headers": "Content-Length,ETag",
+            "Access-Control-Allow-Credentials": true
         };
         if (event.httpMethod.toUpperCase() === "OPTIONS") {
             console.info(event.httpMethod);
@@ -68,20 +71,5 @@ export const withErrorHandling = (handler: LambdaHandler): LambdaHandler => {
                 500
             );
         }
-    };
-};
-
-export const withAuth = (handler: LambdaHandler<LambdaRequest & {user: User}>): LambdaHandler => {
-    return async (event, context) => {
-        if (!event.headers.authorization) {
-            return jsonResponse(
-                {
-                    status: 401,
-                    message: "Credentials are required to access this resource."
-                },
-                401
-            );
-        }
-        return handler({...event, user: new User({fullName: "Test", email: "test"})}, context);
     };
 };

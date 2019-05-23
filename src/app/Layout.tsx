@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import User from "../auth/User";
 import Toolbar from "./Toolbar";
 import {Container, Loader, Segment} from "semantic-ui-react";

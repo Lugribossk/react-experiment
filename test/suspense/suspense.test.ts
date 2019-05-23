@@ -1,4 +1,4 @@
-import * as Promise from "bluebird";
+import Promise from "bluebird";
 import {valueOrThrow} from "../../src/suspense/suspense";
 
 test("should return value from resolved promise", () => {

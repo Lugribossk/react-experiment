@@ -1,14 +1,14 @@
 import {hot} from "./util/hot-loader";
-import * as React from "react";
+import React from "react";
 import {HashRouter, Switch} from "react-router-dom";
 import {PrivateRoute} from "./app/Route";
-import Placeholder from "./suspense/Placeholder";
 import {Loader} from "semantic-ui-react";
 import CurrentUserStore from "./auth/CurrentUserStore";
 import ErrorBoundary from "./app/ErrorBoundary";
 import ErrorPage from "./ErrorPage";
 import MultiplePage from "./MultiplePage";
 import Api from "./Api";
+import Placeholder from "./suspense/Placeholder";
 
 class App extends React.Component<{}> {
     private readonly api: Api;

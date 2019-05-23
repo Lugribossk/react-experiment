@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as Promise from "bluebird";
+import React from "react";
+import Promise from "bluebird";
 import {createFetcher} from "./Fetcher";
 
 const imageFetcher = createFetcher<string, string>(

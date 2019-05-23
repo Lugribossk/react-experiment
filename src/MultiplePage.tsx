@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as Promise from "bluebird";
+import React from "react";
+import Promise from "bluebird";
 import {Card, Loader} from "semantic-ui-react";
 import {createFetcher} from "./suspense/Fetcher";
 import Placeholder from "./suspense/Placeholder";
@@ -34,7 +34,7 @@ export default class MultiplePage extends React.Component<{}> {
         return (
             <Card.Group>
                 {[1, 2, 3, 4, 4, 10].map((n, i) => (
-                    <Placeholder key={i} fallback={() => <LoadingCard />}>
+                    <Placeholder key={i} fallback={<LoadingCard />}>
                         <ProductCard n={n} />
                     </Placeholder>
                 ))}

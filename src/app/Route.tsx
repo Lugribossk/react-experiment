@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {Route, RouteProps, RouteComponentProps} from "react-router-dom";
 import LoginPage from "../auth/LoginPage";
 import Layout from "../app/Layout";

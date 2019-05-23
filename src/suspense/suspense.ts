@@ -1,4 +1,4 @@
-import * as Promise from "bluebird";
+import Promise from "bluebird";
 
 export const withoutReactErrorLogging = <T>(promise: Promise<T>) => {
     // Hidden React feature to not log the usual componentDidCatch() error message.

@@ -1,9 +1,9 @@
 export default class User {
-    readonly fullName: string;
+    readonly name: string;
     readonly email: string;
 
     constructor(data: any) {
-        this.fullName = data.fullName;
+        this.name = data.name;
         this.email = data.email;
     }
 }

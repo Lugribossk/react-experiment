@@ -1,14 +1,10 @@
-import * as Promise from "bluebird";
+import Promise from "bluebird";
 import User from "../auth/User";
 import Store from "../flux/Store";
 import {createContext} from "../flux/StoreContext";
 import {valueOrThrow} from "../suspense/suspense";
 import {login, logout} from "./AuthActions";
 import Api from "../Api";
-
-let cookieWithToken = false;
-const getCurrentUser = () => Promise.delay(200, cookieWithToken ? new User({}) : undefined);
-const getToken = (username: string, password: string) => Promise.delay(200, {}).then(() => (cookieWithToken = true));
 
 export type LoginAttempt = "success" | "loading" | "failed";
 
@@ -33,7 +29,7 @@ export default class CurrentUserStore extends Store<State> {
         super();
         this.api = api;
         this.state = {
-            user: Promise.resolve(getCurrentUser()),
+            user: Promise.resolve(this.api.getCurrentUser()),
             loginAttempt: "success"
         };
         this.subscribe(login.onDispatch((u, p) => this.handleLogin(u, p)));
@@ -53,8 +49,8 @@ export default class CurrentUserStore extends Store<State> {
             loginAttempt: "loading"
         });
         try {
-            await getToken(username, password);
-            const user = await getCurrentUser();
+            await this.api.login(username, password);
+            const user = await this.api.getCurrentUser();
             this.setState({
                 user: Promise.resolve(user),
                 loginAttempt: "success"

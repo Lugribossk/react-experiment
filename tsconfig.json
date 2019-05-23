@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
         "jsx": "react",

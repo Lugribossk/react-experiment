@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {Menu} from "semantic-ui-react";
 import {shallow} from "enzyme";
 import User from "../../src/auth/User";

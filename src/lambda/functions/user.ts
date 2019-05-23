@@ -1,4 +1,5 @@
-import {LambdaHandler, withCors, withErrorHandling, jsonResponse, withAuth} from "../Lambda";
+import {LambdaHandler, withCors, withErrorHandling, jsonResponse} from "../Lambda";
+import {withAuth} from "../LambdaAuth";
 
 export const handler: LambdaHandler = withCors(
     withErrorHandling(

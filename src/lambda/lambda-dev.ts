@@ -1,17 +1,16 @@
 //tslint:disable:no-console
-import * as fs from "fs";
-import * as path from "path";
-import * as express from "express";
+import fs from "fs";
+import path from "path";
+import express from "express";
 import {Request, Response} from "express";
-import * as bodyParser from "body-parser";
-import {LambdaContext, LambdaHandler, LambdaRequest} from "./Lambda";
+import bodyParser from "body-parser";
+import {LambdaContext, LambdaHandler, LambdaRequest, FUNCTIONS_URL} from "./Lambda";
 
 // Serve lambda functions with Express for development.
 // Run with node -r ts-node/register/transpile-only and working directory set to this dir.
 // Inspired by https://github.com/netlify/netlify-lambda/blob/master/lib/serve.js
 
 const FUNCTIONS_DIR = path.join(__dirname, "functions");
-const FUNCTIONS_URL = "/.netlify/functions";
 
 const createLambdaRequest = (request: Request): LambdaRequest => {
     return {

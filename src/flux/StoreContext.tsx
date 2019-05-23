@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {ConsumerProps, Context} from "react";
 import Store from "./Store";
 
