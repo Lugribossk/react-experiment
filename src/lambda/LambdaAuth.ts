@@ -6,7 +6,7 @@ const ALGORITHM = "HS256";
 const SECRET = "TODO";
 const ISSUER = "TODO";
 
-const signToken = (subject: string, payload: ({[key: string]: string}) = {}) => {
+const signToken = (subject: string, payload: {[key: string]: string} = {}) => {
     return jwt.sign(payload, SECRET, {
         algorithm: ALGORITHM,
         expiresIn: "24h",

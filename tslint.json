@@ -65,7 +65,6 @@
         "interface-name": [true, "never-prefix"],
         "interface-over-type-literal": true,
         "jsdoc-format": true,
-        "match-default-export-name": true,
         "new-parens": true,
         "no-angle-bracket-type-assertion": true,
         "no-boolean-literal-compare": true,
